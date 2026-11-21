@@ -408,8 +408,8 @@ const CUSTOM_MARKS={
  '🌐':'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>',
  '⚠️':'<path d="M12 3 22 20H2z"/><path d="M12 9v5M12 17h.01"/>',
  'ARROW_RIGHT':'<path d="M3.5 12h16m-6.5-6.5L19.5 12 13 18.5"/><path d="M3.5 5.5v13" opacity=".25"/>',
- 'ARROW_LEFT':'<path d="M20.5 12h-16M11 5.5 4.5 12 11 18.5"/><path d="M20.5 5.5v13" opacity=".25"/>',
- 'ARROW_UP':'<path d="M12 20.5v-16M5.5 11 12 4.5 18.5 11"/><path d="M5.5 20.5h13" opacity=".25"/>',
+ 'ARROW_LEFT':'<path d="M20.5 12h-16m11 5.5 4.5-6.5-11-6.5"/><path d="M20.5 5.5v13" opacity=".25"/>',
+ 'ARROW_UP':'<path d="M12 20.5v-16m-5.5 11L12 4.5l6.5 6.5"/><path d="M5.5 20.5h13" opacity=".25"/>',
  'ARROW_DOWN':'<path d="M12 3.5v16m-6.5-6.5L12 19.5l6.5-6.5"/><path d="M5.5 3.5h13" opacity=".25"/>'
 };
 function renderMark(mark,extra=''){const path=CUSTOM_MARKS[mark];if(!path)return mark;return `<svg class="custom-mark ${extra}" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`}
@@ -1057,10 +1057,10 @@ function extractStartParam(){
  const tgStart = tg?.initDataUnsafe?.start_param;
  if(tgStart && String(tgStart).trim()) return String(tgStart).trim();
  const params = new URLSearchParams(window.location.search);
- const qStart = params.get('start') || params.get('tgWebAppStartParam') || '';
+ const qStart = params.get('startapp') || params.get('start') || params.get('tgWebAppStartParam') || '';
  if(qStart.trim()) return qStart.trim();
  const hash = window.location.hash || '';
- const m = hash.match(/(?:tgWebAppStartParam|start)=([^&]+)/);
+ const m = hash.match(/(?:tgWebAppStartParam|startapp|start)=([^&]+)/);
  return m ? decodeURIComponent(m[1]).trim() : '';
 }
 
@@ -1082,11 +1082,7 @@ function handleStartParam(){
 
  const shared = loadSharedDeals().find(x=>x.code===code);
  let found = state.deals.find(d=>d.code===code);
- const source = payload || shared || found;
- if(!source){
-   toast('Сделка с таким кодом не найдена');
-   return;
- }
+ const source = payload || shared || found || { code };
 
  const viewer = getCurrentViewerInfo();
  const creatorHandle = source.creatorHandle || '@opiem';
@@ -1096,7 +1092,7 @@ function handleStartParam(){
  const amount = String(source.amount || '1530');
  const currency = source.currency || 'STARS';
  const itemName = source.itemName || 'Telegram Gift';
- const description = source.description || '';
+ const description = source.description || 'Сделка по ссылке';
  const createdDate = source.date || new Date().toLocaleString('ru-RU');
  const baseNum = Number(amount)||0;
 
@@ -1149,6 +1145,7 @@ function handleStartParam(){
 
  state.languageChosen=true;
  save();
+ navigate('deals', document.querySelectorAll('.nav-item')[0]);
  renderDeals('active');
  renderProfile();
  openDealView(found.id);
