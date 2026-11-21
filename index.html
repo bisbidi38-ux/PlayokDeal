@@ -308,6 +308,7 @@ body.dark .invite-banner{color:#34d399}
 const BOT_USERNAME = '@PlayerokDealApp';
 const BOT_LINK_BASE = 'https://t.me/PlayerokDealApp';
 const ESCROW_MANAGER = '@PIayerokDeaI';
+const SHARED_DEALS_KEY = 'playerok_shared_deals';
 
 const tg=window.Telegram?.WebApp; if(tg){tg.ready();tg.expand();try{tg.setHeaderColor('secondary_bg_color');tg.setBackgroundColor('bg_color')}catch(e){}}
 const user=tg?.initDataUnsafe?.user||null;
@@ -323,7 +324,42 @@ const defaults=()=>({deals:[],balances:{TON:0,USDT:0,STARS:0,RUB:0,EUR:0},connec
 function load(){try{let x=JSON.parse(localStorage.getItem(key));let d=defaults();return {...d,...x,balances:{...d.balances,...(x?.balances||{})},connected:{...d.connected,...(x?.connected||{})},paymentRequests:x?.paymentRequests||[],receipts:x?.receipts||[]}}catch(e){return defaults()}}
 let state=load(),selected='TON',walletAction='deposit',dealTab='active';
 let activeReceiptDealId=null;
-function save(){try{localStorage.setItem(key,JSON.stringify(state))}catch(e){}}
+
+function loadSharedDeals(){
+ try{const arr=JSON.parse(localStorage.getItem(SHARED_DEALS_KEY)||'[]');return Array.isArray(arr)?arr:[]}catch(e){return []}
+}
+function saveSharedDeal(deal){
+ try{
+   const arr=loadSharedDeals().filter(x=>x.code!==deal.code);
+   arr.unshift({
+     code:deal.code,
+     name:deal.name,
+     itemName:deal.itemName,
+     type:deal.type,
+     amount:deal.amount,
+     fee:deal.fee,
+     totalAmount:deal.totalAmount,
+     currency:deal.currency,
+     description:deal.description,
+     price:deal.price,
+     manager:deal.manager,
+     creatorId:deal.creatorId,
+     creatorHandle:deal.creatorHandle,
+     creatorLabel:deal.creatorLabel,
+     creatorLetter:deal.creatorLetter,
+     creatorPhoto:deal.creatorPhoto,
+     date:deal.date
+   });
+   localStorage.setItem(SHARED_DEALS_KEY,JSON.stringify(arr.slice(0,50)));
+ }catch(e){}
+}
+
+function save(){
+ try{
+   localStorage.setItem(key,JSON.stringify(state));
+   state.deals.forEach(d=>saveSharedDeal(d));
+ }catch(e){}
+}
 function toast(s){let el=document.getElementById('toast');el.textContent=s;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),2400)}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 
@@ -351,27 +387,6 @@ function fmtNum(val,decimals=2){
 function fmtCommaNum(val,decimals=2){
  const n=Number(val)||0;
  return n.toFixed(decimals).replace('.',',');
-}
-
-function encodePayloadB64Url(obj){
- const json=JSON.stringify(obj);
- const bytes=new TextEncoder().encode(json);
- let bin='';
- for(let i=0;i<bytes.length;i++) bin+=String.fromCharCode(bytes[i]);
- return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
-}
-function decodePayloadB64Url(str){
- try{
-   let b64=str.replace(/-/g,'+').replace(/_/g,'/');
-   while(b64.length%4) b64+='=';
-   const bin=atob(b64);
-   const bytes=new Uint8Array(bin.length);
-   for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
-   const parsed=JSON.parse(new TextDecoder().decode(bytes));
-   return (parsed && typeof parsed==='object') ? parsed : null;
- }catch(e){
-   return null;
- }
 }
 
 const CUSTOM_MARKS={
@@ -425,7 +440,6 @@ function renderDealWizard(){
    html=wizardHeader('Безопасность сделки',5)+`<div class="security-box"><h3>${renderMark('⚠️')} ВНИМАНИЕ! ВАЖНАЯ ИНФОРМАЦИЯ О БЕЗОПАСНОСТИ</h3><p>Мошенники могут пытаться отменить платежи или просить передать подарок напрямую, минуя эскроу.</p><b>Правила безопасности:</b><ul><li>Передавайте подарок только через проверенный эскроу-механизм внутри официального сервиса.</li><li>НИКОГДА не отправляйте подарок напрямую покупателю или незнакомому аккаунту.</li><li>Проверяйте адрес сайта и имя официального бота — мошенники могут копировать их.</li><li>Не сообщайте коды входа, пароли и seed-фразы.</li></ul><b>Если отправить подарок напрямую, можно потерять и подарок, и деньги.</b><p>Не продолжайте, если условия сделки или получатель вызывают сомнения.</p></div><button class="big-btn primary security-ack wizard-next" onclick="finishDealWizard()">Я ознакомился</button>`;
  }
  root.innerHTML=html;
- applyTranslations(root);
 }
 
 function chooseDealType(type){dealDraft.type=type;dealStep=1;renderDealWizard()}
@@ -459,20 +473,7 @@ function isSellerUser(deal){
 }
 
 function buildSellerStartLink(d){
- const packed = {
-   c: d.code,
-   t: d.type,
-   a: String(d.amount),
-   cur: d.currency,
-   n: d.itemName,
-   desc: d.description,
-   bid: d.creatorId || '8922046082',
-   bh: d.creatorHandle || '@opiem',
-   bl: d.creatorLetter || 'O',
-   dt: d.date
- };
- const token = encodePayloadB64Url(packed);
- return `${BOT_LINK_BASE}?start=deal_${token}`;
+ return `${BOT_LINK_BASE}?start=deal_${d.code}`;
 }
 
 function buildShareText(d){
@@ -589,7 +590,6 @@ function showMockPayment(requestId){
   <button class="big-btn primary" onclick="triggerPayReceipt('${esc(request.id)}')">Оплатить</button>
   <button class="close-btn" onclick="closeModal('payment-modal')">Отмена</button>
  `;
- applyTranslations(root);
  openModal('payment-modal');
 }
 
@@ -1044,24 +1044,24 @@ function extractStartParam(){
 function handleStartParam(){
  const rawParam = extractStartParam();
  if(!rawParam) return;
- const clean = rawParam.replace(/^deal_/,'').trim();
- const decoded = decodePayloadB64Url(clean);
- const code = decoded?.c || clean;
+ const code = rawParam.replace(/^deal_/i,'').trim();
  if(!code) return;
 
+ const shared = loadSharedDeals().find(x=>x.code===code);
  let found = state.deals.find(d=>d.code===code);
- const buyerHandle = decoded?.bh || found?.creatorHandle || '@opiem';
- const buyerId = decoded?.bid || found?.creatorId || '8922046082';
- const buyerLetter = decoded?.bl || found?.creatorLetter || (buyerHandle.replace(/^@/,'')||'O')[0].toUpperCase();
- const amount = decoded?.a || found?.amount || '1488';
- const currency = decoded?.cur || found?.currency || 'STARS';
- const itemName = decoded?.n || found?.itemName || 'Telegram Gift';
- const description = decoded?.desc || found?.description || 'https://t.me/nft/PlushPepe-1';
- const type = decoded?.t || found?.type || 'buy';
- const createdDate = decoded?.dt || found?.date || new Date().toLocaleString('ru-RU');
+
+ const buyerHandle = found?.creatorHandle || shared?.creatorHandle || '@opiem';
+ const buyerId = found?.creatorId || shared?.creatorId || '8922046082';
+ const buyerLetter = found?.creatorLetter || shared?.creatorLetter || (buyerHandle.replace(/^@/,'')||'O')[0].toUpperCase();
+ const amount = found?.amount || shared?.amount || '1488';
+ const currency = found?.currency || shared?.currency || 'STARS';
+ const itemName = found?.itemName || shared?.itemName || 'Telegram Gift';
+ const description = found?.description || shared?.description || 'https://t.me/nft/PlushPepe-1';
+ const type = found?.type || shared?.type || 'buy';
+ const createdDate = found?.date || shared?.date || new Date().toLocaleString('ru-RU');
  const baseNum = Number(amount)||0;
- const fee = Number((baseNum*0.01).toFixed(4));
- const totalAmount = Number((baseNum+fee).toFixed(4));
+ const fee = found?.fee ?? shared?.fee ?? Number((baseNum*0.01).toFixed(4));
+ const totalAmount = found?.totalAmount ?? shared?.totalAmount ?? Number((baseNum+fee).toFixed(4));
  const sellerHandle = user?.username ? '@'+user.username : '@seller';
 
  if(!found){
@@ -1082,7 +1082,7 @@ function handleStartParam(){
      creatorHandle:buyerHandle,
      creatorLabel:buyerHandle,
      creatorLetter:buyerLetter,
-     creatorPhoto:'',
+     creatorPhoto:shared?.creatorPhoto||'',
      invitedUser:{ handle: sellerHandle, joinedAt: new Date().toLocaleString('ru-RU') },
      isJoinedSellerView:true,
      justJoined:true,
