@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#f4f6fb">
+<title>Playerok Mini App</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#f3f5fa;--surface:#fff;--text:#111827;--muted:#8992a3;--line:#e8ebf2;--blue:#087cff;--blue2:#36a0ff;--shadow:0 12px 34px rgba(31,52,90,.09);--nav:rgba(255,255,255,.88)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;padding:env(safe-area-inset-top) 16px calc(116px + env(safe-area-inset-bottom));background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;transition:background .3s,color .3s;min-height:100vh}
+body.dark{--bg:#0c111b;--surface:#151d2b;--text:#f4f7fc;--muted:#9aa6ba;--line:#273246;--shadow:0 14px 38px rgba(0,0,0,.28);--nav:rgba(21,29,43,.9)}
+button,input,select{font:inherit}button{cursor:pointer;border:0}
+header{display:flex;align-items:center;justify-content:space-between;margin:38px 2px 22px;animation:fadeDown .55s both}
+h1{font-size:31px;letter-spacing:-1.1px;margin:0;font-weight:800}
+.subhead{color:var(--muted);font-size:14px;margin:6px 0 0}
+.page{display:none;animation:pageIn .38s ease both}.page.active{display:block}
+@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes shine{0%{transform:translateX(-130%) skewX(-18deg)}100%{transform:translateX(230%) skewX(-18deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes goldPulse{0%,100%{filter:drop-shadow(0 0 5px rgba(255,199,61,.5))}50%{filter:drop-shadow(0 0 15px rgba(255,199,61,.95))}}
+@keyframes rise{from{opacity:0;transform:translateY(35px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes pop{0%{transform:scale(.94)}65%{transform:scale(1.035)}100%{transform:scale(1)}}
+@keyframes pulse{0%,100%{box-shadow:0 8px 22px rgba(8,124,255,.22)}50%{box-shadow:0 10px 30px rgba(8,124,255,.42)}}
+@keyframes orbit{to{transform:rotate(360deg)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}
+.primary{background:linear-gradient(115deg,var(--blue2),var(--blue));color:white;box-shadow:0 9px 22px rgba(8,124,255,.25)}
+.primary:active,.outline:active,.nav-item:active{transform:scale(.97)}
+.big-btn{width:100%;min-height:68px;border-radius:22px;font-size:19px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .18s,filter .18s;position:relative;overflow:hidden}
+.big-btn:after{content:"";position:absolute;top:-40%;left:0;width:32%;height:180%;background:rgba(255,255,255,.23);transform:translateX(-130%) skewX(-18deg)}
+.big-btn:active:after{animation:shine .55s}
+.outline{width:100%;min-height:68px;border-radius:22px;background:var(--surface);border:1.5px solid var(--line);color:var(--text);font-size:19px;font-weight:650;margin-bottom:13px;transition:.2s}
+.empty{text-align:center;color:var(--muted);font-size:17px;margin:62px 0 20px}
+.deal-card{padding:18px;margin:12px 0;animation:rise .35s both}
+.deal-title{font-weight:750;font-size:17px;margin-bottom:8px}
+.muted{color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:6px 10px;background:rgba(8,124,255,.1);color:var(--blue);font-size:12px;font-weight:700}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.small-action{border-radius:13px;padding:11px 13px;background:rgba(8,124,255,.1);color:var(--blue);font-weight:700;margin-top:12px}
+.bottom-nav{position:fixed;z-index:10;left:3%;width:94%;bottom:calc(12px + env(safe-area-inset-bottom));height:82px;padding:6px;display:flex;align-items:center;justify-content:space-around;border:1px solid rgba(255,255,255,.75);border-radius:30px;background:var(--nav);box-shadow:0 15px 40px rgba(35,54,91,.16);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
+.nav-item{flex:1;height:68px;border-radius:24px;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px;font-weight:700;transition:all .25s}
+.nav-item svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.nav-item.active{background:linear-gradient(135deg,#2b9aff,#066eea);color:#fff;box-shadow:0 8px 20px rgba(8,124,255,.32);transform:translateY(-3px)}
+/* wallets */
+.asset-pills{display:flex;gap:9px;overflow-x:auto;margin:0 -2px 18px;padding:2px 2px 8px;scrollbar-width:none}.asset-pills::-webkit-scrollbar{display:none}
+.asset-pill{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:99px;padding:10px 15px;font-weight:700;box-shadow:var(--shadow);transition:.2s}
+.asset-pill.active{background:var(--blue);color:#fff;border-color:var(--blue);transform:translateY(-2px)}
+.wallet-card-wrap{perspective:1000px;margin:12px 0 6px}
+.wallet-card{position:relative;overflow:hidden;min-height:220px;border-radius:27px;padding:22px;color:white;box-shadow:0 18px 34px rgba(8,124,255,.25);display:flex;flex-direction:column;justify-content:space-between;transition:background .35s,transform .35s;animation:pop .45s both}
+.wallet-card:before{content:"";position:absolute;width:230px;height:230px;border:1px solid rgba(255,255,255,.18);border-radius:50%;right:-75px;top:-105px}
+.wallet-card:after{content:"";position:absolute;width:170px;height:170px;border:1px solid rgba(255,255,255,.14);border-radius:50%;right:-30px;top:-75px}
+.wallet-top,.wallet-bottom{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.coin-mark{width:45px;height:45px;border-radius:15px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:22px;font-weight:800;backdrop-filter:blur(8px)}
+.wallet-brand{font-size:16px;font-weight:800;letter-spacing:.2px}
+.balance-label{font-size:11px;letter-spacing:1.3px;opacity:.8;font-weight:700}
+.balance-number{font-size:37px;font-weight:850;letter-spacing:-1px;margin-top:4px}
+.balance-number small{font-size:17px;opacity:.9}
+.wallet-status{font-size:13px;font-weight:650;opacity:.92}
+.chip{width:39px;height:29px;border-radius:7px;background:linear-gradient(135deg,#ffe6a1,#c99b42);border:1px solid rgba(255,255,255,.5)}
+.dots{display:flex;justify-content:center;gap:6px;margin:13px 0 18px}.dots i{width:6px;height:6px;border-radius:99px;background:#c5ccd8;transition:.2s}.dots i.active{width:19px;background:var(--blue)}
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:14px 0}
+.action-btn{height:55px;border-radius:17px;font-weight:750;font-size:16px;transition:.2s}
+.action-btn.secondary{background:var(--surface);border:1px solid var(--line);color:var(--text)}
+.requisites{padding:19px;margin-top:8px}.requisites h3{margin:0 0 5px;font-size:19px}.requisites p{margin:0 0 15px;color:var(--muted);font-size:14px}
+.connect{height:52px;width:100%;border-radius:16px;font-weight:750;font-size:15px}
+/* leaders */
+.leaders-hero{position:relative;overflow:hidden;padding:20px 14px 18px;border-radius:28px;color:#fff;background:radial-gradient(circle at 50% 5%,#7659ff,#321c78 52%,#171331);box-shadow:0 16px 34px rgba(49,28,120,.25);margin-bottom:16px}
+.leaders-hero:before,.leaders-hero:after{content:"";position:absolute;border:1px solid rgba(255,255,255,.1);border-radius:50%;width:270px;height:270px;left:50%;top:-205px;transform:translateX(-50%)}
+.leaders-hero:after{width:330px;height:330px;top:-235px}
+.hero-head{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1;margin-bottom:17px}
+.hero-head h2{margin:0;font-size:23px}.hero-head p{margin:5px 0 0;font-size:13px;color:#d6ceff}
+.participants{background:rgba(255,255,255,.14);padding:8px 10px;border-radius:99px;font-size:12px;font-weight:750}
+.podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:7px;align-items:end;position:relative;z-index:1;text-align:center}
+.podium-person{min-width:0;display:flex;flex-direction:column;align-items:center;animation:rise .65s both}
+.podium-person:nth-child(1){animation-delay:.18s}.podium-person:nth-child(2){animation-delay:.02s}.podium-person:nth-child(3){animation-delay:.32s}
+.avatar-shell{position:relative;width:65px;height:65px;border-radius:50%;padding:3px;margin:4px auto 7px}
+.avatar-shell img,.leader-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.avatar-shell img{border:2px solid rgba(255,255,255,.75)}
+.podium-person.first .avatar-shell{width:83px;height:83px;padding:4px;background:conic-gradient(#fff0a6,#ffb700,#fff2b8,#e68a00,#fff0a6);animation:goldPulse 2s infinite}
+.podium-person.first .avatar-shell:before{content:"";position:absolute;inset:-8px;border-radius:50%;border:2px dashed rgba(255,213,91,.9);animation:orbit 8s linear infinite}
+.podium-person.first .avatar-shell:after{content:"";position:absolute;inset:-14px;border-radius:50%;border:1px solid rgba(255,215,100,.32);animation:orbit 12s linear infinite reverse}
+.podium-person.second .avatar-shell{background:linear-gradient(135deg,#f4f7ff,#8796b4)}
+.podium-person.third .avatar-shell{background:linear-gradient(135deg,#ffd0a1,#c66b31)}
+.crown{font-size:22px;line-height:1;animation:float 2.2s ease-in-out infinite}
+.rank-dot{position:absolute;bottom:-3px;right:-1px;width:23px;height:23px;border-radius:50%;display:grid;place-items:center;background:#ffd65c;color:#302044;border:2px solid #39236f;font-weight:900;font-size:12px}
+.podium-person.second .rank-dot{background:#dce5f4}.podium-person.third .rank-dot{background:#ffb879}
+.podium-name{font-size:13px;font-weight:800;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.podium-volume{font-size:14px;font-weight:850;margin-top:3px}.podium-count{font-size:11px;color:#d7d0f4;margin:2px 0 7px}
+.pedestal{width:100%;border-radius:13px 13px 5px 5px;display:grid;place-items:center;font-size:25px;font-weight:900;color:rgba(255,255,255,.9)}
+.first .pedestal{height:78px;background:linear-gradient(180deg,rgba(255,205,72,.55),rgba(160,96,20,.25))}
+.second .pedestal{height:58px;background:linear-gradient(180deg,rgba(190,205,230,.4),rgba(90,105,135,.2))}
+.third .pedestal{height:48px;background:linear-gradient(180deg,rgba(255,165,90,.42),rgba(150,70,25,.2))}
+.leader-row{display:flex;align-items:center;gap:11px;padding:13px 14px;margin:10px 0;border-radius:19px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);animation:rise .45s both}
+.leader-rank{width:29px;height:29px;border-radius:10px;display:grid;place-items:center;background:rgba(8,124,255,.1);color:var(--blue);font-weight:850;font-size:13px}
+.leader-avatar{width:43px;height:43px;border-radius:50%;flex-shrink:0;overflow:hidden;background:#dbeafe}
+.leader-info{flex:1;min-width:0}.leader-name{font-weight:750;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{height:5px;border-radius:9px;background:rgba(130,145,170,.18);margin-top:7px;overflow:hidden}.bar span{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#168bff,#8b5cf6);transform-origin:left;animation:barIn 1s both}
+@keyframes barIn{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.leader-stats{text-align:right;flex-shrink:0}.leader-vol{font-weight:850;font-size:14px}.leader-count{font-size:11px;color:var(--muted);margin-top:3px}
+/* profile */
+.theme-switch{display:flex;padding:4px;border:1px solid var(--line);background:var(--surface);border-radius:99px;box-shadow:var(--shadow)}
+.theme-btn{width:34px;height:30px;border-radius:99px;background:transparent;color:var(--muted);font-size:15px}.theme-btn.active{background:rgba(8,124,255,.13);color:var(--blue)}
+.profile-card{position:relative;overflow:hidden;border-radius:27px;padding:21px;color:white;background:radial-gradient(circle at 90% 10%,rgba(255,255,255,.25),transparent 36%),linear-gradient(135deg,#219dff,#075bd3);box-shadow:0 17px 34px rgba(8,124,255,.25);animation:rise .5s both}
+.profile-card:before{content:"";position:absolute;width:220px;height:220px;border:1px solid rgba(255,255,255,.15);border-radius:50%;right:-90px;bottom:-135px}
+.profile-card:after{content:"";position:absolute;width:160px;height:160px;border:1px solid rgba(255,255,255,.12);border-radius:50%;right:-55px;bottom:-105px}
+.profile-top,.profile-user,.profile-foot{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.profile-brand{font-size:18px;font-weight:850;letter-spacing:.2px}
+.icon-btn{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.2);color:#fff}
+.icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.profile-user{justify-content:flex-start;gap:13px;margin:20px 0}
+.profile-avatar{width:62px;height:62px;border-radius:50%;border:2px solid rgba(255,255,255,.7);background:rgba(255,255,255,.2);overflow:hidden;display:grid;place-items:center;font-size:23px;font-weight:800;flex-shrink:0}
+.profile-avatar img{width:100%;height:100%;object-fit:cover}
+.profile-name{font-size:21px;font-weight:850;line-height:1.15}.profile-handle{font-size:13px;opacity:.82;margin-top:4px}
+.turnover-label{font-size:10px;letter-spacing:1.4px;opacity:.8;font-weight:750}.turnover{font-size:34px;font-weight:900;letter-spacing:-1px;margin-top:4px}
+.profile-foot{margin-top:16px;font-size:12px;opacity:.85}
+.profile-tools{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:14px 0}
+.tool-btn{height:54px;border-radius:17px;background:var(--surface);border:1px solid var(--line);color:var(--text);font-weight:750;box-shadow:var(--shadow);transition:.2s}
+.balances{padding:17px;margin-top:13px}.balances h3{font-size:19px;margin:0}
+.balance-row{display:flex;align-items:center;justify-content:space-between;padding:14px 2px;border-bottom:1px solid var(--line);font-weight:700}
+.balance-row:last-child{border:0}.balance-left{display:flex;align-items:center;gap:10px}.asset-dot{width:31px;height:31px;border-radius:11px;display:grid;place-items:center;color:#fff;font-weight:850}
+.switchline{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted)}
+.switchline input{accent-color:var(--blue)}
+/* modal */
+.modal-bg{position:fixed;inset:0;background:rgba(5,12,25,.48);z-index:30;display:none;align-items:flex-end;backdrop-filter:blur(5px)}
+.modal-bg.show{display:flex;animation:fadeDown .2s}
+.modal{width:100%;background:var(--surface);color:var(--text);border-radius:27px 27px 0 0;padding:23px 19px calc(25px + env(safe-area-inset-bottom));box-shadow:0 -12px 35px rgba(0,0,0,.2);animation:rise .28s}
+.modal h2{margin:0 0 17px;font-size:23px}
+.modal label{display:block;font-size:13px;color:var(--muted);font-weight:700;margin:12px 0 6px}
+.modal input,.modal select{width:100%;height:51px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--text);padding:0 14px;outline:none}
+.modal .big-btn{height:55px;min-height:55px;font-size:16px;margin:16px 0 0}
+.close-btn{height:49px;width:100%;border-radius:15px;background:var(--bg);color:var(--text);font-weight:750;margin-top:9px}
+.toast{position:fixed;z-index:50;left:50%;bottom:110px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#172033;color:white;padding:12px 17px;border-radius:14px;font-size:13px;font-weight:700;transition:.25s;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* Deal creation wizard */
+.deal-wizard{max-height:88vh;overflow-y:auto;border-radius:27px 27px 0 0;overscroll-behavior:contain}
+.wizard-head{display:flex;align-items:center;gap:10px;margin-bottom:17px}
+.wizard-back{width:40px;height:40px;flex:0 0 40px;border-radius:14px;background:var(--bg);color:var(--text);font-size:23px}
+.wizard-title{font-size:23px;font-weight:850;letter-spacing:-.5px;margin:0}
+.wizard-sub{color:var(--muted);font-size:13px;margin:5px 0 18px}
+.wizard-progress{height:5px;background:var(--line);border-radius:9px;overflow:hidden;margin:0 0 20px}
+.wizard-progress span{display:block;height:100%;background:linear-gradient(90deg,#37a5ff,#087cff);border-radius:9px;transition:width .35s}
+.wizard-choice,.currency-choice{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 16px;border:1px solid var(--line);border-radius:17px;background:var(--bg);color:var(--text);font-weight:750;margin:10px 0;text-align:left;transition:.22s;animation:rise .3s both}
+.wizard-choice:active,.currency-choice:active{transform:scale(.98);background:rgba(8,124,255,.1)}
+.choice-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:rgba(8,124,255,.12);color:var(--blue);font-size:23px}
+.currency-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.currency-choice{margin:0;padding:12px 10px;font-size:14px;min-height:61px}
+.currency-choice b{font-size:17px;display:block}
+.currency-choice small{display:block;color:var(--muted);font-weight:600;margin-top:2px}
+.wizard-field{display:block;width:100%;min-height:52px;border:1px solid var(--line);border-radius:15px;background:var(--bg);color:var(--text);padding:13px 14px;margin:8px 0 14px;outline:none}
+textarea.wizard-field{min-height:135px;resize:vertical;line-height:1.5}
+.wizard-field:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(8,124,255,.1)}
+.wizard-label{display:block;font-size:13px;color:var(--muted);font-weight:750;margin:15px 0 6px}
+.wizard-next{margin-top:13px!important}
+.confirm-card{padding:16px;border:1px solid var(--line);background:var(--bg);border-radius:17px;margin:10px 0}
+.confirm-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.confirm-row:last-child{border:0}.confirm-row span{color:var(--muted)}.confirm-row b{text-align:right;overflow-wrap:anywhere;max-width:65%}
+.security-box{border:1px solid rgba(239,68,68,.25);background:rgba(239,68,68,.07);border-radius:17px;padding:15px;line-height:1.48;font-size:13px}
+.security-box h3{color:#ef4444;margin:0 0 10px;font-size:16px}
+.security-box ul{padding-left:19px;margin:8px 0}.security-box li{margin:6px 0}
+.security-ack{background:#e53945!important;box-shadow:0 9px 22px rgba(229,57,69,.24)!important}
+
+@media(min-width:600px){body{max-width:520px;margin:auto}.bottom-nav{max-width:490px;left:50%;transform:translateX(-50%)}}
+
+/* Дополнительная анимация интерфейса */
+button,.card,.asset-pill,.tool-btn,.action-btn,.outline{transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s,filter .22s}
+button:hover{filter:brightness(1.045)}
+.big-btn,.action-btn,.tool-btn,.outline,.asset-pill{will-change:transform}
+.profile-card{isolation:isolate}
+.profile-card:before{animation:orbit 24s linear infinite}
+.profile-avatar{position:relative;box-shadow:0 0 0 4px rgba(255,255,255,.13),0 0 25px rgba(255,255,255,.2);animation:avatarBreath 3s ease-in-out infinite}
+.profile-avatar:before{content:"";position:absolute;inset:-5px;border:1.5px solid rgba(255,255,255,.65);border-radius:50%;animation:orbit 9s linear infinite;pointer-events:none}
+.profile-avatar img{position:relative;z-index:1;border-radius:50%;border:2px solid rgba(255,255,255,.8)}
+@keyframes avatarBreath{0%,100%{transform:scale(1);box-shadow:0 0 0 4px rgba(255,255,255,.13),0 0 18px rgba(255,255,255,.16)}50%{transform:scale(1.045);box-shadow:0 0 0 7px rgba(255,255,255,.12),0 0 28px rgba(255,255,255,.3)}}
+.podium-person.first .avatar-shell{box-shadow:0 0 24px rgba(255,193,48,.35)}
+.podium-person.first .avatar-shell img{border-color:#fff3bd}
+.leader-avatar{box-shadow:0 0 0 2px var(--surface),0 0 0 3px var(--line);transition:transform .25s}
+.leader-row:active .leader-avatar{transform:scale(1.12) rotate(-5deg)}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+</style>
+</head>
+<body>
+<!-- SVG icon set -->
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden">
+<symbol id="i-deals" viewBox="0 0 24 24"><path d="M4 7.5h16v13H4z"/><path d="M8 7.5V4h8v3.5M4 12h16M10 12v3h4v-3"/></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><path d="M4 6.5h15a2 2 0 0 1 2 2v11H5a2 2 0 0 1-2-2v-12a2 2 0 0 1 2-2h13"/><path d="M16 12h5v4h-5a2 2 0 0 1 0-4Z"/></symbol>
+<symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M6 4h12v7a6 6 0 0 1-12 0zM6 7H3v2a4 4 0 0 0 4 4M18 7h3v2a4 4 0 0 1-4 4"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 4v15m-6-6 6 6 6-6"/></symbol>
+<symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 20V5m-6 6 6-6 6 6"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+</svg>
+
+<section class="page active" id="deals">
+<header><div><h1>Мои сделки</h1><p class="subhead">Безопасные сделки в одном месте</p></div></header>
+<button class="big-btn primary" onclick="openDealModal()"><svg width="22" height="22"><use href="#i-plus"/></svg>Создать сделку</button>
+<button class="big-btn primary" onclick="showDeals('active')">Активные сделки</button>
+<button class="outline" onclick="showDeals('history')">История сделок</button>
+<div id="deal-list" class="empty">Нет активных сделок</div>
+</section>
+
+<section class="page" id="wallet">
+<header><div><h1>Мои кошельки</h1><p class="subhead">Все балансы на одной странице</p></div></header>
+<div class="asset-pills" id="asset-pills"></div>
+<div class="wallet-card-wrap"><div class="wallet-card" id="wallet-card">
+<div class="wallet-top"><div class="row" style="justify-content:flex-start"><div class="coin-mark" id="w-icon">💎</div><div><div style="font-size:20px;font-weight:850" id="w-symbol">TON</div><div style="font-size:13px;opacity:.82" id="w-name">Toncoin</div></div></div><div class="wallet-brand">PLAYEROK</div></div>
+<div><div class="balance-label">ДОСТУПНЫЙ БАЛАНС</div><div class="balance-number"><span id="w-balance">0</span> <small id="w-unit">TON</small></div></div>
+<div class="wallet-bottom"><div class="wallet-status" id="w-status">Кошелёк не подключён</div><div class="chip"></div></div>
+</div></div>
+<div class="dots" id="wallet-dots"></div>
+<div class="action-grid"><button class="action-btn primary" onclick="openWalletAction('deposit')"><svg width="18" height="18" style="vertical-align:middle"><use href="#i-arrow-down"/></svg> Пополнить</button><button class="action-btn secondary" onclick="openWalletAction('withdraw')"><svg width="18" height="18" style="vertical-align:middle"><use href="#i-arrow-up"/></svg> Вывести</button></div>
+<div class="card requisites"><h3>Реквизиты</h3><p id="req-label">TON кошелёк</p><button class="connect primary" id="connect-btn" onclick="toggleConnect()">Подключить кошелёк</button></div>
+</section>
+
+<section class="page" id="leaders">
+<header><div><h1>Лидеры</h1><p class="subhead">Лучшие участники сообщества</p></div></header>
+<div class="leaders-hero"><div class="hero-head"><div><h2>Топ участников</h2><p>По объёму завершённых сделок</p></div><div class="participants">✦ 3 689 участников</div></div><div class="podium" id="podium"></div></div>
+<div id="leaders-list"></div>
+</section>
+
+<section class="page" id="profile">
+<header><div><h1>Профиль</h1><p class="subhead">Твой аккаунт Playerok</p></div><div class="theme-switch"><button class="theme-btn active" id="light-btn" onclick="setTheme('light')">☀</button><button class="theme-btn" id="dark-btn" onclick="setTheme('dark')">☾</button></div></header>
+<div class="profile-card" id="profile-card">
+<div class="profile-top"><div class="profile-brand">PLAYEROK <span style="opacity:.7;font-size:11px">• MEMBER</span></div><button class="icon-btn" onclick="showUserInfo()"><svg><use href="#i-shield"/></svg></button></div>
+<div class="profile-user"><div class="profile-avatar" id="p-avatar">?</div><div style="min-width:0"><div class="profile-name" id="p-name">Загрузка профиля…</div><div class="profile-handle" id="p-handle">Открой приложение через Telegram</div></div></div>
+<div class="turnover-label">ТОРГОВЫЙ ОБОРОТ</div><div class="turnover" id="p-turnover">$0.00</div>
+<div class="profile-foot"><span id="p-id">ID: —</span><span id="p-deals">0 завершённых сделок</span></div>
+</div>
+<div class="profile-tools"><button class="tool-btn" onclick="openTransactions()"><svg width="17" height="17" style="vertical-align:middle"><use href="#i-clock"/></svg> Транзакции</button><button class="tool-btn" onclick="toggleLanguage()"><svg width="17" height="17" style="vertical-align:middle"><use href="#i-globe"/></svg> Язык: <span id="lang">RU</span></button></div>
+<div class="card balances"><div class="row"><h3>Балансы</h3><label class="switchline"><input type="checkbox" id="hide-zero" onchange="renderBalances()">Скрыть нулевые</label></div><div id="balances-list"></div></div>
+</section>
+
+<nav class="bottom-nav">
+<button class="nav-item active" onclick="navigate('deals',this)"><svg><use href="#i-deals"/></svg>Сделки</button>
+<button class="nav-item" onclick="navigate('wallet',this)"><svg><use href="#i-wallet"/></svg>Кошельки</button>
+<button class="nav-item" onclick="navigate('leaders',this)"><svg><use href="#i-trophy"/></svg>Лидеры</button>
+<button class="nav-item" onclick="navigate('profile',this)"><svg><use href="#i-user"/></svg>Профиль</button>
+</nav>
+
+<div class="modal-bg" id="deal-modal"><div class="modal deal-wizard"><div id="deal-wizard-content"></div></div></div>
+<div class="modal-bg" id="wallet-modal"><div class="modal"><h2 id="wallet-modal-title">Пополнить баланс</h2><label>Валюта</label><select id="wallet-currency"></select><label>Сумма</label><input id="wallet-amount" type="number" min="0.000001" step="any" placeholder="Введите сумму"><button class="big-btn primary" onclick="submitWallet()">Подтвердить</button><button class="close-btn" onclick="closeModal('wallet-modal')">Отмена</button></div></div>
+<div class="modal-bg" id="tx-modal"><div class="modal"><h2>История транзакций</h2><div id="tx-list"></div><button class="close-btn" onclick="closeModal('tx-modal')">Закрыть</button></div></div>
+<div class="modal-bg" id="payment-modal" style="z-index:65;align-items:center;padding:20px"><div class="modal" style="max-width:440px;border-radius:27px"><div id="mock-payment-content"></div></div></div>
+<div class="modal-bg" id="receipt-modal" style="z-index:66;align-items:center;padding:20px"><div class="modal" style="max-width:440px;border-radius:27px"><div id="mock-receipt-content"></div></div></div>
+<div class="modal-bg" id="language-modal" style="z-index:60;align-items:center;padding:20px"><div class="modal" style="border-radius:27px;max-width:440px"><div style="text-align:center;font-size:34px;margin-bottom:8px">🌐</div><h2 id="language-title" style="text-align:center;margin-bottom:7px">Выберите язык</h2><p id="language-subtitle" class="muted" style="text-align:center;margin:0 0 17px">Язык будет сохранён для этого профиля на этом устройстве</p><div id="language-options" style="display:grid;gap:9px"></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const tg=window.Telegram?.WebApp; if(tg){tg.ready();tg.expand();try{tg.setHeaderColor('secondary_bg_color');tg.setBackgroundColor('bg_color')}catch(e){}}
+const user=tg?.initDataUnsafe?.user||null;
+const key=user?.id?`playerok_${user.id}`:'playerok_guest';
+const assets=[
+ {key:'TON',name:'Toncoin',unit:'TON',icon:'💎',req:'Адрес TON-кошелька',grad:'linear-gradient(135deg,#25a8ff,#0757cb)'},
+ {key:'USDT',name:'Tether USD',unit:'USDT',icon:'₮',req:'Адрес USDT (укажи сеть)',grad:'linear-gradient(135deg,#16c7a0,#087c66)'},
+ {key:'STARS',name:'Telegram Stars',unit:'⭐',icon:'★',req:'Баланс Telegram Stars',grad:'linear-gradient(135deg,#ffc83d,#e28a08)'},
+ {key:'RUB',name:'Российский рубль',unit:'₽',icon:'₽',req:'Банковские реквизиты',grad:'linear-gradient(135deg,#5797ff,#284bc5)'},
+ {key:'EUR',name:'Евро',unit:'€',icon:'€',req:'IBAN / SEPA реквизиты',grad:'linear-gradient(135deg,#8b83ff,#4935bd)'}
+];
+const defaults=()=>({deals:[],balances:{TON:0,USDT:0,STARS:0,RUB:0,EUR:0},connected:{},transactions:[],paymentRequests:[],receipts:[],theme:'light',lang:'RU',languageChosen:false});
+function load(){try{let x=JSON.parse(localStorage.getItem(key));let d=defaults();return {...d,...x,balances:{...d.balances,...(x?.balances||{})},connected:{...d.connected,...(x?.connected||{})},paymentRequests:x?.paymentRequests||[],receipts:x?.receipts||[]}}catch(e){return defaults()}}
+let state=load(),selected='TON',walletAction='deposit',dealTab='active';
+function save(){try{localStorage.setItem(key,JSON.stringify(state))}catch(e){}}
+function toast(s){let el=document.getElementById('toast');el.textContent=s;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),2200)}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function navigate(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b===btn));if(id==='wallet')renderWallet();if(id==='leaders')renderLeaders();if(id==='profile')renderProfile();if(id==='deals')renderDeals(dealTab)}
+function openModal(id){document.getElementById(id).classList.add('show')}function closeModal(id){document.getElementById(id).classList.remove('show')}
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
+const dealCurrencies=[
+ {code:'TON',symbol:'💎',name:'TON'},{code:'USDT',symbol:'₮',name:'USDT'},{code:'STARS',symbol:'⭐',name:'STARS'},
+ {code:'RUB',symbol:'₽',name:'RUB'},{code:'USD',symbol:'$',name:'USD'},{code:'EUR',symbol:'€',name:'EUR'},
+ {code:'GBP',symbol:'£',name:'GBP'},{code:'CNY',symbol:'¥',name:'CNY'},{code:'JPY',symbol:'¥',name:'JPY'},
+ {code:'TRY',symbol:'₺',name:'TRY'},{code:'UAH',symbol:'₴',name:'UAH'},{code:'KZT',symbol:'₸',name:'KZT'},
+ {code:'BTC',symbol:'₿',name:'BTC'},{code:'ETH',symbol:'◆',name:'ETH'}
+];
+let dealDraft={type:'buy',currency:'TON',amount:'',itemName:'',description:''},dealStep=0;
+function openDealModal(){dealDraft={type:'buy',currency:'TON',amount:'',itemName:'',description:''};dealStep=0;renderDealWizard();openModal('deal-modal')}
+function wizardHeader(title,step,back=true){return `<div class="wizard-head">${back?'<button class="wizard-back" onclick="dealBack()" aria-label="Назад">‹</button>':''}<h2 class="wizard-title">${title}</h2></div><div class="wizard-progress"><span style="width:${step/5*100}%"></span></div>`}
+function renderDealWizard(){const root=document.getElementById('deal-wizard-content');let html='';
+ if(dealStep===0){html=wizardHeader('Создать сделку',0,false)+`<p class="wizard-sub">Выберите тип сделки</p><button class="wizard-choice" onclick="chooseDealType('buy')"><span class="row" style="justify-content:flex-start"><span class="choice-icon">⬇️</span>Купить</span><span>›</span></button><button class="wizard-choice" onclick="chooseDealType('sell')"><span class="row" style="justify-content:flex-start"><span class="choice-icon">⬆️</span>Продать</span><span>›</span></button><button class="close-btn" onclick="closeModal('deal-modal')">Отмена</button>`}
+ if(dealStep===1){html=wizardHeader('Выберите валюту',1)+`<div class="currency-grid">${dealCurrencies.map(c=>`<button class="currency-choice" onclick="chooseDealCurrency('${c.code}')"><span><b>${c.symbol} ${c.code}</b><small>${c.name}</small></span><span>›</span></button>`).join('')}</div>`}
+ if(dealStep===2){html=wizardHeader('Детали сделки',2)+`<p class="wizard-sub">Укажите количество и название предмета</p><div class="confirm-card"><b>Валюта: ${dealDraft.currency}</b></div><label class="wizard-label">Количество</label><input class="wizard-field" id="deal-amount" type="number" min="0.00000001" step="any" placeholder="Например, 2" value="${esc(dealDraft.amount)}"><label class="wizard-label">Название чего продаёте или покупаете</label><input class="wizard-field" id="deal-item-name" maxlength="100" placeholder="Например, Telegram Gift" value="${esc(dealDraft.itemName)}"><button class="big-btn primary wizard-next" onclick="dealDetailsNext()">Далее</button>`}
+ if(dealStep===3){html=wizardHeader('Описание товара',3)+`<p class="wizard-sub">Если это NFT-подарок, добавьте ссылку на каждый подарок с новой строки. Её можно скопировать: профиль Telegram → подарок → ⋯ → «Скопировать ссылку».</p><div class="confirm-card" style="font-size:12px;overflow-wrap:anywhere">Пример:<br>https://t.me/nft/PlushPepe-1<br>https://t.me/nft/DurovsCap-1</div><label class="wizard-label">Описание или ссылки на подарки</label><textarea class="wizard-field" id="deal-description" placeholder="Вставьте ссылки на NFT или опишите товар, например: 2 Crystals and 1 Butterfly">${esc(dealDraft.description)}</textarea><button class="big-btn primary wizard-next" onclick="dealDescriptionNext()">Далее</button>`}
+ if(dealStep===4){html=wizardHeader('Подтверждение',4)+`<div class="confirm-card"><div class="confirm-row"><span>Тип</span><b>${dealDraft.type==='buy'?'Покупка':'Продажа'}</b></div><div class="confirm-row"><span>Предмет</span><b>${esc(dealDraft.itemName)}</b></div><div class="confirm-row"><span>Сумма</span><b>${esc(dealDraft.amount)} ${dealDraft.currency}</b></div><div class="confirm-row"><span>Описание</span><b>${esc(dealDraft.description).replace(/\n/g,'<br>')}</b></div></div><button class="big-btn primary wizard-next" onclick="dealConfirmNext()">Далее</button>`}
+ if(dealStep===5){html=wizardHeader('Безопасность сделки',5)+`<div class="security-box"><h3>⚠️ ВНИМАНИЕ! ВАЖНАЯ ИНФОРМАЦИЯ О БЕЗОПАСНОСТИ</h3><p>Мошенники могут пытаться отменить платежи или просить передать подарок напрямую, минуя эскроу.</p><b>Правила безопасности:</b><ul><li>Передавайте подарок только через проверенный эскроу-механизм внутри официального сервиса.</li><li>НИКОГДА не отправляйте подарок напрямую покупателю или незнакомому аккаунту.</li><li>Проверяйте адрес сайта и имя официального бота — мошенники могут копировать их.</li><li>Не сообщайте коды входа, пароли и seed-фразы.</li></ul><b>Если отправить подарок напрямую, можно потерять и подарок, и деньги.</b><p>Не продолжайте, если условия сделки или получатель вызывают сомнения.</p></div><button class="big-btn primary security-ack wizard-next" onclick="finishDealWizard()">Я ознакомился</button>`}
+ root.innerHTML=html;
+}
+function chooseDealType(type){dealDraft.type=type;dealStep=1;renderDealWizard()}
+function chooseDealCurrency(code){dealDraft.currency=code;dealStep=2;renderDealWizard()}
+function dealBack(){if(dealStep>0){dealStep--;renderDealWizard()}else closeModal('deal-modal')}
+function dealDetailsNext(){let amount=document.getElementById('deal-amount').value.trim(),name=document.getElementById('deal-item-name').value.trim();if(!amount||!Number.isFinite(Number(amount))||Number(amount)<=0||!name){toast('Укажи корректное количество и название');return}dealDraft.amount=amount;dealDraft.itemName=name;dealStep=3;renderDealWizard()}
+function dealDescriptionNext(){let d=document.getElementById('deal-description').value.trim();if(!d){toast('Добавь описание товара или ссылку на подарок');return}dealDraft.description=d;dealStep=4;renderDealWizard()}
+function dealConfirmNext(){dealStep=5;renderDealWizard()}
+function finishDealWizard(){const now=new Date().toLocaleString('ru-RU');const id=Date.now();const label=(dealDraft.type==='buy'?'Покупка: ':'Продажа: ')+dealDraft.itemName;const deal={id,name:label,itemName:dealDraft.itemName,type:dealDraft.type,amount:dealDraft.amount,currency:dealDraft.currency,description:dealDraft.description,price:Number(dealDraft.amount),status:'active',paymentStatus:'pending',paymentRecipient:'8922046082',date:now};state.deals.unshift(deal);state.transactions.unshift({title:'Создана сделка: '+label,amount:dealDraft.amount+' '+dealDraft.currency,date:now});const request={id:'REQ-'+id,dealId:id,recipientId:'8922046082',stars:dealDraft.amount,itemName:dealDraft.itemName,status:'pending',createdAt:now};state.paymentRequests.unshift(request);save();closeModal('deal-modal');renderDeals('active');renderProfile();showMockPayment(request)}
+function showMockPayment(request){const root=document.getElementById('mock-payment-content');root.innerHTML=`<div style="text-align:center;font-size:38px;margin-bottom:8px">⭐</div><h2 style="text-align:center;margin:0 0 8px">Запрос тестовой оплаты</h2><p class="muted" style="text-align:center;margin:0 0 18px">Получатель Telegram ID: <b>${esc(request.recipientId)}</b></p><div class="confirm-card" style="text-align:center;padding:20px 14px"><div style="font-size:19px;font-weight:850;line-height:1.5">Вы хотите оплатить <span style="white-space:nowrap">${esc(request.stars)} ⭐</span> за ${esc(request.itemName)}?</div><div class="muted" style="font-size:12px;margin-top:10px">Сделка № ${esc(request.dealId)}</div></div><div style="margin:14px 0;padding:11px;border-radius:13px;background:rgba(245,158,11,.12);font-size:12px;text-align:center">Демо-режим: настоящие звёзды не списываются. Сообщение не отправляется пользователю в Telegram.</div><button class="big-btn primary" onclick="completeMockPayment('${esc(request.id)}')">Кики</button><button class="close-btn" onclick="closeModal('payment-modal')">Отмена</button>`;openModal('payment-modal')}
+function completeMockPayment(requestId){const request=state.paymentRequests.find(x=>x.id===requestId);if(!request||request.status!=='pending')return;request.status='test_paid';request.paidAt=new Date().toLocaleString('ru-RU');const deal=state.deals.find(x=>x.id===request.dealId);if(deal)deal.paymentStatus='test_paid';const receipt={id:'TEST-'+request.dealId,dealId:request.dealId,recipientId:request.recipientId,stars:request.stars,itemName:request.itemName,status:'Тестовая оплата успешна',date:request.paidAt};state.receipts.unshift(receipt);state.transactions.unshift({title:'Тестовый чек: '+receipt.id,amount:receipt.stars+' ⭐',date:receipt.date});save();closeModal('payment-modal');showMockReceipt(receipt);renderDeals(dealTab);renderProfile()}
+function showMockReceipt(receipt){document.getElementById('mock-receipt-content').innerHTML=`<div style="text-align:center;font-size:38px;margin-bottom:8px">🧾</div><h2 style="text-align:center;margin:0 0 5px">Чек об оплате</h2><p style="text-align:center;color:#d97706;font-weight:800;font-size:12px;margin:0 0 16px">ТЕСТОВЫЙ ЧЕК · ДЕНЬГИ НЕ СПИСАНЫ</p><div class="confirm-card"><div class="confirm-row"><span>Номер чека</span><b>${esc(receipt.id)}</b></div><div class="confirm-row"><span>Номер сделки</span><b>${esc(receipt.dealId)}</b></div><div class="confirm-row"><span>Получатель ID</span><b>${esc(receipt.recipientId)}</b></div><div class="confirm-row"><span>Товар</span><b>${esc(receipt.itemName)}</b></div><div class="confirm-row"><span>Сумма</span><b>${esc(receipt.stars)} ⭐</b></div><div class="confirm-row"><span>Статус</span><b style="color:#d97706">${esc(receipt.status)}</b></div><div class="confirm-row"><span>Дата</span><b>${esc(receipt.date)}</b></div></div><p class="muted" style="font-size:11px;text-align:center;margin:12px 0">Этот чек создан только внутри демо-приложения и не подтверждает реальный платёж.</p><button class="big-btn primary" onclick="closeModal('receipt-modal')">Готово</button>`;openModal('receipt-modal')}
+function renderDeals(tab){dealTab=tab;let list=document.getElementById('deal-list'),items=state.deals.filter(d=>d.status===tab);if(!items.length){list.className='empty';list.textContent=tab==='active'?'Нет активных сделок':'Нет завершённых сделок';return}list.className='';list.innerHTML=items.map(d=>`<div class="card deal-card"><div class="row"><div class="deal-title">${esc(d.name)}</div><span class="pill">${d.status==='active'?'Активна':'Завершена'}</span></div><div style="font-size:19px;font-weight:850">${esc(d.amount||Number(d.price).toFixed(2))} ${esc(d.currency||'USD')}</div><div class="muted" style="font-size:13px;margin-top:5px">${esc(d.description||'')}</div><div class="muted" style="font-size:12px;margin-top:6px">${esc(d.date||'')}</div>${d.status==='active'?`<button class="small-action" onclick="completeDeal(${d.id})">✓ Завершить сделку</button>`:''}</div>`).join('')}
+function showDeals(t){renderDeals(t)}
+function completeDeal(id){let d=state.deals.find(x=>x.id===id);if(!d)return;d.status='history';state.transactions.unshift({title:'Завершена сделка: '+d.name,amount:'$'+Number(d.price).toFixed(2),date:new Date().toLocaleString('ru-RU')});save();renderDeals(dealTab);renderProfile();toast('Сделка завершена')}
+function renderWallet(){document.getElementById('asset-pills').innerHTML=assets.map(a=>`<button class="asset-pill ${a.key===selected?'active':''}" onclick="selectAsset('${a.key}')">${a.icon} ${a.key}</button>`).join('');let a=assets.find(x=>x.key===selected)||assets[0],bal=Number(state.balances[a.key]||0);document.getElementById('wallet-card').style.background=`radial-gradient(circle at 90% 10%,rgba(255,255,255,.25),transparent 36%),${a.grad}`;document.getElementById('w-icon').textContent=a.icon;document.getElementById('w-symbol').textContent=a.key;document.getElementById('w-name').textContent=a.name;document.getElementById('w-balance').textContent=bal.toLocaleString('ru-RU',{maximumFractionDigits:4});document.getElementById('w-unit').textContent=a.unit;document.getElementById('w-status').textContent=state.connected[a.key]?'Кошелёк подключён':'Кошелёк не подключён';document.getElementById('req-label').textContent=a.req;document.getElementById('connect-btn').textContent=state.connected[a.key]?'✓ Подключён — отключить':'Подключить '+a.key+' кошелёк';document.getElementById('wallet-dots').innerHTML=assets.map(x=>`<i class="${x.key===selected?'active':''}"></i>`).join('')}
+function selectAsset(k){selected=k;renderWallet()}
+function toggleConnect(){state.connected[selected]=!state.connected[selected];save();renderWallet();toast(state.connected[selected]?'Кошелёк отмечен как подключённый':'Кошелёк отключён')}
+function openWalletAction(t){walletAction=t;document.getElementById('wallet-modal-title').textContent=t==='deposit'?'Пополнить баланс':'Вывести средства';document.getElementById('wallet-currency').innerHTML=assets.map(a=>`<option value="${a.key}" ${a.key===selected?'selected':''}>${a.name} (${a.key})</option>`).join('');document.getElementById('wallet-amount').value='';openModal('wallet-modal')}
+function submitWallet(){let k=document.getElementById('wallet-currency').value,n=Number(document.getElementById('wallet-amount').value);if(!Number.isFinite(n)||n<=0){toast('Введи корректную сумму');return}let old=Number(state.balances[k]||0);if(walletAction==='withdraw'&&n>old){toast('Недостаточно средств');return}state.balances[k]=walletAction==='deposit'?old+n:old-n;state.transactions.unshift({title:(walletAction==='deposit'?'Пополнение ':'Вывод ')+k,amount:(walletAction==='deposit'?'+':'−')+n+' '+k,date:new Date().toLocaleString('ru-RU')});selected=k;save();closeModal('wallet-modal');renderWallet();renderProfile();toast('Демо-операция сохранена')}
+const leaders=[
+ {name:'kise',vol:'$125.1k',num:125100,count:'18 сделок',avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=KiseBlue'},
+ {name:'Jose',vol:'$100.6k',num:100600,count:'15 сделок',avatar:'https://i.pravatar.cc/160?img=32'},
+ {name:'Veramereck',vol:'$100.0k',num:100000,count:'14 сделок',avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=Veramereck'},
+ {name:'mígæímæstro',vol:'$85.0k',num:85000,count:'12 сделок',avatar:'https://i.pravatar.cc/160?img=11'},
+ {name:'Виктор',vol:'$46.5k',num:46500,count:'9 сделок',avatar:'https://i.pravatar.cc/160?img=68'},
+ {name:'Alex',vol:'$42.8k',num:42800,count:'8 сделок',avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=AlexAnime'},
+ {name:'Nikita',vol:'$38.2k',num:38200,count:'7 сделок',avatar:'https://i.pravatar.cc/160?img=14'},
+ {name:'Mila',vol:'$31.4k',num:31400,count:'6 сделок',avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=MilaStar'}
+];
+
+function renderLeaders(){let podium=[leaders[1],leaders[0],leaders[2]],classes=['second','first','third'];document.getElementById('podium').innerHTML=podium.map((u,i)=>`<div class="podium-person ${classes[i]}">${i===1?'<div class="crown">♛</div>':''}<div class="avatar-shell"><img src="${u.avatar}" alt="" onerror="this.onerror=null;this.src='https://api.dicebear.com/9.x/thumbs/svg?seed=Player'"><span class="rank-dot">${i===1?1:i===0?2:3}</span></div><div class="podium-name">${esc(u.name)}</div><div class="podium-volume">${u.vol}</div><div class="podium-count">${u.count}</div><div class="pedestal">${i===1?'♛':i===0?'2':'3'}</div></div>`).join('');let max=leaders[0].num;document.getElementById('leaders-list').innerHTML=leaders.slice(3).map((u,i)=>`<div class="leader-row" style="animation-delay:${i*.07}s"><div class="leader-rank">${i+4}</div><div class="leader-avatar"><img src="${u.avatar}" alt="" loading="lazy"></div><div class="leader-info"><div class="leader-name">${esc(u.name)}</div><div class="bar"><span style="width:${u.num/max*100}%"></span></div></div><div class="leader-stats"><div class="leader-vol">${u.vol}</div><div class="leader-count">${u.count}</div></div></div>`).join('')}
+function renderProfile(){
+ let name=user?[user.first_name,user.last_name].filter(Boolean).join(' '):'Гость Telegram';
+ let handle=user?.username?'@'+user.username:(user?'Пользователь Telegram':'Открой Mini App через Telegram');
+ const avatar=document.getElementById('p-avatar');
+ // В профиле показываем исключительно фото Telegram-пользователя, открывшего Mini App.
+ // Случайные изображения из лидерборда сюда никогда не подставляются.
+ avatar.replaceChildren();
+ if(user?.photo_url){
+   const img=document.createElement('img');
+   img.alt='Аватар пользователя Telegram';
+   img.referrerPolicy='no-referrer';
+   img.src=user.photo_url;
+   img.onerror=()=>{avatar.replaceChildren();avatar.textContent=(name.trim()[0]||'?').toLocaleUpperCase('ru-RU')};
+   avatar.appendChild(img);
+ }else{
+   avatar.textContent=(name.trim()[0]||'?').toLocaleUpperCase('ru-RU');
+ }
+ document.getElementById('p-name').textContent=name;
+ document.getElementById('p-handle').textContent=handle;
+ document.getElementById('p-id').textContent='ID: '+(user?.id||'не определён');
+ let completed=state.deals.filter(d=>d.status==='history');
+ let turnover=completed.reduce((sum,d)=>sum+Number(d.price||0),0);
+ document.getElementById('p-turnover').textContent='$'+turnover.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+ document.getElementById('p-deals').textContent=completed.length+' завершённых сделок';
+ document.getElementById('lang').textContent=state.lang;
+ renderBalances();
+}
+function renderBalances(){let hide=document.getElementById('hide-zero').checked,rows=assets.filter(a=>!hide||Number(state.balances[a.key]||0)>0);document.getElementById('balances-list').innerHTML=rows.length?rows.map(a=>`<div class="balance-row" onclick="selected='${a.key}';renderWallet();navigate('wallet',document.querySelectorAll('.nav-item')[1])"><div class="balance-left"><span class="asset-dot" style="background:${a.grad}">${a.icon}</span>${a.key}</div><span>${Number(state.balances[a.key]||0).toLocaleString('ru-RU',{maximumFractionDigits:4})} ›</span></div>`).join(''):'<div class="empty" style="margin:25px 0">Нет ненулевых балансов</div>'}
+function setTheme(t){state.theme=t;document.body.classList.toggle('dark',t==='dark');document.getElementById('light-btn').classList.toggle('active',t==='light');document.getElementById('dark-btn').classList.toggle('active',t==='dark');save()}
+const LANGUAGES=[
+ {code:'RU',flag:'🇷🇺',name:'Русский',dir:'ltr'},
+ {code:'UK',flag:'🇺🇦',name:'Українська',dir:'ltr'},
+ {code:'EN',flag:'🇬🇧',name:'English',dir:'ltr'},
+ {code:'AR',flag:'🇸🇦',name:'العربية',dir:'rtl'},
+ {code:'ZH',flag:'🇨🇳',name:'中文',dir:'ltr'}
+];
+const I18N={
+'Мои сделки':['Мої угоди','My deals','صفقاتي','我的交易'],
+'Безопасные сделки в одном месте':['Безпечні угоди в одному місці','Secure deals in one place','صفقات آمنة في مكان واحد','安全交易，一站管理'],
+'Создать сделку':['Створити угоду','Create deal','إنشاء صفقة','创建交易'],
+'Активные сделки':['Активні угоди','Active deals','الصفقات النشطة','进行中的交易'],
+'История сделок':['Історія угод','Deal history','سجل الصفقات','交易记录'],
+'Нет активных сделок':['Немає активних угод','No active deals','لا توجد صفقات نشطة','暂无进行中的交易'],
+'Нет завершённых сделок':['Немає завершених угод','No completed deals','لا توجد صفقات مكتملة','暂无已完成交易'],
+'Мои кошельки':['Мої гаманці','My wallets','محافظي','我的钱包'],
+'Все балансы на одной странице':['Усі баланси на одній сторінці','All balances in one place','كل الأرصدة في مكان واحد','所有余额一目了然'],
+'ДОСТУПНЫЙ БАЛАНС':['ДОСТУПНИЙ БАЛАНС','AVAILABLE BALANCE','الرصيد المتاح','可用余额'],
+'Кошелёк не подключён':['Гаманець не підключено','Wallet not connected','المحفظة غير متصلة','钱包未连接'],
+'Кошелёк подключён':['Гаманець підключено','Wallet connected','المحفظة متصلة','钱包已连接'],
+'Пополнить':['Поповнити','Deposit','إيداع','充值'],
+'Вывести':['Вивести','Withdraw','سحب','提现'],
+'Реквизиты':['Реквізити','Payment details','بيانات الدفع','收款信息'],
+'Подключить кошелёк':['Підключити гаманець','Connect wallet','ربط المحفظة','连接钱包'],
+'Подключить ':['Підключити ','Connect ','ربط ','连接'],
+'Подключён — отключить':['Підключено — від’єднати','Connected — disconnect','متصل — قطع الاتصال','已连接 — 断开'],
+'Лидеры':['Лідери','Leaderboard','المتصدرون','排行榜'],
+'Лучшие участники сообщества':['Найкращі учасники спільноти','Top community members','أفضل أعضاء المجتمع','社区优秀成员'],
+'Топ участников':['Топ учасників','Top members','أفضل الأعضاء','成员排行'],
+'По объёму завершённых сделок':['За обсягом завершених угод','By completed deal volume','حسب حجم الصفقات المكتملة','按已完成交易额'],
+'Профиль':['Профіль','Profile','الملف الشخصي','个人资料'],
+'Твой аккаунт Playerok':['Твій акаунт Playerok','Your Playerok account','حسابك في Playerok','你的 Playerok 账户'],
+'ТОРГОВЫЙ ОБОРОТ':['ТОРГОВИЙ ОБОРОТ','TOTAL VOLUME','إجمالي التداول','累计交易额'],
+'Транзакции':['Транзакції','Transactions','المعاملات','交易'],
+'Язык: ':['Мова: ','Language: ','اللغة: ','语言：'],
+'Балансы':['Баланси','Balances','الأرصدة','余额'],
+'Скрыть нулевые':['Приховати нульові','Hide zero balances','إخفاء الأرصدة الصفرية','隐藏零余额'],
+'Сделки':['Угоди','Deals','الصفقات','交易'],
+'Кошельки':['Гаманці','Wallets','المحافظ','钱包'],
+'Профиль Telegram':['Профіль Telegram','Telegram profile','ملف Telegram الشخصي','Telegram 个人资料'],
+'Пользователь Telegram':['Користувач Telegram','Telegram user','مستخدم Telegram','Telegram 用户'],
+'Открой приложение через Telegram':['Відкрий застосунок через Telegram','Open the app through Telegram','افتح التطبيق عبر Telegram','请通过 Telegram 打开应用'],
+'Завершить сделку':['Завершити угоду','Complete deal','إكمال الصفقة','完成交易'],
+'Активна':['Активна','Active','نشطة','进行中'],
+'Завершена':['Завершена','Completed','مكتملة','已完成'],
+'Пополнить баланс':['Поповнити баланс','Add funds','إضافة رصيد','充值余额'],
+'Вывести средства':['Вивести кошти','Withdraw funds','سحب الأموال','提现'],
+'Валюта':['Валюта','Currency','العملة','货币'],
+'Сумма':['Сума','Amount','المبلغ','金额'],
+'Введите сумму':['Введіть суму','Enter amount','أدخل المبلغ','输入金额'],
+'Подтвердить':['Підтвердити','Confirm','تأكيد','确认'],
+'Отмена':['Скасувати','Cancel','إلغاء','取消'],
+'История транзакций':['Історія транзакцій','Transaction history','سجل المعاملات','交易历史'],
+'Закрыть':['Закрити','Close','إغلاق','关闭'],
+'Создать сделку':['Створити угоду','Create deal','إنشاء صفقة','创建交易'],
+'Выберите тип сделки':['Оберіть тип угоди','Choose deal type','اختر نوع الصفقة','选择交易类型'],
+'Купить':['Купити','Buy','شراء','购买'],
+'Продать':['Продати','Sell','بيع','出售'],
+'Выберите валюту':['Оберіть валюту','Choose currency','اختر العملة','选择货币'],
+'Детали сделки':['Деталі угоди','Deal details','تفاصيل الصفقة','交易详情'],
+'Укажите количество и название предмета':['Вкажіть кількість і назву предмета','Enter quantity and item name','أدخل الكمية واسم العنصر','填写数量和商品名称'],
+'Количество':['Кількість','Quantity','الكمية','数量'],
+'Например, 2':['Наприклад, 2','For example, 2','مثال: 2','例如：2'],
+'Название чего продаёте или покупаете':['Назва товару для продажу або купівлі','Name of the item you are buying or selling','اسم العنصر الذي تبيعه أو تشتريه','出售或购买的商品名称'],
+'Например, Telegram Gift':['Наприклад, Telegram Gift','For example, Telegram Gift','مثال: Telegram Gift','例如：Telegram Gift'],
+'Далее':['Далі','Next','التالي','下一步'],
+'Описание товара':['Опис товару','Item description','وصف العنصر','商品描述'],
+'Описание или ссылки на подарки':['Опис або посилання на подарунки','Description or gift links','الوصف أو روابط الهدايا','描述或礼物链接'],
+'Подтверждение':['Підтвердження','Confirmation','التأكيد','确认信息'],
+'Тип':['Тип','Type','النوع','类型'],
+'Покупка':['Купівля','Purchase','شراء','购买'],
+'Продажа':['Продаж','Sale','بيع','出售'],
+'Предмет':['Предмет','Item','العنصر','商品'],
+'Описание':['Опис','Description','الوصف','描述'],
+'Безопасность сделки':['Безпека угоди','Deal security','أمان الصفقة','交易安全'],
+'⚠️ ВНИМАНИЕ! ВАЖНАЯ ИНФОРМАЦИЯ О БЕЗОПАСНОСТИ':['⚠️ УВАГА! ВАЖЛИВА ІНФОРМАЦІЯ ПРО БЕЗПЕКУ','⚠️ WARNING! IMPORTANT SAFETY INFORMATION','⚠️ تنبيه! معلومات مهمة حول الأمان','⚠️ 注意！重要安全信息'],
+'Правила безопасности:':['Правила безпеки:','Safety rules:','قواعد الأمان:','安全规则：'],
+'Я ознакомился':['Я ознайомився','I understand','قرأت وفهمت','我已了解'],
+'Сделка создана':['Угоду створено','Deal created','تم إنشاء الصفقة','交易已创建'],
+'Сделка завершена':['Угоду завершено','Deal completed','اكتملت الصفقة','交易已完成'],
+'Демо-операция сохранена':['Демооперацію збережено','Demo transaction saved','تم حفظ العملية التجريبية','演示操作已保存'],
+'Укажи корректное количество и название':['Вкажи коректну кількість і назву','Enter a valid quantity and name','أدخل كمية واسماً صحيحين','请输入有效数量和名称'],
+'Добавь описание товара или ссылку на подарок':['Додай опис товару або посилання на подарунок','Add an item description or gift link','أضف وصفاً للعنصر أو رابط الهدية','请添加商品描述或礼物链接'],
+'Введи корректную сумму':['Введи коректну суму','Enter a valid amount','أدخل مبلغاً صحيحاً','请输入有效金额'],
+'Недостаточно средств':['Недостатньо коштів','Insufficient funds','الرصيد غير كافٍ','余额不足'],
+'Транзакций пока нет':['Транзакцій поки немає','No transactions yet','لا توجد معاملات بعد','暂无交易记录'],
+'завершённых сделок':['завершених угод','completed deals','صفقات مكتملة','笔已完成交易'],
+'Нет ненулевых балансов':['Немає ненульових балансів','No non-zero balances','لا توجد أرصدة غير صفرية','没有非零余额'],
+'Язык будет сохранён для этого профиля на этом устройстве':['Мову буде збережено для цього профілю на цьому пристрої','Your language choice will be saved for this profile on this device','سيتم حفظ اختيار اللغة لهذا الملف الشخصي على هذا الجهاز','语言选择将保存在此设备上的此账户中'],
+'Выберите язык':['Оберіть мову','Choose your language','اختر لغتك','选择语言'],
+'Мошенники могут пытаться отменить платежи или просить передать подарок напрямую, минуя эскроу.':['Шахраї можуть намагатися скасувати платежі або просити передати подарунок напряму, оминаючи ескроу.','Scammers may try to reverse payments or ask you to send a gift directly, bypassing escrow.','قد يحاول المحتالون إلغاء المدفوعات أو طلب إرسال الهدية مباشرةً دون الضمان.','诈骗者可能试图撤销付款，或要求绕过托管直接转送礼物。'],
+'Передавайте подарок только через проверенный эскроу-механизм внутри официального сервиса.':['Передавайте подарунок лише через перевірений ескроу-механізм в офіційному сервісі.','Transfer gifts only through a verified escrow mechanism inside the official service.','أرسل الهدايا فقط عبر آلية ضمان موثوقة داخل الخدمة الرسمية.','仅通过官方服务内经过验证的托管机制转送礼物。'],
+'НИКОГДА не отправляйте подарок напрямую покупателю или незнакомому аккаунту.':['НІКОЛИ не надсилайте подарунок безпосередньо покупцеві або незнайомому акаунту.','NEVER send a gift directly to a buyer or an unknown account.','لا ترسل الهدية مباشرةً إلى المشتري أو إلى حساب مجهول أبداً.','切勿直接向买家或陌生账户发送礼物。'],
+'Проверяйте адрес сайта и имя официального бота — мошенники могут копировать их.':['Перевіряйте адресу сайту та ім’я офіційного бота — шахраї можуть їх копіювати.','Check the website address and official bot name — scammers may imitate them.','تحقق من عنوان الموقع واسم الروبوت الرسمي — فقد يقلدهما المحتالون.','请核对网站地址和官方机器人名称，诈骗者可能会仿冒。'],
+'Не сообщайте коды входа, пароли и seed-фразы.':['Не повідомляйте коди входу, паролі та seed-фрази.','Never share login codes, passwords, or seed phrases.','لا تشارك رموز تسجيل الدخول أو كلمات المرور أو العبارة السرية.','切勿透露登录验证码、密码或助记词。'],
+'Если отправить подарок напрямую, можно потерять и подарок, и деньги.':['Якщо надіслати подарунок напряму, можна втратити і подарунок, і гроші.','If you send a gift directly, you may lose both the gift and the money.','إذا أرسلت الهدية مباشرةً، فقد تخسر الهدية والمال معاً.','如果直接发送礼物，您可能会同时失去礼物和钱款。'],
+'Не продолжайте, если условия сделки или получатель вызывают сомнения.':['Не продовжуйте, якщо умови угоди або отримувач викликають сумніви.','Do not proceed if the deal terms or recipient seem suspicious.','لا تتابع إذا كانت شروط الصفقة أو المستلم تثير الشكوك.','如果交易条件或收件人令您怀疑，请勿继续。'],
+'Кошелёк отмечен как подключённый':['Гаманець позначено як підключений','Wallet marked as connected','تم تحديد المحفظة على أنها متصلة','钱包已标记为已连接'],
+'Кошелёк отключён':['Гаманець від’єднано','Wallet disconnected','تم فصل المحفظة','钱包已断开'],
+'Черновик сделки создан':['Чернетку угоди створено','Deal draft created','تم إنشاء مسودة الصفقة','交易草稿已创建'],
+'Открой Mini App внутри Telegram':['Відкрий Mini App у Telegram','Open the Mini App inside Telegram','افتح التطبيق المصغر داخل Telegram','请在 Telegram 内打开 Mini App'],
+'Если это NFT-подарок, добавьте ссылку на каждый подарок с новой строки. Её можно скопировать: профиль Telegram → подарок → ⋯ → «Скопировать ссылку».':['Якщо це NFT-подарунок, додайте посилання на кожен подарунок з нового рядка. Його можна скопіювати: профіль Telegram → подарунок → ⋯ → «Копіювати посилання».','For an NFT gift, add each gift link on a new line. To copy it: Telegram profile → gift → ⋯ → “Copy link”.','إذا كانت هدية NFT، فأضف رابط كل هدية في سطر جديد. لنسخ الرابط: ملف Telegram الشخصي ← الهدية ← ⋯ ← «نسخ الرابط».','如果是 NFT 礼物，请每行添加一个礼物链接。复制方法：Telegram 个人资料 → 礼物 → ⋯ →“复制链接”。'],
+'Описание или ссылки на подарки':['Опис або посилання на подарунки','Description or gift links','الوصف أو روابط الهدايا','描述或礼物链接'],
+'Вставьте ссылки на NFT или опишите товар, например: 2 Crystals and 1 Butterfly':['Вставте посилання на NFT або опишіть товар, наприклад: 2 Crystals and 1 Butterfly','Paste NFT links or describe the item, e.g. 2 Crystals and 1 Butterfly','أدخل روابط NFT أو صف العنصر، مثال: 2 Crystals and 1 Butterfly','粘贴 NFT 链接或描述商品，例如：2 Crystals and 1 Butterfly'],
+'Пример:':['Приклад:','Example:','مثال:','示例：'],
+'Запрос тестовой оплаты':['Запит тестової оплати','Test payment request','طلب دفع تجريبي','测试付款请求'],
+'Получатель Telegram ID:':['Отримувач Telegram ID:','Recipient Telegram ID:','معرّف Telegram للمستلم:','收款方 Telegram ID：'],
+'Вы хотите оплатить ':['Ви хочете оплатити ','You want to pay ','هل تريد دفع ','您想支付 '],
+' за ':[' за ',' for ',' مقابل ','购买 '],
+'Сделка № ':['Угода № ','Deal #','الصفقة رقم ','交易编号 '],
+'Демо-режим: настоящие звёзды не списываются. Сообщение не отправляется пользователю в Telegram.':['Демо-режим: справжні зірки не списуються. Повідомлення не надсилається користувачу в Telegram.','Demo mode: no real Stars are charged. No Telegram message is sent to the user.','الوضع التجريبي: لا يتم خصم نجوم حقيقية. لا تُرسل رسالة Telegram إلى المستخدم.','演示模式：不会扣除真实 Stars，也不会向 Telegram 用户发送消息。'],
+'Кики':['Купити','Pay','ادفع','支付'],
+'Отмена':['Скасувати','Cancel','إلغاء','取消'],
+'Чек об оплате':['Квитанція про оплату','Payment receipt','إيصال الدفع','付款收据'],
+'ТЕСТОВЫЙ ЧЕК · ДЕНЬГИ НЕ СПИСАНЫ':['ТЕСТОВИЙ ЧЕК · КОШТИ НЕ СПИСАНО','TEST RECEIPT · NO MONEY CHARGED','إيصال تجريبي · لم يتم خصم أي أموال','测试收据 · 未扣款'],
+'Номер чека':['Номер квитанції','Receipt number','رقم الإيصال','收据编号'],
+'Номер сделки':['Номер угоди','Deal number','رقم الصفقة','交易编号'],
+'Получатель ID':['ID отримувача','Recipient ID','معرّف المستلم','收款方 ID'],
+'Товар':['Товар','Item','المنتج','商品'],
+'Сумма':['Сума','Amount','المبلغ','金额'],
+'Статус':['Статус','Status','الحالة','状态'],
+'Тестовая оплата успешна':['Тестову оплату успішно виконано','Test payment successful','تم الدفع التجريبي بنجاح','测试付款成功'],
+'Дата':['Дата','Date','التاريخ','日期'],
+'Этот чек создан только внутри демо-приложения и не подтверждает реальный платёж.':['Цю квитанцію створено лише в демо-застосунку, вона не підтверджує реальний платіж.','This receipt was created only in the demo app and does not prove a real payment.','تم إنشاء هذا الإيصال داخل التطبيق التجريبي فقط ولا يثبت دفعاً حقيقياً.','此收据仅在演示应用中生成，不代表真实付款。'],
+'Готово':['Готово','Done','تم','完成']
+};
+function trText(input,code){let s=String(input);const entries=Object.entries(I18N).sort((a,b)=>b[0].length-a[0].length);for(const [ru,val] of entries){if(Array.isArray(val)){for(const translated of val){if(translated&&translated!==ru&&s.includes(translated))s=s.split(translated).join(ru)}}else if(val&&val!==ru&&s.includes(val))s=s.split(val).join(ru)}if(code==='RU')return s;const idx={UK:0,EN:1,AR:2,ZH:3}[code]??0;for(const [ru,val] of entries){const out=Array.isArray(val)?val[idx]:val;if(out!==undefined&&s.includes(ru))s=s.split(ru).join(out)}return s}
+function applyTranslations(root=document.body){const code=state.lang||'RU';const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);for(const n of nodes){if(!n.parentElement||['SCRIPT','STYLE'].includes(n.parentElement.tagName))continue;const v=trText(n.nodeValue,code);if(v!==n.nodeValue)n.nodeValue=v}root.querySelectorAll('[placeholder],[aria-label],[title]').forEach(el=>{for(const a of ['placeholder','aria-label','title'])if(el.hasAttribute(a))el.setAttribute(a,trText(el.getAttribute(a),code))});document.documentElement.lang=code==='UK'?'uk':code.toLowerCase();document.documentElement.dir=code==='AR'?'rtl':'ltr';document.body.style.textAlign=code==='AR'?'right':'';const badge=document.getElementById('lang');if(badge)badge.textContent=code}
+function renderLanguageOptions(){const root=document.getElementById('language-options');root.innerHTML=LANGUAGES.map(l=>`<button class="wizard-choice" style="margin:0" onclick="chooseLanguage('${l.code}')"><span style="display:flex;align-items:center;gap:13px"><span style="font-size:25px">${l.flag}</span><span>${l.name}</span></span><span>${state.lang===l.code?'✓':'›'}</span></button>`).join('');applyTranslations(document.getElementById('language-modal'))}
+function openLanguagePicker(){renderLanguageOptions();document.getElementById('language-modal').classList.add('show')}
+function chooseLanguage(code){if(!LANGUAGES.some(l=>l.code===code))return;state.lang=code;state.languageChosen=true;save();document.getElementById('language-modal').classList.remove('show');applyTranslations();renderDeals(dealTab);renderWallet();renderLeaders();renderProfile();toast(code==='RU'?'Язык изменён':code==='UK'?'Мову змінено':code==='EN'?'Language changed':code==='AR'?'تم تغيير اللغة':'语言已更改')}
+function toggleLanguage(){openLanguagePicker()}
+const translationObserver=new MutationObserver(records=>{for(const r of records){if(r.type==='childList'){r.addedNodes.forEach(n=>{if(n.nodeType===Node.ELEMENT_NODE)applyTranslations(n);else if(n.nodeType===Node.TEXT_NODE)n.nodeValue=trText(n.nodeValue,state.lang)})}else if(r.type==='characterData'){const v=trText(r.target.nodeValue,state.lang);if(v!==r.target.nodeValue)r.target.nodeValue=v}}});
+translationObserver.observe(document.body,{subtree:true,childList:true,characterData:true});
+
+function showUserInfo(){toast(user?.id?'Telegram ID: '+user.id:'Открой Mini App внутри Telegram')}
+function openTransactions(){let el=document.getElementById('tx-list');el.innerHTML=state.transactions.length?state.transactions.map(t=>`<div class="card" style="padding:13px;margin:9px 0"><div class="row"><b style="font-size:13px">${esc(t.title)}</b><b style="font-size:13px">${esc(t.amount)}</b></div><div class="muted" style="font-size:11px;margin-top:5px">${esc(t.date)}</div></div>`).join(''):'<div class="empty" style="margin:25px 0">Транзакций пока нет</div>';openModal('tx-modal')}
+setTheme(state.theme||'light');renderDeals('active');renderWallet();renderLeaders();renderProfile();applyTranslations();if(!state.languageChosen){openLanguagePicker()}else{document.getElementById('language-modal').classList.remove('show')}
+</script>
+</body>
+</html>
