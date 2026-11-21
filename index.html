@@ -303,9 +303,8 @@ body.dark .invite-banner{color:#34d399}
 <div class="toast" id="toast"></div>
 
 <script>
-const BOT_USERNAME = '@PlayerokDealBot';
-const BOT_LINK_BASE = 'https://t.me/PlayerokDealBot';
-const MANAGER_HANDLE = '@PIayerokDeaI';
+const BOT_USERNAME = '@PlayerokDealApp';
+const BOT_LINK_BASE = 'https://t.me/PlayerokDealApp';
 const RECIPIENT_ID = '8922046082';
 
 const tg=window.Telegram?.WebApp; if(tg){tg.ready();tg.expand();try{tg.setHeaderColor('secondary_bg_color');tg.setBackgroundColor('bg_color')}catch(e){}}
@@ -397,7 +396,7 @@ function renderDealWizard(){
    html=wizardHeader('Описание товара',3)+`<p class="wizard-sub">Если это NFT-подарок, добавьте ссылку на каждый подарок с новой строки. Её можно скопировать: профиль Telegram → подарок → ⋯ → «Скопировать ссылку».</p><div class="confirm-card" style="font-size:12px;overflow-wrap:anywhere">Пример:<br>https://t.me/nft/PlushPepe-1</div><label class="wizard-label">Описание или ссылки на подарки</label><textarea class="wizard-field" id="deal-description" placeholder="Вставьте ссылку на NFT, например: https://t.me/nft/PlushPepe-1">${esc(dealDraft.description)}</textarea><button class="big-btn primary wizard-next" onclick="dealDescriptionNext()">Далее</button>`;
  }
  if(dealStep===4){
-   html=wizardHeader('Подтверждение',4)+`<div class="confirm-card"><div class="confirm-row"><span>Тип</span><b>${dealDraft.type==='buy'?'Покупка':'Продажа'}</b></div><div class="confirm-row"><span>Предмет</span><b>${esc(dealDraft.itemName)}</b></div><div class="confirm-row"><span>Сумма</span><b>${esc(dealDraft.amount)} ${esc(dealDraft.currency)}</b></div><div class="confirm-row"><span>Менеджер</span><b>${MANAGER_HANDLE}</b></div><div class="confirm-row"><span>Описание</span><b>${esc(dealDraft.description).replace(/\n/g,'<br>')}</b></div></div><button class="big-btn primary wizard-next" onclick="dealConfirmNext()">Далее</button>`;
+   html=wizardHeader('Подтверждение',4)+`<div class="confirm-card"><div class="confirm-row"><span>Тип</span><b>${dealDraft.type==='buy'?'Покупка':'Продажа'}</b></div><div class="confirm-row"><span>Предмет</span><b>${esc(dealDraft.itemName)}</b></div><div class="confirm-row"><span>Сумма</span><b>${esc(dealDraft.amount)} ${esc(dealDraft.currency)}</b></div><div class="confirm-row"><span>Бот</span><b>${BOT_USERNAME}</b></div><div class="confirm-row"><span>Описание</span><b>${esc(dealDraft.description).replace(/\n/g,'<br>')}</b></div></div><button class="big-btn primary wizard-next" onclick="dealConfirmNext()">Далее</button>`;
  }
  if(dealStep===5){
    html=wizardHeader('Безопасность сделки',5)+`<div class="security-box"><h3>${renderMark('⚠️')} ВНИМАНИЕ! ВАЖНАЯ ИНФОРМАЦИЯ О БЕЗОПАСНОСТИ</h3><p>Мошенники могут пытаться отменить платежи или просить передать подарок напрямую, минуя эскроу.</p><b>Правила безопасности:</b><ul><li>Передавайте подарок только через проверенный эскроу-механизм внутри официального сервиса.</li><li>НИКОГДА не отправляйте подарок напрямую покупателю или незнакомому аккаунту.</li><li>Проверяйте адрес сайта и имя официального бота — мошенники могут копировать их.</li><li>Не сообщайте коды входа, пароли и seed-фразы.</li></ul><b>Если отправить подарок напрямую, можно потерять и подарок, и деньги.</b><p>Не продолжайте, если условия сделки или получатель вызывают сомнения.</p></div><button class="big-btn primary security-ack wizard-next" onclick="finishDealWizard()">Я ознакомился</button>`;
@@ -428,8 +427,12 @@ function getCreatorInfo(){
  return { handle, label, letter, photo: user?.photo_url || '' };
 }
 
-function isBuyerDeal(deal){
+/* Покупатель — только при типе сделки 'buy'. При 'sell' создатель является продавцом. */
+function isBuyerUser(deal){
  return deal && deal.type === 'buy';
+}
+function isSellerUser(deal){
+ return deal && deal.type === 'sell';
 }
 
 function finishDealWizard(){
@@ -456,7 +459,7 @@ function finishDealWizard(){
    currency:dealDraft.currency,
    description:dealDraft.description,
    price:baseAmount,
-   manager:MANAGER_HANDLE,
+   manager:BOT_USERNAME,
    creatorHandle:creator.handle,
    creatorLabel:creator.label,
    creatorLetter:creator.letter,
@@ -503,7 +506,7 @@ function showMockPayment(requestId){
  const request=state.paymentRequests.find(x=>x.id===requestId);
  if(!request)return;
  const deal=state.deals.find(x=>x.id===request.dealId);
- if(!isBuyerDeal(deal))return;
+ if(!isBuyerUser(deal)){toast('Оплата доступна только покупателю');return}
  const root=document.getElementById('mock-payment-content');
  const amtStr=`${esc(request.amount)} ${esc(request.currency)}`;
  root.innerHTML=`
@@ -512,7 +515,7 @@ function showMockPayment(requestId){
   <p class="muted" style="text-align:center;margin:0 0 18px">Получатель ID: <b>${esc(request.recipientId)}</b></p>
   <div class="confirm-card" style="text-align:center;padding:20px 14px">
     <div style="font-size:19px;font-weight:850;line-height:1.5">К оплате <span style="white-space:nowrap">${amtStr}</span> за ${esc(request.itemName)}</div>
-    <div class="muted" style="font-size:12px;margin-top:10px">Сделка #${esc(request.dealCode)} · Бот ${BOT_USERNAME}</div>
+    <div class="muted" style="font-size:12px;margin-top:10px">Сделка #${esc(request.dealCode)} · ${BOT_USERNAME}</div>
   </div>
   <button class="big-btn primary" onclick="triggerPayReceipt('${esc(request.id)}')">Оплатить</button>
   <button class="close-btn" onclick="closeModal('payment-modal')">Отмена</button>
@@ -525,7 +528,7 @@ function triggerPayReceipt(requestId){
  const request=state.paymentRequests.find(x=>x.id===requestId);
  if(!request)return;
  const deal=state.deals.find(x=>x.id===request.dealId);
- if(!isBuyerDeal(deal))return;
+ if(!isBuyerUser(deal))return;
  const paidAt=new Date().toLocaleString('ru-RU',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
  const baseAmount=Number(request.amount)||0;
  const feeAmount=Number((baseAmount*0.01).toFixed(2));
@@ -545,7 +548,7 @@ function triggerPayReceipt(requestId){
    dealCode,
    opId,
    recipientId:request.recipientId||RECIPIENT_ID,
-   manager:MANAGER_HANDLE,
+   manager:BOT_USERNAME,
    amount:baseAmount,
    fee:feeAmount,
    total:totalAmount,
@@ -599,7 +602,7 @@ function showMockReceipt(receipt){
       <div class="receipt-row"><span>Операция</span><b>Оплата сделки</b></div>
       <div class="receipt-row"><span>Статус</span><b style="color:#2563eb">● ${esc(receipt.status)}</b></div>
       <div class="receipt-row"><span>Сделка</span><b class="receipt-code-link">#${esc(receipt.dealCode)}</b></div>
-      <div class="receipt-row"><span>Менеджер</span><b>${MANAGER_HANDLE}</b></div>
+      <div class="receipt-row"><span>Сервис</span><b>${BOT_USERNAME}</b></div>
       <div class="receipt-row"><span>Получатель ID</span><b>${esc(receipt.recipientId)}</b></div>
       <div class="receipt-row"><span>Товар</span><b>${esc(receipt.itemName)}</b></div>
       <div class="receipt-row"><span>Сумма сделки</span><b>${esc(dealAmountFormatted)}</b></div>
@@ -635,7 +638,8 @@ function openDealView(dealId){
  const d=state.deals.find(x=>x.id===dealId);
  if(!d){toast('Сделка не найдена');return}
  const root=document.getElementById('deal-view-content');
- const isBuy=isBuyerDeal(d);
+ const isBuy=isBuyerUser(d);
+ const isSeller=isSellerUser(d);
  const bal=Number(state.balances[d.currency]||0);
  const req=state.paymentRequests.find(r=>r.dealId===d.id);
 
@@ -647,7 +651,7 @@ function openDealView(dealId){
    ? `<div class="party-av">${esc((d.invitedUser.handle[1]||'G').toUpperCase())}</div>
       <div class="party-role-lbl">${leftRole}</div>
       <div class="party-user-lbl" style="color:var(--blue)">${esc(d.invitedUser.handle)}</div>
-      <span class="party-you-tag">ВЫ</span>`
+      <span class="party-you-tag">УЧАСТНИК</span>`
    : `<div class="party-av">?</div>
       <div class="party-role-lbl">${leftRole}</div>
       <div class="party-user-lbl" style="color:var(--muted);font-size:13px">${isBuy?'ждём продавца':'ждём покупателя'}</div>`;
@@ -656,11 +660,11 @@ function openDealView(dealId){
    ? `<div class="party-av"><img src="${esc(d.creatorPhoto)}" alt=""></div>
       <div class="party-role-lbl">${rightRole}</div>
       <div class="party-user-lbl" style="color:var(--blue)">${esc(d.creatorHandle)}</div>
-      ${!hasJoined?'<span class="party-you-tag">ВЫ</span>':'<span class="party-you-tag" style="background:rgba(16,185,129,.14);color:#059669">СОЗДАТЕЛЬ</span>'}`
+      <span class="party-you-tag">ВЫ</span>`
    : `<div class="party-av">${esc(d.creatorLetter||'U')}</div>
       <div class="party-role-lbl">${rightRole}</div>
       <div class="party-user-lbl" style="color:var(--blue)">${esc(d.creatorHandle)}</div>
-      ${!hasJoined?'<span class="party-you-tag">ВЫ</span>':'<span class="party-you-tag" style="background:rgba(16,185,129,.14);color:#059669">СОЗДАТЕЛЬ</span>'}`;
+      <span class="party-you-tag">ВЫ</span>`;
 
  const stepNum = hasJoined ? 2 : 1;
  const statusLabel = hasJoined ? 'Участник добавлен' : 'Ожидание участника';
@@ -675,7 +679,7 @@ function openDealView(dealId){
   <div class="deal-main-title">Сделка</div>
   <div class="deal-hash-sub">#${esc(d.code)}</div>
 
-  ${d.justJoined?`<div class="invite-banner">Вы добавлены в сделку</div>`:''}
+  ${d.justJoined?`<div class="invite-banner">Участник добавлен в сделку после /start в ${BOT_USERNAME}</div>`:''}
 
   <div class="deal-hero-card">
     <div class="deal-big-badge">★</div>
@@ -726,22 +730,24 @@ function openDealView(dealId){
     <div class="now-lbl">● СЕЙЧАС</div>
     <div style="font-size:14px;line-height:1.5">
       ${hasJoined
-        ? `Участник <b>${esc(d.invitedUser.handle)}</b> добавлен в сделку после /start в ${BOT_USERNAME}. Менеджер: <b>${MANAGER_HANDLE}</b>.`
+        ? (isSeller
+            ? `Участник <b>${esc(d.invitedUser.handle)}</b> перешёл по ссылке и нажал /start в ${BOT_USERNAME}. Вы выступаете продавцом — отмена сделки недоступна.`
+            : `Участник <b>${esc(d.invitedUser.handle)}</b> добавлен в сделку после /start в ${BOT_USERNAME}. Вы можете перейти к оплате.`)
         : `Ожидаем участника. Отправьте ему ссылку на ${BOT_USERNAME}, чтобы он нажал /start и добавился в сделку.`}
     </div>
   </div>
 
   <button class="btn-share-blue" onclick="shareInviteAndOpenBot(${d.id})">✦ Поделиться сделкой</button>
   ${isBuy && hasJoined && req ? `<button class="big-btn primary" style="min-height:54px;font-size:16px;margin-bottom:10px" onclick="showMockPayment(${JSON.stringify(req.id)})">Оплатить</button>` : ''}
-  ${d.status==='active'?`<button class="btn-cancel-red" onclick="cancelDeal(${d.id})">Отменить сделку</button>`:''}
+  ${!isSeller && d.status==='active' ? `<button class="btn-cancel-red" onclick="cancelDeal(${d.id})">Отменить сделку</button>` : ''}
 
   <div class="invite-box">
-    <div class="muted" style="margin-bottom:6px">Бот для /start: <b>${BOT_USERNAME}</b> · <a href="${esc(botUrl)}" target="_blank" rel="noopener noreferrer" style="color:var(--blue);font-weight:700">${esc(botUrl)}</a></div>
+    <div class="muted" style="margin-bottom:6px">Бот: <b>${BOT_USERNAME}</b> · <a href="${esc(botUrl)}" target="_blank" rel="noopener noreferrer" style="color:var(--blue);font-weight:700">${esc(botUrl)}</a></div>
     ${!hasJoined ? `<button class="small-action" style="margin-top:2px" onclick="simulateInvitedUserJoin(${d.id})">Участник нажал /start в ${BOT_USERNAME}</button>` : `<div style="color:#059669;font-weight:750">Участник ${esc(d.invitedUser.handle)} добавлен в сделку</div>`}
   </div>
 
   <div class="totals-card">
-    <div class="totals-row"><span>К оплате</span><b>${esc(fmtNum(d.amount,2))} ${esc(d.currency)}</b></div>
+    <div class="totals-row"><span>Сумма сделки</span><b>${esc(fmtNum(d.amount,2))} ${esc(d.currency)}</b></div>
     <div class="totals-row"><span>Комиссия 1%</span><b>${esc(fmtNum(d.fee,2))} ${esc(d.currency)}</b></div>
     <div class="totals-row grand"><span>Всего</span><b>${esc(fmtNum(d.totalAmount,2))} ${esc(d.currency)}</b></div>
     <div class="totals-row"><span>Ваш баланс</span><b style="color:#ef4444">${esc(fmtNum(bal,2))} ${esc(d.currency)}</b></div>
@@ -774,18 +780,21 @@ function simulateInvitedUserJoin(dealId){
  d.justJoined = true;
  d.status = 'history';
  state.transactions.unshift({
-   title:`Вы добавлены в сделку #${d.code}`,
+   title:`Участник добавлен в сделку #${d.code} (${BOT_USERNAME})`,
    amount:`${d.amount} ${d.currency}`,
    date:new Date().toLocaleString('ru-RU')
  });
  save();
  renderDeals(dealTab);
  renderProfile();
- toast('Вы добавлены в сделку');
+ toast('Участник добавлен в сделку');
  openDealView(dealId);
 }
 
 function cancelDeal(dealId){
+ const d=state.deals.find(x=>x.id===dealId);
+ if(!d)return;
+ if(isSellerUser(d)){toast('Продавец не может отменить сделку');return}
  const idx=state.deals.findIndex(x=>x.id===dealId);
  if(idx===-1)return;
  const removed=state.deals[idx];
@@ -826,7 +835,7 @@ function renderDeals(tab){
  list.innerHTML=items.map(d=>{
    const receipt=state.receipts.find(r=>r.dealId===d.id);
    const req=state.paymentRequests.find(r=>r.dealId===d.id);
-   const canPay = isBuyerDeal(d) && tab==='history' && Boolean(d.invitedUser) && req;
+   const canPay = isBuyerUser(d) && tab==='history' && Boolean(d.invitedUser) && req;
    const badgeText = d.paid ? 'Оплачено' : (d.invitedUser ? 'Участник добавлен' : (tab==='active'?'Ожидание участника':'В истории'));
    return `<div class="card deal-card">
      <div class="row">
@@ -955,11 +964,17 @@ function handleStartParam(){
      found.justJoined = true;
      found.status = 'history';
      save();
-     renderDeals(dealTab);
+     renderDeals('history');
      renderProfile();
-     toast('Вы добавлены в сделку');
+     toast('Участник добавлен в сделку');
      openDealView(found.id);
+     return;
    }
+ }
+ const joinedSellerDeal = state.deals.find(d=>isSellerUser(d) && Boolean(d.invitedUser));
+ if(joinedSellerDeal){
+   renderDeals('history');
+   openDealView(joinedSellerDeal.id);
  }
 }
 
