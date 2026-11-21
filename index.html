@@ -11,7 +11,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;padding:env(safe-area-inset-top) 16px calc(116px + env(safe-area-inset-bottom));background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;transition:background .3s,color .3s;min-height:100vh}
 body.dark{--bg:#0c111b;--surface:#151d2b;--text:#f4f7fc;--muted:#9aa6ba;--line:#273246;--shadow:0 14px 38px rgba(0,0,0,.28);--nav:rgba(21,29,43,.9)}
-button,input,select{font:inherit}button{cursor:pointer;border:0}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}
 header{display:flex;align-items:center;justify-content:space-between;margin:38px 2px 22px;animation:fadeDown .55s both}
 h1{font-size:31px;letter-spacing:-1.1px;margin:0;font-weight:800}
 .subhead{color:var(--muted);font-size:14px;margin:6px 0 0}
@@ -20,13 +20,10 @@ h1{font-size:31px;letter-spacing:-1.1px;margin:0;font-weight:800}
 @keyframes fadeDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 @keyframes shine{0%{transform:translateX(-130%) skewX(-18deg)}100%{transform:translateX(230%) skewX(-18deg)}}
-@keyframes spin{to{transform:rotate(360deg)}}
 @keyframes goldPulse{0%,100%{filter:drop-shadow(0 0 5px rgba(255,199,61,.5))}50%{filter:drop-shadow(0 0 15px rgba(255,199,61,.95))}}
 @keyframes rise{from{opacity:0;transform:translateY(35px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes pop{0%{transform:scale(.94)}65%{transform:scale(1.035)}100%{transform:scale(1)}}
-@keyframes pulse{0%,100%{box-shadow:0 8px 22px rgba(8,124,255,.22)}50%{box-shadow:0 10px 30px rgba(8,124,255,.42)}}
 @keyframes orbit{to{transform:rotate(360deg)}}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}
 .primary{background:linear-gradient(115deg,var(--blue2),var(--blue));color:white;box-shadow:0 9px 22px rgba(8,124,255,.25)}
 .primary:active,.outline:active,.nav-item:active{transform:scale(.97)}
@@ -41,6 +38,7 @@ h1{font-size:31px;letter-spacing:-1.1px;margin:0;font-weight:800}
 .pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:6px 10px;background:rgba(8,124,255,.1);color:var(--blue);font-size:12px;font-weight:700}
 .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .small-action{border-radius:13px;padding:11px 13px;background:rgba(8,124,255,.1);color:var(--blue);font-weight:700;margin-top:12px}
+.danger-action{border-radius:13px;padding:11px 13px;background:rgba(239,68,68,.12);color:#ef4444;font-weight:700;margin-top:12px}
 .bottom-nav{position:fixed;z-index:10;left:3%;width:94%;bottom:calc(12px + env(safe-area-inset-bottom));height:82px;padding:6px;display:flex;align-items:center;justify-content:space-around;border:1px solid rgba(255,255,255,.75);border-radius:30px;background:var(--nav);box-shadow:0 15px 40px rgba(35,54,91,.16);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
 .nav-item{flex:1;height:68px;border-radius:24px;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px;font-weight:700;transition:all .25s}
 .nav-item svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
@@ -133,15 +131,15 @@ h1{font-size:31px;letter-spacing:-1.1px;margin:0;font-weight:800}
 .modal input,.modal select{width:100%;height:51px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--text);padding:0 14px;outline:none}
 .modal .big-btn{height:55px;min-height:55px;font-size:16px;margin:16px 0 0}
 .close-btn{height:49px;width:100%;border-radius:15px;background:var(--bg);color:var(--text);font-weight:750;margin-top:9px}
-.toast{position:fixed;z-index:50;left:50%;bottom:110px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#172033;color:white;padding:12px 17px;border-radius:14px;font-size:13px;font-weight:700;transition:.25s;white-space:nowrap}
+.toast{position:fixed;z-index:80;left:50%;bottom:110px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#172033;color:white;padding:12px 17px;border-radius:14px;font-size:13px;font-weight:700;transition:.25s;white-space:nowrap}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* Deal creation wizard */
-.deal-wizard{max-height:88vh;overflow-y:auto;border-radius:27px 27px 0 0;overscroll-behavior:contain}
+.deal-wizard{max-height:90vh;overflow-y:auto;border-radius:27px 27px 0 0;overscroll-behavior:contain}
 .wizard-head{display:flex;align-items:center;gap:10px;margin-bottom:17px}
-.wizard-back{width:40px;height:40px;flex:0 0 40px;border-radius:14px;background:var(--bg);color:var(--text);font-size:23px}
+.wizard-back{width:40px;height:40px;flex:0 0 40px;border-radius:14px;background:var(--bg);color:var(--text);font-size:23px;display:grid;place-items:center}
 .wizard-title{font-size:23px;font-weight:850;letter-spacing:-.5px;margin:0}
-.wizard-sub{color:var(--muted);font-size:13px;margin:5px 0 18px}
+.wizard-sub{color:var(--muted);font-size:13px;margin:5px 0 18px;line-height:1.45}
 .wizard-progress{height:5px;background:var(--line);border-radius:9px;overflow:hidden;margin:0 0 20px}
 .wizard-progress span{display:block;height:100%;background:linear-gradient(90deg,#37a5ff,#087cff);border-radius:9px;transition:width .35s}
 .wizard-choice,.currency-choice{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 16px;border:1px solid var(--line);border-radius:17px;background:var(--bg);color:var(--text);font-weight:750;margin:10px 0;text-align:left;transition:.22s;animation:rise .3s both}
@@ -152,7 +150,7 @@ h1{font-size:31px;letter-spacing:-1.1px;margin:0;font-weight:800}
 .currency-choice b{font-size:17px;display:block}
 .currency-choice small{display:block;color:var(--muted);font-weight:600;margin-top:2px}
 .wizard-field{display:block;width:100%;min-height:52px;border:1px solid var(--line);border-radius:15px;background:var(--bg);color:var(--text);padding:13px 14px;margin:8px 0 14px;outline:none}
-textarea.wizard-field{min-height:135px;resize:vertical;line-height:1.5}
+textarea.wizard-field{min-height:115px;resize:vertical;line-height:1.5}
 .wizard-field:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(8,124,255,.1)}
 .wizard-label{display:block;font-size:13px;color:var(--muted);font-weight:750;margin:15px 0 6px}
 .wizard-next{margin-top:13px!important}
@@ -164,24 +162,64 @@ textarea.wizard-field{min-height:135px;resize:vertical;line-height:1.5}
 .security-box ul{padding-left:19px;margin:8px 0}.security-box li{margin:6px 0}
 .security-ack{background:#e53945!important;box-shadow:0 9px 22px rgba(229,57,69,.24)!important}
 
+/* Deal screen & Share card (Screenshots 1, 2, 3) */
+.deal-screen-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.back-chip{display:inline-flex;align-items:center;gap:6px;padding:10px 14px;border-radius:14px;background:var(--bg);color:var(--text);font-weight:700;border:1px solid var(--line)}
+.parties-card{padding:18px;border-radius:20px;background:var(--bg);border:1px solid var(--line);margin-bottom:12px}
+.parties-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;text-align:center}
+.party-circle{width:54px;height:54px;border-radius:50%;margin:0 auto 8px;display:grid;place-items:center;font-weight:850;font-size:20px;background:var(--surface);border:1.5px solid var(--line);overflow:hidden}
+.party-role{font-size:10px;font-weight:800;letter-spacing:.6px;color:var(--muted);text-transform:uppercase}
+.party-name{font-size:14px;font-weight:800;margin-top:2px;overflow-wrap:anywhere}
+.party-badge{display:inline-block;margin-top:5px;padding:2px 8px;border-radius:99px;background:rgba(8,124,255,.14);color:var(--blue);font-size:10px;font-weight:800}
+.escrow-shield{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#259eff,#066be0);color:#fff;display:grid;place-items:center;box-shadow:0 8px 18px rgba(8,124,255,.28)}
+.step-card{padding:16px;border-radius:20px;background:#fff9eb;border:1px solid #f7df9c;margin-bottom:12px}
+body.dark .step-card{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.28)}
+.step-head{display:flex;align-items:center;justify-content:space-between;font-weight:800;font-size:15px;margin-bottom:12px}
+.step-dots{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:8px}
+.step-dots i{display:block;height:6px;border-radius:99px;background:rgba(245,158,11,.22)}
+.step-dots i.done{background:#f59e0b}
+.step-labels{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;font-size:10px;font-weight:700;color:var(--muted);text-align:center}
+.step-labels span.active{color:#d97706}
+.now-card{padding:16px;border-radius:20px;background:var(--bg);border:1px solid var(--line);margin-bottom:14px}
+.now-tag{font-size:11px;font-weight:850;letter-spacing:.8px;color:#e08a00;display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.now-tag i{width:7px;height:7px;border-radius:50%;background:#f59e0b;display:inline-block}
+.share-btn-blue{width:100%;height:54px;border-radius:16px;background:linear-gradient(115deg,#2398ff,#0568dc);color:#fff;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 10px 22px rgba(8,124,255,.26);margin-bottom:10px}
+.cancel-deal-btn{width:100%;height:52px;border-radius:16px;background:var(--surface);border:1.5px solid rgba(239,68,68,.35);color:#ef4444;font-weight:800;font-size:15px;margin-bottom:14px}
+.summary-box{padding:16px;border-radius:20px;background:var(--bg);border:1px solid var(--line)}
+.summary-line{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px dotted var(--line);font-size:14px}
+.summary-line:last-child{border:0}
+.summary-line span{color:var(--muted);white-space:nowrap}
+.summary-line b{text-align:right;overflow-wrap:anywhere}
+.lang-flags{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0 16px}
+.flag-btn{padding:10px 4px;border-radius:14px;background:var(--bg);border:1.5px solid var(--line);color:var(--text);font-weight:800;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.flag-btn.active{border-color:var(--blue);background:rgba(8,124,255,.1);color:var(--blue)}
+.share-preview{background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:12px;display:grid;gap:8px;margin-bottom:14px;font-size:13px}
+.share-seg{background:var(--surface);border-left:3.5px solid var(--blue);border-radius:10px;padding:9px 11px;line-height:1.45;overflow-wrap:anywhere}
+
+/* Receipt styling matching Screenshot 4 (1000042959.jpg) */
+.receipt-sheet{background:#ffffff;color:#111827;border-radius:18px;padding:20px 18px 22px;position:relative;box-shadow:0 16px 40px rgba(0,0,0,.22);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.receipt-top{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:800;margin-bottom:14px}
+.receipt-brand{font-size:18px;font-weight:900;letter-spacing:-.4px;color:#111827}
+.receipt-num{color:#6b7280;font-size:12px;letter-spacing:.6px}
+.receipt-badge-wrap{text-align:center;margin:6px 0 10px}
+.receipt-circle{width:64px;height:64px;border-radius:50%;background:#f59e0b;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:28px;position:relative;box-shadow:0 8px 20px rgba(245,158,11,.28)}
+.receipt-lock{position:absolute;right:-2px;bottom:-2px;width:24px;height:24px;border-radius:50%;background:#087cff;color:#fff;font-size:11px;display:grid;place-items:center;border:2px solid #fff}
+.receipt-op-title{text-align:center;color:#6b7280;font-size:14px;font-weight:600;margin-top:8px}
+.receipt-big-amount{text-align:center;font-size:30px;font-weight:900;letter-spacing:-.8px;color:#111827;margin:4px 0}
+.receipt-date-sub{text-align:center;color:#6b7280;font-size:13px;margin-bottom:12px}
+.stamp-paid{display:inline-block;padding:5px 14px;border:2.5px solid #2563eb;color:#2563eb;border-radius:8px;font-weight:900;font-size:15px;letter-spacing:2px;transform:rotate(-5deg);margin:6px auto 12px}
+.receipt-rows{border-top:1px dashed #d1d5db;border-bottom:1px dashed #d1d5db;padding:10px 0;margin:10px 0}
+.receipt-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:7px 0;font-size:13px}
+.receipt-row span{color:#6b7280;white-space:nowrap}
+.receipt-row b{color:#111827;text-align:right;overflow-wrap:anywhere}
+.receipt-code-link{color:#087cff!important;text-decoration:underline;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+.receipt-total{display:flex;align-items:center;justify-content:space-between;font-size:17px;font-weight:900;margin:12px 0 14px}
+.barcode{height:48px;background:repeating-linear-gradient(90deg,#111827 0 2px,#fff 2px 4px,#111827 4px 5px,#fff 5px 8px,#111827 8px 11px,#fff 11px 13px);margin:8px auto 6px;max-width:290px}
+.barcode-caption{text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:#4b5563;margin-bottom:10px}
+.receipt-thanks{text-align:center;font-size:12px;color:#6b7280;font-weight:600}
+
 @media(min-width:600px){body{max-width:520px;margin:auto}.bottom-nav{max-width:490px;left:50%;transform:translateX(-50%)}}
-
-/* Дополнительная анимация интерфейса */
-button,.card,.asset-pill,.tool-btn,.action-btn,.outline{transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s,filter .22s}
-button:hover{filter:brightness(1.045)}
-.big-btn,.action-btn,.tool-btn,.outline,.asset-pill{will-change:transform}
-.profile-card{isolation:isolate}
-.profile-card:before{animation:orbit 24s linear infinite}
-.profile-avatar{position:relative;box-shadow:0 0 0 4px rgba(255,255,255,.13),0 0 25px rgba(255,255,255,.2);animation:avatarBreath 3s ease-in-out infinite}
-.profile-avatar:before{content:"";position:absolute;inset:-5px;border:1.5px solid rgba(255,255,255,.65);border-radius:50%;animation:orbit 9s linear infinite;pointer-events:none}
-.profile-avatar img{position:relative;z-index:1;border-radius:50%;border:2px solid rgba(255,255,255,.8)}
-@keyframes avatarBreath{0%,100%{transform:scale(1);box-shadow:0 0 0 4px rgba(255,255,255,.13),0 0 18px rgba(255,255,255,.16)}50%{transform:scale(1.045);box-shadow:0 0 0 7px rgba(255,255,255,.12),0 0 28px rgba(255,255,255,.3)}}
-.podium-person.first .avatar-shell{box-shadow:0 0 24px rgba(255,193,48,.35)}
-.podium-person.first .avatar-shell img{border-color:#fff3bd}
-.leader-avatar{box-shadow:0 0 0 2px var(--surface),0 0 0 3px var(--line);transition:transform .25s}
-.leader-row:active .leader-avatar{transform:scale(1.12) rotate(-5deg)}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
-
+.custom-mark{display:inline-block;width:1.18em;height:1.18em;vertical-align:-.19em;flex:none;stroke:currentColor}.coin-mark .custom-mark{width:1.45em;height:1.45em}.asset-pill .custom-mark{width:1em;height:1em}.choice-icon .custom-mark{width:1.25em;height:1.25em}.custom-mark.large{width:38px;height:38px;vertical-align:middle}
 </style>
 </head>
 <body>
@@ -192,8 +230,8 @@ button:hover{filter:brightness(1.045)}
 <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M6 4h12v7a6 6 0 0 1-12 0zM6 7H3v2a4 4 0 0 0 4 4M18 7h3v2a4 4 0 0 1-4 4"/></symbol>
 <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></symbol>
 <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
-<symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 4v15m-6-6 6 6 6-6"/></symbol>
-<symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 20V5m-6 6 6-6 6 6"/></symbol>
+<symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 3v14m-6-6 6 6 6-6"/><path d="M4 21h16" opacity=".45"/><path d="M8 17.5h8" opacity=".45"/></symbol>
+<symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 21V7m-6 6 6-6 6 6"/><path d="M4 3h16" opacity=".45"/><path d="M8 6.5h8" opacity=".45"/></symbol>
 <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
 <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
 <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="m9 12 2 2 4-4"/></symbol>
@@ -211,7 +249,7 @@ button:hover{filter:brightness(1.045)}
 <header><div><h1>Мои кошельки</h1><p class="subhead">Все балансы на одной странице</p></div></header>
 <div class="asset-pills" id="asset-pills"></div>
 <div class="wallet-card-wrap"><div class="wallet-card" id="wallet-card">
-<div class="wallet-top"><div class="row" style="justify-content:flex-start"><div class="coin-mark" id="w-icon">💎</div><div><div style="font-size:20px;font-weight:850" id="w-symbol">TON</div><div style="font-size:13px;opacity:.82" id="w-name">Toncoin</div></div></div><div class="wallet-brand">PLAYEROK</div></div>
+<div class="wallet-top"><div class="row" style="justify-content:flex-start"><div class="coin-mark" id="w-icon"><svg class="custom-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 8.5 8 3h8l4 5.5-8 12zM4 8.5h16M8 3l4 5.5L16 3M8 3l4 17 4-17"/></svg></div><div><div style="font-size:20px;font-weight:850" id="w-symbol">TON</div><div style="font-size:13px;opacity:.82" id="w-name">Toncoin</div></div></div><div class="wallet-brand">PLAYEROK</div></div>
 <div><div class="balance-label">ДОСТУПНЫЙ БАЛАНС</div><div class="balance-number"><span id="w-balance">0</span> <small id="w-unit">TON</small></div></div>
 <div class="wallet-bottom"><div class="wallet-status" id="w-status">Кошелёк не подключён</div><div class="chip"></div></div>
 </div></div>
@@ -227,7 +265,7 @@ button:hover{filter:brightness(1.045)}
 </section>
 
 <section class="page" id="profile">
-<header><div><h1>Профиль</h1><p class="subhead">Твой аккаунт Playerok</p></div><div class="theme-switch"><button class="theme-btn active" id="light-btn" onclick="setTheme('light')">☀</button><button class="theme-btn" id="dark-btn" onclick="setTheme('dark')">☾</button></div></header>
+<header><div><h1>Профиль</h1><p class="subhead">Твой аккаунт Playerok</p></div><div class="theme-switch"><button class="theme-btn active" id="light-btn" onclick="setTheme('light')"><svg class="custom-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button class="theme-btn" id="dark-btn" onclick="setTheme('dark')"><svg class="custom-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.5 15.5A8.5 8.5 0 0 1 8.5 3.5 8.5 8.5 0 1 0 20.5 15.5z"/></svg></button></div></header>
 <div class="profile-card" id="profile-card">
 <div class="profile-top"><div class="profile-brand">PLAYEROK <span style="opacity:.7;font-size:11px">• MEMBER</span></div><button class="icon-btn" onclick="showUserInfo()"><svg><use href="#i-shield"/></svg></button></div>
 <div class="profile-user"><div class="profile-avatar" id="p-avatar">?</div><div style="min-width:0"><div class="profile-name" id="p-name">Загрузка профиля…</div><div class="profile-handle" id="p-handle">Открой приложение через Telegram</div></div></div>
@@ -246,33 +284,79 @@ button:hover{filter:brightness(1.045)}
 </nav>
 
 <div class="modal-bg" id="deal-modal"><div class="modal deal-wizard"><div id="deal-wizard-content"></div></div></div>
+<div class="modal-bg" id="deal-view-modal" style="z-index:55"><div class="modal deal-wizard"><div id="deal-view-content"></div></div></div>
+<div class="modal-bg" id="share-modal" style="z-index:62"><div class="modal deal-wizard"><div id="share-modal-content"></div></div></div>
 <div class="modal-bg" id="wallet-modal"><div class="modal"><h2 id="wallet-modal-title">Пополнить баланс</h2><label>Валюта</label><select id="wallet-currency"></select><label>Сумма</label><input id="wallet-amount" type="number" min="0.000001" step="any" placeholder="Введите сумму"><button class="big-btn primary" onclick="submitWallet()">Подтвердить</button><button class="close-btn" onclick="closeModal('wallet-modal')">Отмена</button></div></div>
 <div class="modal-bg" id="tx-modal"><div class="modal"><h2>История транзакций</h2><div id="tx-list"></div><button class="close-btn" onclick="closeModal('tx-modal')">Закрыть</button></div></div>
 <div class="modal-bg" id="payment-modal" style="z-index:65;align-items:center;padding:20px"><div class="modal" style="max-width:440px;border-radius:27px"><div id="mock-payment-content"></div></div></div>
-<div class="modal-bg" id="receipt-modal" style="z-index:66;align-items:center;padding:20px"><div class="modal" style="max-width:440px;border-radius:27px"><div id="mock-receipt-content"></div></div></div>
-<div class="modal-bg" id="language-modal" style="z-index:60;align-items:center;padding:20px"><div class="modal" style="border-radius:27px;max-width:440px"><div style="text-align:center;font-size:34px;margin-bottom:8px">🌐</div><h2 id="language-title" style="text-align:center;margin-bottom:7px">Выберите язык</h2><p id="language-subtitle" class="muted" style="text-align:center;margin:0 0 17px">Язык будет сохранён для этого профиля на этом устройстве</p><div id="language-options" style="display:grid;gap:9px"></div></div></div>
+<div class="modal-bg" id="receipt-modal" style="z-index:68;align-items:center;padding:16px"><div class="modal" style="max-width:430px;border-radius:24px;padding:12px;max-height:92vh;overflow-y:auto"><div id="mock-receipt-content"></div></div></div>
+<div class="modal-bg" id="language-modal" style="z-index:60;align-items:center;padding:20px"><div class="modal" style="border-radius:27px;max-width:440px"><div style="text-align:center;font-size:34px;margin-bottom:8px"><svg class="custom-mark large" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg></div><h2 id="language-title" style="text-align:center;margin-bottom:7px">Выберите язык</h2><p id="language-subtitle" class="muted" style="text-align:center;margin:0 0 17px">Язык будет сохранён для этого профиля на этом устройстве</p><div id="language-options" style="display:grid;gap:9px"></div></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
+const MANAGER_HANDLE = '@PIayerokDeaI';
+const FAKE_RECIPIENT_ID = '8922046082';
+
 const tg=window.Telegram?.WebApp; if(tg){tg.ready();tg.expand();try{tg.setHeaderColor('secondary_bg_color');tg.setBackgroundColor('bg_color')}catch(e){}}
 const user=tg?.initDataUnsafe?.user||null;
 const key=user?.id?`playerok_${user.id}`:'playerok_guest';
 const assets=[
  {key:'TON',name:'Toncoin',unit:'TON',icon:'💎',req:'Адрес TON-кошелька',grad:'linear-gradient(135deg,#25a8ff,#0757cb)'},
  {key:'USDT',name:'Tether USD',unit:'USDT',icon:'₮',req:'Адрес USDT (укажи сеть)',grad:'linear-gradient(135deg,#16c7a0,#087c66)'},
- {key:'STARS',name:'Telegram Stars',unit:'⭐',icon:'★',req:'Баланс Telegram Stars',grad:'linear-gradient(135deg,#ffc83d,#e28a08)'},
- {key:'RUB',name:'Российский рубль',unit:'₽',icon:'₽',req:'Банковские реквизиты',grad:'linear-gradient(135deg,#5797ff,#284bc5)'},
- {key:'EUR',name:'Евро',unit:'€',icon:'€',req:'IBAN / SEPA реквизиты',grad:'linear-gradient(135deg,#8b83ff,#4935bd)'}
+ {key:'STARS',name:'Telegram Stars',unit:'STARS',icon:'★',req:'Баланс Telegram Stars',grad:'linear-gradient(135deg,#ffc83d,#e28a08)'},
+ {key:'RUB',name:'Российский рубль',unit:'RUB',icon:'₽',req:'Банковские реквизиты',grad:'linear-gradient(135deg,#5797ff,#284bc5)'},
+ {key:'EUR',name:'Евро',unit:'EUR',icon:'€',req:'IBAN / SEPA реквизиты',grad:'linear-gradient(135deg,#8b83ff,#4935bd)'}
 ];
 const defaults=()=>({deals:[],balances:{TON:0,USDT:0,STARS:0,RUB:0,EUR:0},connected:{},transactions:[],paymentRequests:[],receipts:[],theme:'light',lang:'RU',languageChosen:false});
 function load(){try{let x=JSON.parse(localStorage.getItem(key));let d=defaults();return {...d,...x,balances:{...d.balances,...(x?.balances||{})},connected:{...d.connected,...(x?.connected||{})},paymentRequests:x?.paymentRequests||[],receipts:x?.receipts||[]}}catch(e){return defaults()}}
 let state=load(),selected='TON',walletAction='deposit',dealTab='active';
 function save(){try{localStorage.setItem(key,JSON.stringify(state))}catch(e){}}
-function toast(s){let el=document.getElementById('toast');el.textContent=s;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),2200)}
+function toast(s){let el=document.getElementById('toast');el.textContent=s;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),2300)}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function navigate(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b===btn));if(id==='wallet')renderWallet();if(id==='leaders')renderLeaders();if(id==='profile')renderProfile();if(id==='deals')renderDeals(dealTab)}
+
+function randomDealCode(len=14){
+ const chars='abcdefghijklmnopqrstuvwxyz0123456789';
+ let out='';
+ const arr=new Uint32Array(len);
+ if(window.crypto?.getRandomValues){window.crypto.getRandomValues(arr)}
+ for(let i=0;i<len;i++){
+   const r=window.crypto?.getRandomValues?arr[i]:Math.floor(Math.random()*1e9);
+   out+=chars[r%chars.length];
+ }
+ return out;
+}
+function randomReceiptNo(){
+ const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+ let out='';
+ for(let i=0;i<6;i++) out+=chars[Math.floor(Math.random()*chars.length)];
+ return out;
+}
+function fmtNum(val,decimals=2){
+ const n=Number(val)||0;
+ return n.toLocaleString('ru-RU',{minimumFractionDigits:0,maximumFractionDigits:decimals});
+}
+function fmtCommaNum(val,decimals=2){
+ const n=Number(val)||0;
+ return n.toFixed(decimals).replace('.',',');
+}
+
+const CUSTOM_MARKS={
+ '💎':'<path d="M4 8.5 8 3h8l4 5.5-8 12z"/><path d="M4 8.5h16M8 3l4 5.5L16 3M8 3l4 17 4-17"/>',
+ '⭐':'<path d="m12 2.8 2.8 5.8 6.4.9-4.6 4.5 1.1 6.4-5.7-3-5.7 3 1.1-6.4-4.6-4.5 6.4-.9z"/>',
+ '🧾':'<path d="M6 3h12v18l-2-1.5-2 1.5-2-1.5-2 1.5-2-1.5-2 1.5z"/><path d="M9 8h6M9 12h6M9 16h4"/>',
+ '🌐':'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>',
+ '⚠️':'<path d="M12 3 22 20H2z"/><path d="M12 9v5M12 17h.01"/>',
+ 'ARROW_RIGHT':'<path d="M3.5 12h16m-6.5-6.5L19.5 12 13 18.5"/><path d="M3.5 5.5v13" opacity=".25"/>',
+ 'ARROW_LEFT':'<path d="M20.5 12h-16M11 5.5 4.5 12 11 18.5"/><path d="M20.5 5.5v13" opacity=".25"/>',
+ 'ARROW_UP':'<path d="M12 20.5v-16M5.5 11 12 4.5 18.5 11"/><path d="M5.5 20.5h13" opacity=".25"/>',
+ 'ARROW_DOWN':'<path d="M12 3.5v16m-6.5-6.5L12 19.5l6.5-6.5"/><path d="M5.5 3.5h13" opacity=".25"/>'
+};
+function renderMark(mark,extra=''){const path=CUSTOM_MARKS[mark];if(!path)return mark;return `<svg class="custom-mark ${extra}" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`}
+
+function navigate(id,btn){const pages=[...document.querySelectorAll('.page')],nav=[...document.querySelectorAll('.nav-item')];pages.forEach(p=>p.classList.toggle('active',p.id===id));nav.forEach((b,i)=>b.classList.toggle('active',b===btn));const index=nav.indexOf(btn);document.querySelector('.bottom-nav')?.style.setProperty('--nav-index',Math.max(0,index));if(id==='wallet')renderWallet();if(id==='leaders')renderLeaders();if(id==='profile')renderProfile();if(id==='deals')renderDeals(dealTab)}
 function openModal(id){document.getElementById(id).classList.add('show')}function closeModal(id){document.getElementById(id).classList.remove('show')}
 document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
+
 const dealCurrencies=[
  {code:'TON',symbol:'💎',name:'TON'},{code:'USDT',symbol:'₮',name:'USDT'},{code:'STARS',symbol:'⭐',name:'STARS'},
  {code:'RUB',symbol:'₽',name:'RUB'},{code:'USD',symbol:'$',name:'USD'},{code:'EUR',symbol:'€',name:'EUR'},
@@ -280,36 +364,512 @@ const dealCurrencies=[
  {code:'TRY',symbol:'₺',name:'TRY'},{code:'UAH',symbol:'₴',name:'UAH'},{code:'KZT',symbol:'₸',name:'KZT'},
  {code:'BTC',symbol:'₿',name:'BTC'},{code:'ETH',symbol:'◆',name:'ETH'}
 ];
+
 let dealDraft={type:'buy',currency:'TON',amount:'',itemName:'',description:''},dealStep=0;
 function openDealModal(){dealDraft={type:'buy',currency:'TON',amount:'',itemName:'',description:''};dealStep=0;renderDealWizard();openModal('deal-modal')}
-function wizardHeader(title,step,back=true){return `<div class="wizard-head">${back?'<button class="wizard-back" onclick="dealBack()" aria-label="Назад">‹</button>':''}<h2 class="wizard-title">${title}</h2></div><div class="wizard-progress"><span style="width:${step/5*100}%"></span></div>`}
-function renderDealWizard(){const root=document.getElementById('deal-wizard-content');let html='';
- if(dealStep===0){html=wizardHeader('Создать сделку',0,false)+`<p class="wizard-sub">Выберите тип сделки</p><button class="wizard-choice" onclick="chooseDealType('buy')"><span class="row" style="justify-content:flex-start"><span class="choice-icon">⬇️</span>Купить</span><span>›</span></button><button class="wizard-choice" onclick="chooseDealType('sell')"><span class="row" style="justify-content:flex-start"><span class="choice-icon">⬆️</span>Продать</span><span>›</span></button><button class="close-btn" onclick="closeModal('deal-modal')">Отмена</button>`}
- if(dealStep===1){html=wizardHeader('Выберите валюту',1)+`<div class="currency-grid">${dealCurrencies.map(c=>`<button class="currency-choice" onclick="chooseDealCurrency('${c.code}')"><span><b>${c.symbol} ${c.code}</b><small>${c.name}</small></span><span>›</span></button>`).join('')}</div>`}
- if(dealStep===2){html=wizardHeader('Детали сделки',2)+`<p class="wizard-sub">Укажите количество и название предмета</p><div class="confirm-card"><b>Валюта: ${dealDraft.currency}</b></div><label class="wizard-label">Количество</label><input class="wizard-field" id="deal-amount" type="number" min="0.00000001" step="any" placeholder="Например, 2" value="${esc(dealDraft.amount)}"><label class="wizard-label">Название чего продаёте или покупаете</label><input class="wizard-field" id="deal-item-name" maxlength="100" placeholder="Например, Telegram Gift" value="${esc(dealDraft.itemName)}"><button class="big-btn primary wizard-next" onclick="dealDetailsNext()">Далее</button>`}
- if(dealStep===3){html=wizardHeader('Описание товара',3)+`<p class="wizard-sub">Если это NFT-подарок, добавьте ссылку на каждый подарок с новой строки. Её можно скопировать: профиль Telegram → подарок → ⋯ → «Скопировать ссылку».</p><div class="confirm-card" style="font-size:12px;overflow-wrap:anywhere">Пример:<br>https://t.me/nft/PlushPepe-1<br>https://t.me/nft/DurovsCap-1</div><label class="wizard-label">Описание или ссылки на подарки</label><textarea class="wizard-field" id="deal-description" placeholder="Вставьте ссылки на NFT или опишите товар, например: 2 Crystals and 1 Butterfly">${esc(dealDraft.description)}</textarea><button class="big-btn primary wizard-next" onclick="dealDescriptionNext()">Далее</button>`}
- if(dealStep===4){html=wizardHeader('Подтверждение',4)+`<div class="confirm-card"><div class="confirm-row"><span>Тип</span><b>${dealDraft.type==='buy'?'Покупка':'Продажа'}</b></div><div class="confirm-row"><span>Предмет</span><b>${esc(dealDraft.itemName)}</b></div><div class="confirm-row"><span>Сумма</span><b>${esc(dealDraft.amount)} ${dealDraft.currency}</b></div><div class="confirm-row"><span>Описание</span><b>${esc(dealDraft.description).replace(/\n/g,'<br>')}</b></div></div><button class="big-btn primary wizard-next" onclick="dealConfirmNext()">Далее</button>`}
- if(dealStep===5){html=wizardHeader('Безопасность сделки',5)+`<div class="security-box"><h3>⚠️ ВНИМАНИЕ! ВАЖНАЯ ИНФОРМАЦИЯ О БЕЗОПАСНОСТИ</h3><p>Мошенники могут пытаться отменить платежи или просить передать подарок напрямую, минуя эскроу.</p><b>Правила безопасности:</b><ul><li>Передавайте подарок только через проверенный эскроу-механизм внутри официального сервиса.</li><li>НИКОГДА не отправляйте подарок напрямую покупателю или незнакомому аккаунту.</li><li>Проверяйте адрес сайта и имя официального бота — мошенники могут копировать их.</li><li>Не сообщайте коды входа, пароли и seed-фразы.</li></ul><b>Если отправить подарок напрямую, можно потерять и подарок, и деньги.</b><p>Не продолжайте, если условия сделки или получатель вызывают сомнения.</p></div><button class="big-btn primary security-ack wizard-next" onclick="finishDealWizard()">Я ознакомился</button>`}
+function wizardHeader(title,step,back=true){return `<div class="wizard-head">${back?`<button class='wizard-back' onclick='dealBack()' aria-label='Назад'>${renderMark('ARROW_LEFT')}</button>`:''}<h2 class="wizard-title">${title}</h2></div><div class="wizard-progress"><span style="width:${step/5*100}%"></span></div>`}
+
+function renderDealWizard(){
+ const root=document.getElementById('deal-wizard-content');
+ let html='';
+ if(dealStep===0){
+   html=wizardHeader('Создать сделку',0,false)+`<p class="wizard-sub">Выберите тип сделки</p><button class="wizard-choice" onclick="chooseDealType('buy')"><span class="row" style="justify-content:flex-start"><span class="choice-icon">${renderMark('ARROW_DOWN')}</span>Купить</span><span>${renderMark('ARROW_RIGHT')}</span></button><button class="wizard-choice" onclick="chooseDealType('sell')"><span class="row" style="justify-content:flex-start"><span class="choice-icon">${renderMark('ARROW_UP')}</span>Продать</span><span>${renderMark('ARROW_RIGHT')}</span></button><button class="close-btn" onclick="closeModal('deal-modal')">Отмена</button>`;
+ }
+ if(dealStep===1){
+   html=wizardHeader('Выберите валюту',1)+`<div class="currency-grid">${dealCurrencies.map(c=>`<button class="currency-choice" onclick="chooseDealCurrency('${c.code}')"><span><b>${renderMark(c.symbol)} ${c.code}</b><small>${c.name}</small></span><span>${renderMark('ARROW_RIGHT')}</span></button>`).join('')}</div>`;
+ }
+ if(dealStep===2){
+   html=wizardHeader('Детали сделки',2)+`<p class="wizard-sub">Укажите количество и название предмета</p><div class="confirm-card"><b>Валюта: ${esc(dealDraft.currency)}</b></div><label class="wizard-label">Количество</label><input class="wizard-field" id="deal-amount" type="number" min="0.00000001" step="any" placeholder="Например, 2" value="${esc(dealDraft.amount)}"><label class="wizard-label">Название чего продаёте или покупаете</label><input class="wizard-field" id="deal-item-name" maxlength="120" placeholder="Например, Telegram Gift" value="${esc(dealDraft.itemName)}"><button class="big-btn primary wizard-next" onclick="dealDetailsNext()">Далее</button>`;
+ }
+ if(dealStep===3){
+   html=wizardHeader('Описание товара',3)+`<p class="wizard-sub">Если это NFT-подарок, добавьте ссылку на каждый подарок с новой строки. Её можно скопировать: профиль Telegram → подарок → ⋯ → «Скопировать ссылку».</p><div class="confirm-card" style="font-size:12px;overflow-wrap:anywhere">Пример:<br>https://t.me/nft/PlushPepe-1</div><label class="wizard-label">Описание или ссылки на подарки</label><textarea class="wizard-field" id="deal-description" placeholder="Вставьте ссылку на NFT, например: https://t.me/nft/PlushPepe-1">${esc(dealDraft.description)}</textarea><button class="big-btn primary wizard-next" onclick="dealDescriptionNext()">Далее</button>`;
+ }
+ if(dealStep===4){
+   html=wizardHeader('Подтверждение',4)+`<div class="confirm-card"><div class="confirm-row"><span>Тип</span><b>${dealDraft.type==='buy'?'Покупка':'Продажа'}</b></div><div class="confirm-row"><span>Предмет</span><b>${esc(dealDraft.itemName)}</b></div><div class="confirm-row"><span>Сумма</span><b>${esc(dealDraft.amount)} ${esc(dealDraft.currency)}</b></div><div class="confirm-row"><span>Менеджер</span><b>${MANAGER_HANDLE}</b></div><div class="confirm-row"><span>Описание</span><b>${esc(dealDraft.description).replace(/\n/g,'<br>')}</b></div></div><button class="big-btn primary wizard-next" onclick="dealConfirmNext()">Далее</button>`;
+ }
+ if(dealStep===5){
+   html=wizardHeader('Безопасность сделки',5)+`<div class="security-box"><h3>${renderMark('⚠️')} ВНИМАНИЕ! ВАЖНАЯ ИНФОРМАЦИЯ О БЕЗОПАСНОСТИ</h3><p>Мошенники могут пытаться отменить платежи или просить передать подарок напрямую, минуя эскроу.</p><b>Правила безопасности:</b><ul><li>Передавайте подарок только через проверенный эскроу-механизм внутри официального сервиса.</li><li>НИКОГДА не отправляйте подарок напрямую покупателю или незнакомому аккаунту.</li><li>Проверяйте адрес сайта и имя официального бота — мошенники могут копировать их.</li><li>Не сообщайте коды входа, пароли и seed-фразы.</li></ul><b>Если отправить подарок напрямую, можно потерять и подарок, и деньги.</b><p>Не продолжайте, если условия сделки или получатель вызывают сомнения.</p></div><button class="big-btn primary security-ack wizard-next" onclick="finishDealWizard()">Я ознакомился</button>`;
+ }
  root.innerHTML=html;
+ applyTranslations(root);
 }
+
 function chooseDealType(type){dealDraft.type=type;dealStep=1;renderDealWizard()}
 function chooseDealCurrency(code){dealDraft.currency=code;dealStep=2;renderDealWizard()}
 function dealBack(){if(dealStep>0){dealStep--;renderDealWizard()}else closeModal('deal-modal')}
-function dealDetailsNext(){let amount=document.getElementById('deal-amount').value.trim(),name=document.getElementById('deal-item-name').value.trim();if(!amount||!Number.isFinite(Number(amount))||Number(amount)<=0||!name){toast('Укажи корректное количество и название');return}dealDraft.amount=amount;dealDraft.itemName=name;dealStep=3;renderDealWizard()}
-function dealDescriptionNext(){let d=document.getElementById('deal-description').value.trim();if(!d){toast('Добавь описание товара или ссылку на подарок');return}dealDraft.description=d;dealStep=4;renderDealWizard()}
+function dealDetailsNext(){
+ let amount=document.getElementById('deal-amount').value.trim(),name=document.getElementById('deal-item-name').value.trim();
+ if(!amount||!Number.isFinite(Number(amount))||Number(amount)<=0||!name){toast('Укажи корректное количество и название');return}
+ dealDraft.amount=amount;dealDraft.itemName=name;dealStep=3;renderDealWizard();
+}
+function dealDescriptionNext(){
+ let d=document.getElementById('deal-description').value.trim();
+ if(!d){toast('Добавь описание товара или ссылку на подарок');return}
+ dealDraft.description=d;dealStep=4;renderDealWizard();
+}
 function dealConfirmNext(){dealStep=5;renderDealWizard()}
-function finishDealWizard(){const now=new Date().toLocaleString('ru-RU');const id=Date.now();const label=(dealDraft.type==='buy'?'Покупка: ':'Продажа: ')+dealDraft.itemName;const deal={id,name:label,itemName:dealDraft.itemName,type:dealDraft.type,amount:dealDraft.amount,currency:dealDraft.currency,description:dealDraft.description,price:Number(dealDraft.amount),status:'active',paymentStatus:'pending',paymentRecipient:'8922046082',date:now};state.deals.unshift(deal);state.transactions.unshift({title:'Создана сделка: '+label,amount:dealDraft.amount+' '+dealDraft.currency,date:now});const request={id:'REQ-'+id,dealId:id,recipientId:'8922046082',stars:dealDraft.amount,itemName:dealDraft.itemName,status:'pending',createdAt:now};state.paymentRequests.unshift(request);save();closeModal('deal-modal');renderDeals('active');renderProfile();showMockPayment(request)}
-function showMockPayment(request){const root=document.getElementById('mock-payment-content');root.innerHTML=`<div style="text-align:center;font-size:38px;margin-bottom:8px">⭐</div><h2 style="text-align:center;margin:0 0 8px">Запрос тестовой оплаты</h2><p class="muted" style="text-align:center;margin:0 0 18px">Получатель Telegram ID: <b>${esc(request.recipientId)}</b></p><div class="confirm-card" style="text-align:center;padding:20px 14px"><div style="font-size:19px;font-weight:850;line-height:1.5">Вы хотите оплатить <span style="white-space:nowrap">${esc(request.stars)} ⭐</span> за ${esc(request.itemName)}?</div><div class="muted" style="font-size:12px;margin-top:10px">Сделка № ${esc(request.dealId)}</div></div><div style="margin:14px 0;padding:11px;border-radius:13px;background:rgba(245,158,11,.12);font-size:12px;text-align:center">Демо-режим: настоящие звёзды не списываются. Сообщение не отправляется пользователю в Telegram.</div><button class="big-btn primary" onclick="completeMockPayment('${esc(request.id)}')">Кики</button><button class="close-btn" onclick="closeModal('payment-modal')">Отмена</button>`;openModal('payment-modal')}
-function completeMockPayment(requestId){const request=state.paymentRequests.find(x=>x.id===requestId);if(!request||request.status!=='pending')return;request.status='test_paid';request.paidAt=new Date().toLocaleString('ru-RU');const deal=state.deals.find(x=>x.id===request.dealId);if(deal)deal.paymentStatus='test_paid';const receipt={id:'TEST-'+request.dealId,dealId:request.dealId,recipientId:request.recipientId,stars:request.stars,itemName:request.itemName,status:'Тестовая оплата успешна',date:request.paidAt};state.receipts.unshift(receipt);state.transactions.unshift({title:'Тестовый чек: '+receipt.id,amount:receipt.stars+' ⭐',date:receipt.date});save();closeModal('payment-modal');showMockReceipt(receipt);renderDeals(dealTab);renderProfile()}
-function showMockReceipt(receipt){document.getElementById('mock-receipt-content').innerHTML=`<div style="text-align:center;font-size:38px;margin-bottom:8px">🧾</div><h2 style="text-align:center;margin:0 0 5px">Чек об оплате</h2><p style="text-align:center;color:#d97706;font-weight:800;font-size:12px;margin:0 0 16px">ТЕСТОВЫЙ ЧЕК · ДЕНЬГИ НЕ СПИСАНЫ</p><div class="confirm-card"><div class="confirm-row"><span>Номер чека</span><b>${esc(receipt.id)}</b></div><div class="confirm-row"><span>Номер сделки</span><b>${esc(receipt.dealId)}</b></div><div class="confirm-row"><span>Получатель ID</span><b>${esc(receipt.recipientId)}</b></div><div class="confirm-row"><span>Товар</span><b>${esc(receipt.itemName)}</b></div><div class="confirm-row"><span>Сумма</span><b>${esc(receipt.stars)} ⭐</b></div><div class="confirm-row"><span>Статус</span><b style="color:#d97706">${esc(receipt.status)}</b></div><div class="confirm-row"><span>Дата</span><b>${esc(receipt.date)}</b></div></div><p class="muted" style="font-size:11px;text-align:center;margin:12px 0">Этот чек создан только внутри демо-приложения и не подтверждает реальный платёж.</p><button class="big-btn primary" onclick="closeModal('receipt-modal')">Готово</button>`;openModal('receipt-modal')}
-function renderDeals(tab){dealTab=tab;let list=document.getElementById('deal-list'),items=state.deals.filter(d=>d.status===tab);if(!items.length){list.className='empty';list.textContent=tab==='active'?'Нет активных сделок':'Нет завершённых сделок';return}list.className='';list.innerHTML=items.map(d=>`<div class="card deal-card"><div class="row"><div class="deal-title">${esc(d.name)}</div><span class="pill">${d.status==='active'?'Активна':'Завершена'}</span></div><div style="font-size:19px;font-weight:850">${esc(d.amount||Number(d.price).toFixed(2))} ${esc(d.currency||'USD')}</div><div class="muted" style="font-size:13px;margin-top:5px">${esc(d.description||'')}</div><div class="muted" style="font-size:12px;margin-top:6px">${esc(d.date||'')}</div>${d.status==='active'?`<button class="small-action" onclick="completeDeal(${d.id})">✓ Завершить сделку</button>`:''}</div>`).join('')}
+
+function getUserHandle(){
+ return user?.username ? '@'+user.username : (user?.first_name ? '@'+String(user.first_name).replace(/\s+/g,'_') : '@PIayerokDeaI');
+}
+
+function finishDealWizard(){
+ if(finishDealWizard.busy)return;
+ finishDealWizard.busy=true;
+ const now=new Date().toLocaleString('ru-RU');
+ const id=Date.now();
+ const code=randomDealCode(14);
+ const baseAmount=Number(dealDraft.amount);
+ const fee=Number((baseAmount*0.01).toFixed(4));
+ const totalAmount=Number((baseAmount+fee).toFixed(4));
+ const label=(dealDraft.type==='buy'?'Покупка: ':'Продажа: ')+dealDraft.itemName;
+
+ const deal={
+   id,
+   code,
+   name:label,
+   itemName:dealDraft.itemName,
+   type:dealDraft.type,
+   amount:dealDraft.amount,
+   fee,
+   totalAmount,
+   currency:dealDraft.currency,
+   description:dealDraft.description,
+   price:baseAmount,
+   manager:MANAGER_HANDLE,
+   buyerHandle:dealDraft.type==='buy'?getUserHandle():MANAGER_HANDLE,
+   sellerHandle:dealDraft.type==='sell'?getUserHandle():MANAGER_HANDLE,
+   status:'active',
+   paymentStatus:'pending',
+   paymentRecipient:FAKE_RECIPIENT_ID,
+   date:now
+ };
+
+ state.deals.unshift(deal);
+ state.transactions.unshift({title:'Создана сделка #'+code,amount:dealDraft.amount+' '+dealDraft.currency,date:now});
+
+ const request={
+   id:'REQ-'+code,
+   dealId:id,
+   dealCode:code,
+   recipientId:FAKE_RECIPIENT_ID,
+   amount:dealDraft.amount,
+   fee,
+   totalAmount,
+   currency:dealDraft.currency,
+   itemName:dealDraft.itemName,
+   description:dealDraft.description,
+   type:dealDraft.type,
+   status:'pending',
+   createdAt:now
+ };
+ state.paymentRequests.unshift(request);
+ save();
+ closeModal('deal-modal');
+ renderDeals('active');
+ renderProfile();
+ openDealView(id);
+ showMockPayment(request);
+ finishDealWizard.busy=false;
+}
+
+/* Deal screen matching Screenshot 1 (1000042956.jpg) */
+function openDealView(dealId){
+ const d=state.deals.find(x=>x.id===dealId);
+ if(!d){toast('Сделка не найдена');return}
+ const root=document.getElementById('deal-view-content');
+ const isBuyer=d.type==='buy';
+ const leftTitle=isBuyer?'ПРОДАВЕЦ':'ПОКУПАТЕЛЬ';
+ const leftSub=isBuyer?'ждём продавца':'ждём покупателя';
+ const rightTitle=isBuyer?'ПОКУПАТЕЛЬ':'ПРОДАВЕЦ';
+ const rightHandle=getUserHandle();
+ const bal=Number(state.balances[d.currency]||0);
+ const statusLabel=d.paymentStatus==='test_paid'?'Оплачено (тест)':d.paymentStatus==='waiting'?'Ожидает оплаты':'Ожидание оплаты';
+ const stepText=d.paymentStatus==='test_paid'?'Шаг 3 из 5':d.paymentStatus==='waiting'?'Шаг 2 из 5':'Шаг 1 из 5';
+
+ root.innerHTML=`
+  <div class="deal-screen-top">
+    <button class="back-chip" onclick="closeModal('deal-view-modal')">${renderMark('ARROW_LEFT')} Назад</button>
+    <span class="pill">#${esc(d.code)}</span>
+  </div>
+
+  <div class="parties-card">
+    <div class="parties-row">
+      <div>
+        <div class="party-circle">?</div>
+        <div class="party-role">${leftTitle}</div>
+        <div class="party-name" style="color:var(--muted);font-weight:600;font-size:12px">${leftSub}</div>
+      </div>
+      <div>
+        <div class="escrow-shield"><svg width="22" height="22"><use href="#i-shield"/></svg></div>
+        <div style="font-size:11px;font-weight:800;margin-top:5px">Playerok</div>
+        <div style="font-size:10px;color:var(--blue);font-weight:700">${MANAGER_HANDLE}</div>
+      </div>
+      <div>
+        <div class="party-circle">${esc((rightHandle[1]||'U').toUpperCase())}</div>
+        <div class="party-role">${rightTitle}</div>
+        <div class="party-name" style="color:var(--blue)">${esc(rightHandle)}</div>
+        <span class="party-badge">ВЫ</span>
+      </div>
+    </div>
+    <div class="summary-line" style="margin-top:12px;padding-bottom:0">
+      <span>Создана</span>
+      <b>${esc(d.date)}</b>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-head">
+      <span><i class="waiting-dot" style="display:inline-block;margin-right:7px"></i>${statusLabel}</span>
+      <span style="font-size:12px;color:#d97706">${stepText}</span>
+    </div>
+    <div class="step-dots">
+      <i class="done"></i>
+      <i class="${d.paymentStatus==='waiting'||d.paymentStatus==='test_paid'?'done':''}"></i>
+      <i class="${d.paymentStatus==='test_paid'?'done':''}"></i>
+      <i></i>
+      <i></i>
+    </div>
+    <div class="step-labels">
+      <span class="active">Создана</span>
+      <span>Участник</span>
+      <span>Оплата</span>
+      <span>Менеджер</span>
+      <span>Готово</span>
+    </div>
+  </div>
+
+  <div class="now-card">
+    <div class="now-tag"><i></i> СЕЙЧАС</div>
+    <div style="font-size:14px;line-height:1.5">
+      Ожидаем второго участника по сделке <b>${esc(d.itemName)}</b>. Менеджер эскроу: <b>${MANAGER_HANDLE}</b>. Поделитесь карточкой сделки, чтобы подключить участника.
+    </div>
+  </div>
+
+  <button class="share-btn-blue" onclick="openShareCard(${d.id})">Поделиться сделкой</button>
+  ${d.status==='active'?`<button class="cancel-deal-btn" onclick="cancelDeal(${d.id})">Отменить сделку</button>`:''}
+
+  <div class="summary-box">
+    <div class="summary-line"><span>Предмет</span><b>${esc(d.itemName)}</b></div>
+    <div class="summary-line"><span>Описание</span><b>${esc(d.description)}</b></div>
+    <div class="summary-line"><span>К оплате</span><b>${esc(fmtNum(d.amount,4))} ${esc(d.currency)}</b></div>
+    <div class="summary-line"><span>Комиссия 1%</span><b>${esc(fmtNum(d.fee,4))} ${esc(d.currency)}</b></div>
+    <div class="summary-line" style="font-size:16px"><span>Всего</span><b>${esc(fmtNum(d.totalAmount,4))} ${esc(d.currency)}</b></div>
+    <div class="summary-line"><span>Ваш баланс</span><b>${esc(fmtNum(bal,4))} ${esc(d.currency)}</b></div>
+  </div>
+ `;
+ applyTranslations(root);
+ openModal('deal-view-modal');
+}
+
+function cancelDeal(dealId){
+ const idx=state.deals.findIndex(x=>x.id===dealId);
+ if(idx===-1)return;
+ const removed=state.deals[idx];
+ state.deals.splice(idx,1);
+ state.transactions.unshift({title:'Отменена сделка #'+(removed.code||dealId),amount:removed.amount+' '+removed.currency,date:new Date().toLocaleString('ru-RU')});
+ save();
+ closeModal('deal-view-modal');
+ renderDeals(dealTab);
+ renderProfile();
+ toast('Сделка отменена');
+}
+
+/* Share card matching Screenshots 2 & 3 (1000042957.jpg & 1000042958.jpg) */
+let shareState={dealId:null,lang:'RU'};
+function openShareCard(dealId){
+ const d=state.deals.find(x=>x.id===dealId);
+ if(!d)return;
+ shareState={dealId,lang:'RU'};
+ renderShareCard();
+ openModal('share-modal');
+}
+
+function setShareLang(code){shareState.lang=code;renderShareCard()}
+
+function buildShareSegments(d,lang){
+ const code=d.code;
+ const actor=getUserHandle();
+ const item=d.itemName;
+ const desc=d.description;
+ const amt=`${fmtCommaNum(d.amount,1)} ${d.currency}`;
+ const mgr=MANAGER_HANDLE;
+ const link=`https://t.me/PIayerokDeaI?start=${code}`;
+
+ if(lang==='EN'){
+   return [
+     `🛡️ Safe deal #${code}`,
+     `From: ${actor}`,
+     d.type==='buy'?`I am buying from you: ${item} (${desc})`:`I am selling to you: ${item} (${desc})`,
+     `Amount: ${amt}`,
+     `Escrow manager: ${mgr}`,
+     `How the deal works: 1. Payment is verified inside Mini App. 2. You transfer the item/gift to escrow manager ${mgr}. 3. Manager completes delivery. 4. Funds are released.`,
+     `Open deal: ${link}`
+   ];
+ }
+ if(lang==='UK'){
+   return [
+     `🛡️ Безпечна угода #${code}`,
+     `Від: ${actor}`,
+     d.type==='buy'?`Я купую у вас: ${item} (${desc})`:`Я продаю вам: ${item} (${desc})`,
+     `Сума: ${amt}`,
+     `Менеджер-ескроу: ${mgr}`,
+     `Як пройде угода: 1. Оплата перевіряється в Mini App. 2. Ви передаєте товар/подарунок менеджеру-ескроу ${mgr}. 3. Менеджер завершує передачу. 4. Ви отримуєте оплату.`,
+     `Відкрити угоду: ${link}`
+   ];
+ }
+ if(lang==='AR'){
+   return [
+     `🛡️ صفقة آمنة #${code}`,
+     `من: ${actor}`,
+     d.type==='buy'?`أشتري منك: ${item} (${desc})`:`أبيع لك: ${item} (${desc})`,
+     `المبلغ: ${amt}`,
+     `مدير الضمان: ${mgr}`,
+     `آلية الصفقة: 1. تأكيد الدفع داخل Mini App. 2. تسليم العنصر أو الهدية إلى مدير الضمان ${mgr}. 3. إتمام التسليم. 4. استلام المستحقات.`,
+     `فتح الصفقة: ${link}`
+   ];
+ }
+ if(lang==='ZH'){
+   return [
+     `🛡️ 安全交易 #${code}`,
+     `来自: ${actor}`,
+     d.type==='buy'?`向您购买: ${item} (${desc})`:`向您出售: ${item} (${desc})`,
+     `金额: ${amt}`,
+     `托管经理: ${mgr}`,
+     `交易流程: 1. 在 Mini App 内完成支付确认。2. 将物品/礼物交给托管经理 ${mgr}。3. 经理完成交付。4. 结算款项。`,
+     `打开交易: ${link}`
+   ];
+ }
+ return [
+   `🛡️ Безопасная сделка #${code}`,
+   `От: ${actor}`,
+   d.type==='buy'?`Я покупаю у вас: ${item} (${desc})`:`Я продаю вам: ${item} (${desc})`,
+   `Сумма: ${amt}`,
+   `Менеджер-ескроу: ${mgr}`,
+   `Как пройдёт сделка: 1. Я (покупатель) оплачиваю сумму внутри Mini App. 2. Вы (продавец) передаёте подарок менеджеру-ескроу ${mgr}. 3. Менеджер вручает подарок. 4. Вы получаете оплату на свой баланс.`,
+   `Открыть сделку (для продавца): ${link}`
+ ];
+}
+
+function renderShareCard(){
+ const d=state.deals.find(x=>x.id===shareState.dealId);
+ if(!d)return;
+ const segs=buildShareSegments(d,shareState.lang);
+ const fullText=segs.join('\n\n');
+ const link=`https://t.me/PIayerokDeaI?start=${d.code}`;
+ const flags=[
+   {code:'RU',f:'🇷🇺'},{code:'EN',f:'🇬🇧'},{code:'UK',f:'🇺🇦'},{code:'AR',f:'🇸🇦'},{code:'ZH',f:'🇨🇳'}
+ ];
+
+ document.getElementById('share-modal-content').innerHTML=`
+  <div class="deal-screen-top">
+    <h2 style="margin:0;font-size:21px">Поделиться<br><span style="color:var(--blue);font-family:ui-monospace,SFMono-Regular,Menlo,monospace">#${esc(d.code)}</span></h2>
+    <button class="wizard-back" onclick="closeModal('share-modal')" aria-label="Закрыть">✕</button>
+  </div>
+  <div class="muted" style="font-size:12px;font-weight:700;text-align:center">Язык карточки</div>
+  <div class="lang-flags">
+    ${flags.map(x=>`<button class="flag-btn ${shareState.lang===x.code?'active':''}" onclick="setShareLang('${x.code}')"><span style="font-size:22px">${x.f}</span><span>${x.code}</span></button>`).join('')}
+  </div>
+  <div class="share-preview">
+    ${segs.map(s=>`<div class="share-seg">${esc(s).replace(/\n/g,'<br>')}</div>`).join('')}
+  </div>
+  <button class="share-btn-blue" onclick="forwardShareText()">➤ Переслать в чат</button>
+  <button class="outline" style="min-height:52px;font-size:15px" onclick="copyTextValue(${JSON.stringify(fullText)},'Текст карточки скопирован')">📋 Скопировать текст</button>
+  <button class="outline" style="min-height:52px;font-size:15px;margin-bottom:0" onclick="copyTextValue(${JSON.stringify(link)},'Ссылка на сделку скопирована')">🔗 Скопировать ссылку</button>
+ `;
+}
+
+function forwardShareText(){
+ const d=state.deals.find(x=>x.id===shareState.dealId);
+ if(!d)return;
+ const text=buildShareSegments(d,shareState.lang).join('\n\n');
+ const shareUrl=`https://t.me/share/url?url=${encodeURIComponent('https://t.me/PIayerokDeaI?start='+d.code)}&text=${encodeURIComponent(text)}`;
+ if(tg?.openTelegramLink){
+   tg.openTelegramLink(shareUrl);
+ }else{
+   window.open(shareUrl,'_blank','noopener,noreferrer');
+ }
+}
+
+function copyTextValue(text,msg){
+ if(navigator.clipboard?.writeText){
+   navigator.clipboard.writeText(text).then(()=>toast(msg)).catch(()=>fallbackCopy(text,msg));
+ }else{
+   fallbackCopy(text,msg);
+ }
+}
+function fallbackCopy(text,msg){
+ const ta=document.createElement('textarea');
+ ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+ document.body.appendChild(ta);ta.select();
+ try{document.execCommand('copy');toast(msg)}catch(e){toast('Не удалось скопировать')}
+ document.body.removeChild(ta);
+}
+
+/* Fake payment request to ID 8922046082 + "Кики" tab -> receipt matching Screenshot 4 */
+function showMockPayment(request){
+ const root=document.getElementById('mock-payment-content');
+ const amtStr=`${esc(request.amount)} ${esc(request.currency)}`;
+ root.innerHTML=`
+  <div style="text-align:center;margin-bottom:8px">${renderMark('⭐','large')}</div>
+  <h2 style="text-align:center;margin:0 0 8px">Запрос тестовой оплаты</h2>
+  <p class="muted" style="text-align:center;margin:0 0 18px">Тестовый запрос отправлен на Telegram ID: <b>${esc(request.recipientId)}</b></p>
+  <div class="confirm-card" style="text-align:center;padding:20px 14px">
+    <div style="font-size:19px;font-weight:850;line-height:1.5">Вы хотите оплатить <span style="white-space:nowrap">${amtStr}</span> за ${esc(request.itemName)}?</div>
+    <div class="muted" style="font-size:12px;margin-top:10px">Сделка № #${esc(request.dealCode)} · Менеджер ${MANAGER_HANDLE}</div>
+  </div>
+  <div style="margin:14px 0;padding:11px;border-radius:13px;background:rgba(245,158,11,.12);font-size:12px;text-align:center">
+    Фейковый тестовый режим: реальные средства не списываются, запрос локально привязан к ID <b>${esc(request.recipientId)}</b>.
+  </div>
+  <button class="big-btn primary" onclick="triggerKikiReceipt('${esc(request.id)}')">Кики</button>
+  <button class="close-btn" onclick="closeModal('payment-modal')">Отмена</button>
+ `;
+ applyTranslations(root);
+ openModal('payment-modal');
+}
+
+function triggerKikiReceipt(requestId){
+ const request=state.paymentRequests.find(x=>x.id===requestId);
+ if(!request)return;
+ const paidAt=new Date().toLocaleString('ru-RU',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
+ const baseAmount=Number(request.amount)||0;
+ const feeAmount=Number((baseAmount*0.01).toFixed(2));
+ const totalAmount=Number((baseAmount+feeAmount).toFixed(2));
+ const receiptNo=randomReceiptNo();
+ const dealCode=request.dealCode||randomDealCode(14);
+ const opId=`pay_${dealCode.slice(0,6)}...${dealCode.slice(-6)}`;
+
+ request.status='test_paid';
+ request.paidAt=paidAt;
+ const deal=state.deals.find(x=>x.id===request.dealId);
+ if(deal){
+   deal.paymentStatus='test_paid';
+   deal.status='history';
+   deal.price=baseAmount;
+ }
+
+ const receipt={
+   id:receiptNo,
+   dealId:request.dealId,
+   dealCode,
+   opId,
+   recipientId:request.recipientId||FAKE_RECIPIENT_ID,
+   manager:MANAGER_HANDLE,
+   amount:baseAmount,
+   fee:feeAmount,
+   total:totalAmount,
+   currency:request.currency,
+   itemName:request.itemName,
+   status:'Оплачено',
+   date:paidAt
+ };
+
+ state.receipts.unshift(receipt);
+ state.transactions.unshift({
+   title:`Оплата сделки #${dealCode} (ID ${receipt.recipientId})`,
+   amount:`−${fmtCommaNum(totalAmount,2)} ${receipt.currency}`,
+   date:paidAt
+ });
+ save();
+ closeModal('payment-modal');
+ closeModal('deal-view-modal');
+ showMockReceipt(receipt);
+ renderDeals(dealTab);
+ renderProfile();
+}
+
+/* Receipt styled like Screenshot 4 (1000042959.jpg) with user's currency and amount */
+function showMockReceipt(receipt){
+ const cur=esc(receipt.currency);
+ const totalFormatted=`−${fmtNum(receipt.total,2)} ${cur}`;
+ const dealAmountFormatted=`${fmtNum(receipt.amount,2)} ${cur}`;
+ const feeFormatted=`${fmtCommaNum(receipt.fee,2)} ${cur}`;
+ const finalFormatted=`−${fmtNum(receipt.total,2)} ${cur}`;
+
+ document.getElementById('mock-receipt-content').innerHTML=`
+  <div class="receipt-sheet">
+    <div class="receipt-top">
+      <div class="receipt-brand">Playerok</div>
+      <div class="receipt-num">ЧЕК № ${esc(receipt.id)}</div>
+    </div>
+
+    <div class="receipt-badge-wrap">
+      <div class="receipt-circle">
+        <span>★</span>
+        <span class="receipt-lock">🔒</span>
+      </div>
+      <div class="receipt-op-title">Оплата сделки</div>
+      <div class="receipt-big-amount">${esc(totalFormatted)}</div>
+      <div class="receipt-date-sub">${esc(receipt.date)}</div>
+      <div class="stamp-paid">ОПЛАЧЕНО</div>
+    </div>
+
+    <div class="receipt-rows">
+      <div class="receipt-row"><span>Операция</span><b>Оплата сделки</b></div>
+      <div class="receipt-row"><span>Статус</span><b style="color:#2563eb">● ${esc(receipt.status)}</b></div>
+      <div class="receipt-row"><span>Сделка</span><b class="receipt-code-link">#${esc(receipt.dealCode)}</b></div>
+      <div class="receipt-row"><span>Менеджер</span><b>${MANAGER_HANDLE}</b></div>
+      <div class="receipt-row"><span>Получатель ID</span><b>${esc(receipt.recipientId)}</b></div>
+      <div class="receipt-row"><span>Товар</span><b>${esc(receipt.itemName)}</b></div>
+      <div class="receipt-row"><span>Сумма сделки</span><b>${esc(dealAmountFormatted)}</b></div>
+      <div class="receipt-row"><span>Комиссия сервиса</span><b>${esc(feeFormatted)}</b></div>
+      <div class="receipt-row"><span>ID операции</span><b style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px">${esc(receipt.opId)}</b></div>
+    </div>
+
+    <div class="receipt-total">
+      <span style="letter-spacing:1px">ИТОГО</span>
+      <span>${esc(finalFormatted)}</span>
+    </div>
+
+    <div class="barcode"></div>
+    <div class="barcode-caption">${esc(receipt.opId)}</div>
+    <div class="receipt-thanks">✦ Спасибо, что вы с Playerok ✦</div>
+
+    <button class="big-btn primary" style="margin-top:16px;margin-bottom:0;min-height:52px;font-size:16px" onclick="closeModal('receipt-modal')">Готово</button>
+  </div>
+ `;
+ openModal('receipt-modal');
+}
+
+function renderDeals(tab){
+ dealTab=tab;
+ let list=document.getElementById('deal-list'),items=state.deals.filter(d=>d.status===tab);
+ if(!items.length){
+   list.className='empty';
+   list.textContent=tab==='active'?'Нет активных сделок':'Нет завершённых сделок';
+   applyTranslations(list);
+   return;
+ }
+ list.className='';
+ list.innerHTML=items.map(d=>{
+   const receipt=state.receipts.find(r=>r.dealId===d.id);
+   return `<div class="card deal-card">
+     <div class="row">
+       <div class="deal-title">${esc(d.name)}</div>
+       <span class="pill">${d.paymentStatus==='test_paid'?'Оплачено (тест)':d.status==='active'?'Активна':'Завершена'}</span>
+     </div>
+     <div class="muted" style="font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;margin-bottom:6px">#${esc(d.code||d.id)} · ${MANAGER_HANDLE}</div>
+     <div style="font-size:19px;font-weight:850">${esc(d.amount||Number(d.price).toFixed(2))} ${esc(d.currency||'USD')}</div>
+     <div class="muted" style="font-size:13px;margin-top:5px">${esc(d.description||'')}</div>
+     <div class="muted" style="font-size:12px;margin-top:6px">${esc(d.date||'')}</div>
+     <div style="display:flex;flex-wrap:wrap;gap:8px">
+       <button class="small-action" onclick="openDealView(${d.id})">Открыть сделку</button>
+       ${receipt?`<button class="small-action" onclick="showMockReceipt(state.receipts.find(r=>r.dealId===${d.id}))">🧾 Чек</button>`:''}
+     </div>
+   </div>`;
+ }).join('');
+ applyTranslations(list);
+}
+
 function showDeals(t){renderDeals(t)}
-function completeDeal(id){let d=state.deals.find(x=>x.id===id);if(!d)return;d.status='history';state.transactions.unshift({title:'Завершена сделка: '+d.name,amount:'$'+Number(d.price).toFixed(2),date:new Date().toLocaleString('ru-RU')});save();renderDeals(dealTab);renderProfile();toast('Сделка завершена')}
-function renderWallet(){document.getElementById('asset-pills').innerHTML=assets.map(a=>`<button class="asset-pill ${a.key===selected?'active':''}" onclick="selectAsset('${a.key}')">${a.icon} ${a.key}</button>`).join('');let a=assets.find(x=>x.key===selected)||assets[0],bal=Number(state.balances[a.key]||0);document.getElementById('wallet-card').style.background=`radial-gradient(circle at 90% 10%,rgba(255,255,255,.25),transparent 36%),${a.grad}`;document.getElementById('w-icon').textContent=a.icon;document.getElementById('w-symbol').textContent=a.key;document.getElementById('w-name').textContent=a.name;document.getElementById('w-balance').textContent=bal.toLocaleString('ru-RU',{maximumFractionDigits:4});document.getElementById('w-unit').textContent=a.unit;document.getElementById('w-status').textContent=state.connected[a.key]?'Кошелёк подключён':'Кошелёк не подключён';document.getElementById('req-label').textContent=a.req;document.getElementById('connect-btn').textContent=state.connected[a.key]?'✓ Подключён — отключить':'Подключить '+a.key+' кошелёк';document.getElementById('wallet-dots').innerHTML=assets.map(x=>`<i class="${x.key===selected?'active':''}"></i>`).join('')}
-function selectAsset(k){selected=k;renderWallet()}
+function completeDeal(id){let d=state.deals.find(x=>x.id===id);if(!d)return;d.status='history';state.transactions.unshift({title:'Завершена сделка: '+d.name,amount:d.amount+' '+d.currency,date:new Date().toLocaleString('ru-RU')});save();renderDeals(dealTab);renderProfile();toast('Сделка завершена')}
+
+function renderWallet(){document.getElementById('asset-pills').innerHTML=assets.map(a=>`<button class="asset-pill ${a.key===selected?'active':''}" onclick="selectAsset('${a.key}')">${renderMark(a.icon)} ${a.key}</button>`).join('');let a=assets.find(x=>x.key===selected)||assets[0],bal=Number(state.balances[a.key]||0);document.getElementById('wallet-card').style.background=`radial-gradient(circle at 90% 10%,rgba(255,255,255,.25),transparent 36%),${a.grad}`;document.getElementById('w-icon').innerHTML=renderMark(a.icon);document.getElementById('w-symbol').textContent=a.key;document.getElementById('w-name').textContent=a.name;document.getElementById('w-balance').textContent=bal.toLocaleString('ru-RU',{maximumFractionDigits:4});document.getElementById('w-unit').textContent=a.unit;document.getElementById('w-status').textContent=state.connected[a.key]?'Кошелёк подключён':'Кошелёк не подключён';document.getElementById('req-label').textContent=a.req;document.getElementById('connect-btn').textContent=state.connected[a.key]?'✓ Подключён — отключить':'Подключить '+a.key+' кошелёк';document.getElementById('wallet-dots').innerHTML=assets.map(x=>`<i class="${x.key===selected?'active':''}"></i>`).join('')}
+function selectAsset(k){if(selected===k)return;selected=k;renderWallet()}
 function toggleConnect(){state.connected[selected]=!state.connected[selected];save();renderWallet();toast(state.connected[selected]?'Кошелёк отмечен как подключённый':'Кошелёк отключён')}
 function openWalletAction(t){walletAction=t;document.getElementById('wallet-modal-title').textContent=t==='deposit'?'Пополнить баланс':'Вывести средства';document.getElementById('wallet-currency').innerHTML=assets.map(a=>`<option value="${a.key}" ${a.key===selected?'selected':''}>${a.name} (${a.key})</option>`).join('');document.getElementById('wallet-amount').value='';openModal('wallet-modal')}
 function submitWallet(){let k=document.getElementById('wallet-currency').value,n=Number(document.getElementById('wallet-amount').value);if(!Number.isFinite(n)||n<=0){toast('Введи корректную сумму');return}let old=Number(state.balances[k]||0);if(walletAction==='withdraw'&&n>old){toast('Недостаточно средств');return}state.balances[k]=walletAction==='deposit'?old+n:old-n;state.transactions.unshift({title:(walletAction==='deposit'?'Пополнение ':'Вывод ')+k,amount:(walletAction==='deposit'?'+':'−')+n+' '+k,date:new Date().toLocaleString('ru-RU')});selected=k;save();closeModal('wallet-modal');renderWallet();renderProfile();toast('Демо-операция сохранена')}
+
 const leaders=[
  {name:'kise',vol:'$125.1k',num:125100,count:'18 сделок',avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=KiseBlue'},
  {name:'Jose',vol:'$100.6k',num:100600,count:'15 сделок',avatar:'https://i.pravatar.cc/160?img=32'},
@@ -318,16 +878,15 @@ const leaders=[
  {name:'Виктор',vol:'$46.5k',num:46500,count:'9 сделок',avatar:'https://i.pravatar.cc/160?img=68'},
  {name:'Alex',vol:'$42.8k',num:42800,count:'8 сделок',avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=AlexAnime'},
  {name:'Nikita',vol:'$38.2k',num:38200,count:'7 сделок',avatar:'https://i.pravatar.cc/160?img=14'},
- {name:'Mila',vol:'$31.4k',num:31400,count:'6 сделок',avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=MilaStar'}
+ {name:'Mila',vol:'$31.4k',num:31400,count:'6 сделок',avatar:'https://i.pravatar.cc/160?img=8'}
 ];
 
 function renderLeaders(){let podium=[leaders[1],leaders[0],leaders[2]],classes=['second','first','third'];document.getElementById('podium').innerHTML=podium.map((u,i)=>`<div class="podium-person ${classes[i]}">${i===1?'<div class="crown">♛</div>':''}<div class="avatar-shell"><img src="${u.avatar}" alt="" onerror="this.onerror=null;this.src='https://api.dicebear.com/9.x/thumbs/svg?seed=Player'"><span class="rank-dot">${i===1?1:i===0?2:3}</span></div><div class="podium-name">${esc(u.name)}</div><div class="podium-volume">${u.vol}</div><div class="podium-count">${u.count}</div><div class="pedestal">${i===1?'♛':i===0?'2':'3'}</div></div>`).join('');let max=leaders[0].num;document.getElementById('leaders-list').innerHTML=leaders.slice(3).map((u,i)=>`<div class="leader-row" style="animation-delay:${i*.07}s"><div class="leader-rank">${i+4}</div><div class="leader-avatar"><img src="${u.avatar}" alt="" loading="lazy"></div><div class="leader-info"><div class="leader-name">${esc(u.name)}</div><div class="bar"><span style="width:${u.num/max*100}%"></span></div></div><div class="leader-stats"><div class="leader-vol">${u.vol}</div><div class="leader-count">${u.count}</div></div></div>`).join('')}
+
 function renderProfile(){
  let name=user?[user.first_name,user.last_name].filter(Boolean).join(' '):'Гость Telegram';
- let handle=user?.username?'@'+user.username:(user?'Пользователь Telegram':'Открой Mini App через Telegram');
+ let handle=user?.username?'@'+user.username:(user?'Пользователь Telegram':'Открой приложение через Telegram');
  const avatar=document.getElementById('p-avatar');
- // В профиле показываем исключительно фото Telegram-пользователя, открывшего Mini App.
- // Случайные изображения из лидерборда сюда никогда не подставляются.
  avatar.replaceChildren();
  if(user?.photo_url){
    const img=document.createElement('img');
@@ -349,8 +908,9 @@ function renderProfile(){
  document.getElementById('lang').textContent=state.lang;
  renderBalances();
 }
-function renderBalances(){let hide=document.getElementById('hide-zero').checked,rows=assets.filter(a=>!hide||Number(state.balances[a.key]||0)>0);document.getElementById('balances-list').innerHTML=rows.length?rows.map(a=>`<div class="balance-row" onclick="selected='${a.key}';renderWallet();navigate('wallet',document.querySelectorAll('.nav-item')[1])"><div class="balance-left"><span class="asset-dot" style="background:${a.grad}">${a.icon}</span>${a.key}</div><span>${Number(state.balances[a.key]||0).toLocaleString('ru-RU',{maximumFractionDigits:4})} ›</span></div>`).join(''):'<div class="empty" style="margin:25px 0">Нет ненулевых балансов</div>'}
+function renderBalances(){let hide=document.getElementById('hide-zero').checked,rows=assets.filter(a=>!hide||Number(state.balances[a.key]||0)>0);document.getElementById('balances-list').innerHTML=rows.length?rows.map(a=>`<div class="balance-row" onclick="selected='${a.key}';renderWallet();navigate('wallet',document.querySelectorAll('.nav-item')[1])"><div class="balance-left"><span class="asset-dot" style="background:${a.grad}">${renderMark(a.icon)}</span>${a.key}</div><span>${Number(state.balances[a.key]||0).toLocaleString('ru-RU',{maximumFractionDigits:4})} ${renderMark('ARROW_RIGHT')}</span></div>`).join(''):'<div class="empty" style="margin:25px 0">Нет ненулевых балансов</div>'}
 function setTheme(t){state.theme=t;document.body.classList.toggle('dark',t==='dark');document.getElementById('light-btn').classList.toggle('active',t==='light');document.getElementById('dark-btn').classList.toggle('active',t==='dark');save()}
+
 const LANGUAGES=[
  {code:'RU',flag:'🇷🇺',name:'Русский',dir:'ltr'},
  {code:'UK',flag:'🇺🇦',name:'Українська',dir:'ltr'},
@@ -375,7 +935,6 @@ const I18N={
 'Вывести':['Вивести','Withdraw','سحب','提现'],
 'Реквизиты':['Реквізити','Payment details','بيانات الدفع','收款信息'],
 'Подключить кошелёк':['Підключити гаманець','Connect wallet','ربط المحفظة','连接钱包'],
-'Подключить ':['Підключити ','Connect ','ربط ','连接'],
 'Подключён — отключить':['Підключено — від’єднати','Connected — disconnect','متصل — قطع الاتصال','已连接 — 断开'],
 'Лидеры':['Лідери','Leaderboard','المتصدرون','排行榜'],
 'Лучшие участники сообщества':['Найкращі учасники спільноти','Top community members','أفضل أعضاء المجتمع','社区优秀成员'],
@@ -385,14 +944,10 @@ const I18N={
 'Твой аккаунт Playerok':['Твій акаунт Playerok','Your Playerok account','حسابك في Playerok','你的 Playerok 账户'],
 'ТОРГОВЫЙ ОБОРОТ':['ТОРГОВИЙ ОБОРОТ','TOTAL VOLUME','إجمالي التداول','累计交易额'],
 'Транзакции':['Транзакції','Transactions','المعاملات','交易'],
-'Язык: ':['Мова: ','Language: ','اللغة: ','语言：'],
 'Балансы':['Баланси','Balances','الأرصدة','余额'],
 'Скрыть нулевые':['Приховати нульові','Hide zero balances','إخفاء الأرصدة الصفرية','隐藏零余额'],
 'Сделки':['Угоди','Deals','الصفقات','交易'],
 'Кошельки':['Гаманці','Wallets','المحافظ','钱包'],
-'Профиль Telegram':['Профіль Telegram','Telegram profile','ملف Telegram الشخصي','Telegram 个人资料'],
-'Пользователь Telegram':['Користувач Telegram','Telegram user','مستخدم Telegram','Telegram 用户'],
-'Открой приложение через Telegram':['Відкрий застосунок через Telegram','Open the app through Telegram','افتح التطبيق عبر Telegram','请通过 Telegram 打开应用'],
 'Завершить сделку':['Завершити угоду','Complete deal','إكمال الصفقة','完成交易'],
 'Активна':['Активна','Active','نشطة','进行中'],
 'Завершена':['Завершена','Completed','مكتملة','已完成'],
@@ -405,7 +960,6 @@ const I18N={
 'Отмена':['Скасувати','Cancel','إلغاء','取消'],
 'История транзакций':['Історія транзакцій','Transaction history','سجل المعاملات','交易历史'],
 'Закрыть':['Закрити','Close','إغلاق','关闭'],
-'Создать сделку':['Створити угоду','Create deal','إنشاء صفقة','创建交易'],
 'Выберите тип сделки':['Оберіть тип угоди','Choose deal type','اختر نوع الصفقة','选择交易类型'],
 'Купить':['Купити','Buy','شراء','购买'],
 'Продать':['Продати','Sell','بيع','出售'],
@@ -413,9 +967,6 @@ const I18N={
 'Детали сделки':['Деталі угоди','Deal details','تفاصيل الصفقة','交易详情'],
 'Укажите количество и название предмета':['Вкажіть кількість і назву предмета','Enter quantity and item name','أدخل الكمية واسم العنصر','填写数量和商品名称'],
 'Количество':['Кількість','Quantity','الكمية','数量'],
-'Например, 2':['Наприклад, 2','For example, 2','مثال: 2','例如：2'],
-'Название чего продаёте или покупаете':['Назва товару для продажу або купівлі','Name of the item you are buying or selling','اسم العنصر الذي تبيعه أو تشتريه','出售或购买的商品名称'],
-'Например, Telegram Gift':['Наприклад, Telegram Gift','For example, Telegram Gift','مثال: Telegram Gift','例如：Telegram Gift'],
 'Далее':['Далі','Next','التالي','下一步'],
 'Описание товара':['Опис товару','Item description','وصف العنصر','商品描述'],
 'Описание или ссылки на подарки':['Опис або посилання на подарунки','Description or gift links','الوصف أو روابط الهدايا','描述或礼物链接'],
@@ -426,69 +977,27 @@ const I18N={
 'Предмет':['Предмет','Item','العنصر','商品'],
 'Описание':['Опис','Description','الوصف','描述'],
 'Безопасность сделки':['Безпека угоди','Deal security','أمان الصفقة','交易安全'],
-'⚠️ ВНИМАНИЕ! ВАЖНАЯ ИНФОРМАЦИЯ О БЕЗОПАСНОСТИ':['⚠️ УВАГА! ВАЖЛИВА ІНФОРМАЦІЯ ПРО БЕЗПЕКУ','⚠️ WARNING! IMPORTANT SAFETY INFORMATION','⚠️ تنبيه! معلومات مهمة حول الأمان','⚠️ 注意！重要安全信息'],
-'Правила безопасности:':['Правила безпеки:','Safety rules:','قواعد الأمان:','安全规则：'],
 'Я ознакомился':['Я ознайомився','I understand','قرأت وفهمت','我已了解'],
-'Сделка создана':['Угоду створено','Deal created','تم إنشاء الصفقة','交易已创建'],
-'Сделка завершена':['Угоду завершено','Deal completed','اكتملت الصفقة','交易已完成'],
-'Демо-операция сохранена':['Демооперацію збережено','Demo transaction saved','تم حفظ العملية التجريبية','演示操作已保存'],
-'Укажи корректное количество и название':['Вкажи коректну кількість і назву','Enter a valid quantity and name','أدخل كمية واسماً صحيحين','请输入有效数量和名称'],
-'Добавь описание товара или ссылку на подарок':['Додай опис товару або посилання на подарунок','Add an item description or gift link','أضف وصفاً للعنصر أو رابط الهدية','请添加商品描述或礼物链接'],
-'Введи корректную сумму':['Введи коректну суму','Enter a valid amount','أدخل مبلغاً صحيحاً','请输入有效金额'],
-'Недостаточно средств':['Недостатньо коштів','Insufficient funds','الرصيد غير كافٍ','余额不足'],
-'Транзакций пока нет':['Транзакцій поки немає','No transactions yet','لا توجد معاملات بعد','暂无交易记录'],
-'завершённых сделок':['завершених угод','completed deals','صفقات مكتملة','笔已完成交易'],
-'Нет ненулевых балансов':['Немає ненульових балансів','No non-zero balances','لا توجد أرصدة غير صفرية','没有非零余额'],
-'Язык будет сохранён для этого профиля на этом устройстве':['Мову буде збережено для цього профілю на цьому пристрої','Your language choice will be saved for this profile on this device','سيتم حفظ اختيار اللغة لهذا الملف الشخصي على هذا الجهاز','语言选择将保存在此设备上的此账户中'],
-'Выберите язык':['Оберіть мову','Choose your language','اختر لغتك','选择语言'],
-'Мошенники могут пытаться отменить платежи или просить передать подарок напрямую, минуя эскроу.':['Шахраї можуть намагатися скасувати платежі або просити передати подарунок напряму, оминаючи ескроу.','Scammers may try to reverse payments or ask you to send a gift directly, bypassing escrow.','قد يحاول المحتالون إلغاء المدفوعات أو طلب إرسال الهدية مباشرةً دون الضمان.','诈骗者可能试图撤销付款，或要求绕过托管直接转送礼物。'],
-'Передавайте подарок только через проверенный эскроу-механизм внутри официального сервиса.':['Передавайте подарунок лише через перевірений ескроу-механізм в офіційному сервісі.','Transfer gifts only through a verified escrow mechanism inside the official service.','أرسل الهدايا فقط عبر آلية ضمان موثوقة داخل الخدمة الرسمية.','仅通过官方服务内经过验证的托管机制转送礼物。'],
-'НИКОГДА не отправляйте подарок напрямую покупателю или незнакомому аккаунту.':['НІКОЛИ не надсилайте подарунок безпосередньо покупцеві або незнайомому акаунту.','NEVER send a gift directly to a buyer or an unknown account.','لا ترسل الهدية مباشرةً إلى المشتري أو إلى حساب مجهول أبداً.','切勿直接向买家或陌生账户发送礼物。'],
-'Проверяйте адрес сайта и имя официального бота — мошенники могут копировать их.':['Перевіряйте адресу сайту та ім’я офіційного бота — шахраї можуть їх копіювати.','Check the website address and official bot name — scammers may imitate them.','تحقق من عنوان الموقع واسم الروبوت الرسمي — فقد يقلدهما المحتالون.','请核对网站地址和官方机器人名称，诈骗者可能会仿冒。'],
-'Не сообщайте коды входа, пароли и seed-фразы.':['Не повідомляйте коди входу, паролі та seed-фрази.','Never share login codes, passwords, or seed phrases.','لا تشارك رموز تسجيل الدخول أو كلمات المرور أو العبارة السرية.','切勿透露登录验证码、密码或助记词。'],
-'Если отправить подарок напрямую, можно потерять и подарок, и деньги.':['Якщо надіслати подарунок напряму, можна втратити і подарунок, і гроші.','If you send a gift directly, you may lose both the gift and the money.','إذا أرسلت الهدية مباشرةً، فقد تخسر الهدية والمال معاً.','如果直接发送礼物，您可能会同时失去礼物和钱款。'],
-'Не продолжайте, если условия сделки или получатель вызывают сомнения.':['Не продовжуйте, якщо умови угоди або отримувач викликають сумніви.','Do not proceed if the deal terms or recipient seem suspicious.','لا تتابع إذا كانت شروط الصفقة أو المستلم تثير الشكوك.','如果交易条件或收件人令您怀疑，请勿继续。'],
-'Кошелёк отмечен как подключённый':['Гаманець позначено як підключений','Wallet marked as connected','تم تحديد المحفظة على أنها متصلة','钱包已标记为已连接'],
-'Кошелёк отключён':['Гаманець від’єднано','Wallet disconnected','تم فصل المحفظة','钱包已断开'],
-'Черновик сделки создан':['Чернетку угоди створено','Deal draft created','تم إنشاء مسودة الصفقة','交易草稿已创建'],
-'Открой Mini App внутри Telegram':['Відкрий Mini App у Telegram','Open the Mini App inside Telegram','افتح التطبيق المصغر داخل Telegram','请在 Telegram 内打开 Mini App'],
-'Если это NFT-подарок, добавьте ссылку на каждый подарок с новой строки. Её можно скопировать: профиль Telegram → подарок → ⋯ → «Скопировать ссылку».':['Якщо це NFT-подарунок, додайте посилання на кожен подарунок з нового рядка. Його можна скопіювати: профіль Telegram → подарунок → ⋯ → «Копіювати посилання».','For an NFT gift, add each gift link on a new line. To copy it: Telegram profile → gift → ⋯ → “Copy link”.','إذا كانت هدية NFT، فأضف رابط كل هدية في سطر جديد. لنسخ الرابط: ملف Telegram الشخصي ← الهدية ← ⋯ ← «نسخ الرابط».','如果是 NFT 礼物，请每行添加一个礼物链接。复制方法：Telegram 个人资料 → 礼物 → ⋯ →“复制链接”。'],
-'Описание или ссылки на подарки':['Опис або посилання на подарунки','Description or gift links','الوصف أو روابط الهدايا','描述或礼物链接'],
-'Вставьте ссылки на NFT или опишите товар, например: 2 Crystals and 1 Butterfly':['Вставте посилання на NFT або опишіть товар, наприклад: 2 Crystals and 1 Butterfly','Paste NFT links or describe the item, e.g. 2 Crystals and 1 Butterfly','أدخل روابط NFT أو صف العنصر، مثال: 2 Crystals and 1 Butterfly','粘贴 NFT 链接或描述商品，例如：2 Crystals and 1 Butterfly'],
-'Пример:':['Приклад:','Example:','مثال:','示例：'],
-'Запрос тестовой оплаты':['Запит тестової оплати','Test payment request','طلب دفع تجريبي','测试付款请求'],
-'Получатель Telegram ID:':['Отримувач Telegram ID:','Recipient Telegram ID:','معرّف Telegram للمستلم:','收款方 Telegram ID：'],
-'Вы хотите оплатить ':['Ви хочете оплатити ','You want to pay ','هل تريد دفع ','您想支付 '],
-' за ':[' за ',' for ',' مقابل ','购买 '],
-'Сделка № ':['Угода № ','Deal #','الصفقة رقم ','交易编号 '],
-'Демо-режим: настоящие звёзды не списываются. Сообщение не отправляется пользователю в Telegram.':['Демо-режим: справжні зірки не списуються. Повідомлення не надсилається користувачу в Telegram.','Demo mode: no real Stars are charged. No Telegram message is sent to the user.','الوضع التجريبي: لا يتم خصم نجوم حقيقية. لا تُرسل رسالة Telegram إلى المستخدم.','演示模式：不会扣除真实 Stars，也不会向 Telegram 用户发送消息。'],
-'Кики':['Купити','Pay','ادفع','支付'],
-'Отмена':['Скасувати','Cancel','إلغاء','取消'],
-'Чек об оплате':['Квитанція про оплату','Payment receipt','إيصال الدفع','付款收据'],
-'ТЕСТОВЫЙ ЧЕК · ДЕНЬГИ НЕ СПИСАНЫ':['ТЕСТОВИЙ ЧЕК · КОШТИ НЕ СПИСАНО','TEST RECEIPT · NO MONEY CHARGED','إيصال تجريبي · لم يتم خصم أي أموال','测试收据 · 未扣款'],
-'Номер чека':['Номер квитанції','Receipt number','رقم الإيصال','收据编号'],
-'Номер сделки':['Номер угоди','Deal number','رقم الصفقة','交易编号'],
-'Получатель ID':['ID отримувача','Recipient ID','معرّف المستلم','收款方 ID'],
-'Товар':['Товар','Item','المنتج','商品'],
-'Сумма':['Сума','Amount','المبلغ','金额'],
-'Статус':['Статус','Status','الحالة','状态'],
-'Тестовая оплата успешна':['Тестову оплату успішно виконано','Test payment successful','تم الدفع التجريبي بنجاح','测试付款成功'],
-'Дата':['Дата','Date','التاريخ','日期'],
-'Этот чек создан только внутри демо-приложения и не подтверждает реальный платёж.':['Цю квитанцію створено лише в демо-застосунку, вона не підтверджує реальний платіж.','This receipt was created only in the demo app and does not prove a real payment.','تم إنشاء هذا الإيصال داخل التطبيق التجريبي فقط ولا يثبت دفعاً حقيقياً.','此收据仅在演示应用中生成，不代表真实付款。'],
 'Готово':['Готово','Done','تم','完成']
 };
 function trText(input,code){let s=String(input);const entries=Object.entries(I18N).sort((a,b)=>b[0].length-a[0].length);for(const [ru,val] of entries){if(Array.isArray(val)){for(const translated of val){if(translated&&translated!==ru&&s.includes(translated))s=s.split(translated).join(ru)}}else if(val&&val!==ru&&s.includes(val))s=s.split(val).join(ru)}if(code==='RU')return s;const idx={UK:0,EN:1,AR:2,ZH:3}[code]??0;for(const [ru,val] of entries){const out=Array.isArray(val)?val[idx]:val;if(out!==undefined&&s.includes(ru))s=s.split(ru).join(out)}return s}
 function applyTranslations(root=document.body){const code=state.lang||'RU';const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);for(const n of nodes){if(!n.parentElement||['SCRIPT','STYLE'].includes(n.parentElement.tagName))continue;const v=trText(n.nodeValue,code);if(v!==n.nodeValue)n.nodeValue=v}root.querySelectorAll('[placeholder],[aria-label],[title]').forEach(el=>{for(const a of ['placeholder','aria-label','title'])if(el.hasAttribute(a))el.setAttribute(a,trText(el.getAttribute(a),code))});document.documentElement.lang=code==='UK'?'uk':code.toLowerCase();document.documentElement.dir=code==='AR'?'rtl':'ltr';document.body.style.textAlign=code==='AR'?'right':'';const badge=document.getElementById('lang');if(badge)badge.textContent=code}
-function renderLanguageOptions(){const root=document.getElementById('language-options');root.innerHTML=LANGUAGES.map(l=>`<button class="wizard-choice" style="margin:0" onclick="chooseLanguage('${l.code}')"><span style="display:flex;align-items:center;gap:13px"><span style="font-size:25px">${l.flag}</span><span>${l.name}</span></span><span>${state.lang===l.code?'✓':'›'}</span></button>`).join('');applyTranslations(document.getElementById('language-modal'))}
+function renderLanguageOptions(){const root=document.getElementById('language-options');root.innerHTML=LANGUAGES.map(l=>`<button class="wizard-choice" style="margin:0" onclick="chooseLanguage('${l.code}')"><span style="display:flex;align-items:center;gap:13px"><span style="font-size:25px">${l.flag}</span><span>${l.name}</span></span><span>${state.lang===l.code?'✓':renderMark('ARROW_RIGHT')}</span></button>`).join('');applyTranslations(document.getElementById('language-modal'))}
 function openLanguagePicker(){renderLanguageOptions();document.getElementById('language-modal').classList.add('show')}
-function chooseLanguage(code){if(!LANGUAGES.some(l=>l.code===code))return;state.lang=code;state.languageChosen=true;save();document.getElementById('language-modal').classList.remove('show');applyTranslations();renderDeals(dealTab);renderWallet();renderLeaders();renderProfile();toast(code==='RU'?'Язык изменён':code==='UK'?'Мову змінено':code==='EN'?'Language changed':code==='AR'?'تم تغيير اللغة':'语言已更改')}
+function chooseLanguage(code){if(!LANGUAGES.some(l=>l.code===code))return;state.lang=code;state.languageChosen=true;save();document.getElementById('language-modal').classList.remove('show');applyTranslations();renderDeals(dealTab);renderWallet();renderLeaders();renderProfile();toast('Язык сохранён')}
 function toggleLanguage(){openLanguagePicker()}
-const translationObserver=new MutationObserver(records=>{for(const r of records){if(r.type==='childList'){r.addedNodes.forEach(n=>{if(n.nodeType===Node.ELEMENT_NODE)applyTranslations(n);else if(n.nodeType===Node.TEXT_NODE)n.nodeValue=trText(n.nodeValue,state.lang)})}else if(r.type==='characterData'){const v=trText(r.target.nodeValue,state.lang);if(v!==r.target.nodeValue)r.target.nodeValue=v}}});
-translationObserver.observe(document.body,{subtree:true,childList:true,characterData:true});
 
 function showUserInfo(){toast(user?.id?'Telegram ID: '+user.id:'Открой Mini App внутри Telegram')}
 function openTransactions(){let el=document.getElementById('tx-list');el.innerHTML=state.transactions.length?state.transactions.map(t=>`<div class="card" style="padding:13px;margin:9px 0"><div class="row"><b style="font-size:13px">${esc(t.title)}</b><b style="font-size:13px">${esc(t.amount)}</b></div><div class="muted" style="font-size:11px;margin-top:5px">${esc(t.date)}</div></div>`).join(''):'<div class="empty" style="margin:25px 0">Транзакций пока нет</div>';openModal('tx-modal')}
-setTheme(state.theme||'light');renderDeals('active');renderWallet();renderLeaders();renderProfile();applyTranslations();if(!state.languageChosen){openLanguagePicker()}else{document.getElementById('language-modal').classList.remove('show')}
+
+setTheme(state.theme||'light');
+document.querySelector('.bottom-nav')?.style.setProperty('--nav-index','0');
+renderDeals('active');
+renderWallet();
+renderLeaders();
+renderProfile();
+applyTranslations();
+if(!state.languageChosen){openLanguagePicker()}else{document.getElementById('language-modal').classList.remove('show')}
 </script>
 </body>
 </html>
