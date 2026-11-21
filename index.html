@@ -44,7 +44,6 @@ h1{font-size:31px;letter-spacing:-1.1px;margin:0;font-weight:800}
 .nav-item{flex:1;height:68px;border-radius:24px;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px;font-weight:700;transition:all .25s}
 .nav-item svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .nav-item.active{background:linear-gradient(135deg,#2b9aff,#066eea);color:#fff;box-shadow:0 8px 20px rgba(8,124,255,.32);transform:translateY(-3px)}
-/* wallets */
 .asset-pills{display:flex;gap:9px;overflow-x:auto;margin:0 -2px 18px;padding:2px 2px 8px;scrollbar-width:none}.asset-pills::-webkit-scrollbar{display:none}
 .asset-pill{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:99px;padding:10px 15px;font-weight:700;box-shadow:var(--shadow);transition:.2s}
 .asset-pill.active{background:var(--blue);color:#fff;border-color:var(--blue);transform:translateY(-2px)}
@@ -66,7 +65,6 @@ h1{font-size:31px;letter-spacing:-1.1px;margin:0;font-weight:800}
 .action-btn.secondary{background:var(--surface);border:1px solid var(--line);color:var(--text)}
 .requisites{padding:19px;margin-top:8px}.requisites h3{margin:0 0 5px;font-size:19px}.requisites p{margin:0 0 15px;color:var(--muted);font-size:14px}
 .connect{height:52px;width:100%;border-radius:16px;font-weight:750;font-size:15px}
-/* leaders */
 .leaders-hero{position:relative;overflow:hidden;padding:20px 14px 18px;border-radius:28px;color:#fff;background:radial-gradient(circle at 50% 5%,#7659ff,#321c78 52%,#171331);box-shadow:0 16px 34px rgba(49,28,120,.25);margin-bottom:16px}
 .leaders-hero:before,.leaders-hero:after{content:"";position:absolute;border:1px solid rgba(255,255,255,.1);border-radius:50%;width:270px;height:270px;left:50%;top:-205px;transform:translateX(-50%)}
 .leaders-hero:after{width:330px;height:330px;top:-235px}
@@ -100,7 +98,6 @@ h1{font-size:31px;letter-spacing:-1.1px;margin:0;font-weight:800}
 .bar{height:5px;border-radius:9px;background:rgba(130,145,170,.18);margin-top:7px;overflow:hidden}.bar span{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#168bff,#8b5cf6);transform-origin:left;animation:barIn 1s both}
 @keyframes barIn{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 .leader-stats{text-align:right;flex-shrink:0}.leader-vol{font-weight:850;font-size:14px}.leader-count{font-size:11px;color:var(--muted);margin-top:3px}
-/* profile */
 .theme-switch{display:flex;padding:4px;border:1px solid var(--line);background:var(--surface);border-radius:99px;box-shadow:var(--shadow)}
 .theme-btn{width:34px;height:30px;border-radius:99px;background:transparent;color:var(--muted);font-size:15px}.theme-btn.active{background:rgba(8,124,255,.13);color:var(--blue)}
 .profile-card{position:relative;overflow:hidden;border-radius:27px;padding:21px;color:white;background:radial-gradient(circle at 90% 10%,rgba(255,255,255,.25),transparent 36%),linear-gradient(135deg,#219dff,#075bd3);box-shadow:0 17px 34px rgba(8,124,255,.25);animation:rise .5s both}
@@ -123,7 +120,6 @@ h1{font-size:31px;letter-spacing:-1.1px;margin:0;font-weight:800}
 .balance-row:last-child{border:0}.balance-left{display:flex;align-items:center;gap:10px}.asset-dot{width:31px;height:31px;border-radius:11px;display:grid;place-items:center;color:#fff;font-weight:850}
 .switchline{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted)}
 .switchline input{accent-color:var(--blue)}
-/* modal */
 .modal-bg{position:fixed;inset:0;background:rgba(5,12,25,.48);z-index:30;display:none;align-items:flex-end;backdrop-filter:blur(5px)}
 .modal-bg.show{display:flex;animation:fadeDown .2s}
 .modal{width:100%;background:var(--surface);color:var(--text);border-radius:27px 27px 0 0;padding:23px 19px calc(25px + env(safe-area-inset-bottom));box-shadow:0 -12px 35px rgba(0,0,0,.2);animation:rise .28s}
@@ -135,7 +131,6 @@ h1{font-size:31px;letter-spacing:-1.1px;margin:0;font-weight:800}
 .toast{position:fixed;z-index:90;left:50%;bottom:110px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#172033;color:white;padding:12px 17px;border-radius:14px;font-size:13px;font-weight:700;transition:.25s;white-space:nowrap}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
-/* Deal creation wizard */
 .deal-wizard{max-height:92vh;overflow-y:auto;border-radius:27px 27px 0 0;overscroll-behavior:contain}
 .wizard-head{display:flex;align-items:center;gap:10px;margin-bottom:17px}
 .wizard-back{width:40px;height:40px;flex:0 0 40px;border-radius:14px;background:var(--bg);color:var(--text);font-size:23px;display:grid;place-items:center}
@@ -163,7 +158,6 @@ textarea.wizard-field{min-height:115px;resize:vertical;line-height:1.5}
 .security-box ul{padding-left:19px;margin:8px 0}.security-box li{margin:6px 0}
 .security-ack{background:#e53945!important;box-shadow:0 9px 22px rgba(229,57,69,.24)!important}
 
-/* Deal room */
 .deal-topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
 .pill-back{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:99px;background:#e5e7eb;color:#111827;font-weight:700;font-size:14px}
 body.dark .pill-back{background:#232e42;color:#f4f7fc}
@@ -208,7 +202,7 @@ body.dark .invite-banner{color:#34d399}
 .invite-box{padding:12px 14px;border-radius:16px;background:var(--bg);border:1px dashed var(--line);margin-bottom:12px;font-size:12px;line-height:1.45}
 .share-preview{white-space:pre-line;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:11px 12px;font-size:12px;margin-top:8px;overflow-wrap:anywhere}
 
-/* Receipt sheet */
+/* Чистый чек без красной лишней суммы */
 .receipt-sheet{background:#ffffff;color:#111827;border-radius:18px;padding:20px 18px 22px;position:relative;box-shadow:0 16px 40px rgba(0,0,0,.22);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
 .receipt-top{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:800;margin-bottom:14px}
 .receipt-brand{font-size:18px;font-weight:900;letter-spacing:-.4px;color:#111827}
@@ -217,7 +211,7 @@ body.dark .invite-banner{color:#34d399}
 .receipt-circle{width:64px;height:64px;border-radius:50%;background:#f59e0b;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:28px;position:relative;box-shadow:0 8px 20px rgba(245,158,11,.28)}
 .receipt-lock{position:absolute;right:-2px;bottom:-2px;width:24px;height:24px;border-radius:50%;background:#087cff;color:#fff;font-size:11px;display:grid;place-items:center;border:2px solid #fff}
 .receipt-op-title{text-align:center;color:#6b7280;font-size:14px;font-weight:600;margin-top:8px}
-.receipt-big-amount{text-align:center;font-size:30px;font-weight:900;letter-spacing:-.8px;color:#111827;margin:4px 0}
+.receipt-big-amount{text-align:center;font-size:30px;font-weight:900;letter-spacing:-.8px;color:#111827;margin:6px 0}
 .receipt-date-sub{text-align:center;color:#6b7280;font-size:13px;margin-bottom:12px}
 .stamp-paid{display:inline-block;padding:5px 14px;border:2.5px solid #2563eb;color:#2563eb;border-radius:8px;font-weight:900;font-size:15px;letter-spacing:2px;transform:rotate(-5deg);margin:6px auto 12px}
 .receipt-rows{border-top:1px dashed #d1d5db;border-bottom:1px dashed #d1d5db;padding:10px 0;margin:10px 0}
@@ -235,7 +229,6 @@ body.dark .invite-banner{color:#34d399}
 </style>
 </head>
 <body>
-<!-- SVG icon set -->
 <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden">
 <symbol id="i-deals" viewBox="0 0 24 24"><path d="M4 7.5h16v13H4z"/><path d="M8 7.5V4h8v3.5M4 12h16M10 12v3h4v-3"/></symbol>
 <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M4 6.5h15a2 2 0 0 1 2 2v11H5a2 2 0 0 1-2-2v-12a2 2 0 0 1 2-2h13"/><path d="M16 12h5v4h-5a2 2 0 0 1 0-4Z"/></symbol>
@@ -348,6 +341,7 @@ function saveSharedDeal(deal){
      creatorLabel:deal.creatorLabel,
      creatorLetter:deal.creatorLetter,
      creatorPhoto:deal.creatorPhoto,
+     invitedUser:deal.invitedUser||null,
      date:deal.date
    });
    localStorage.setItem(SHARED_DEALS_KEY,JSON.stringify(arr.slice(0,50)));
@@ -389,6 +383,24 @@ function fmtCommaNum(val,decimals=2){
  return n.toFixed(decimals).replace('.',',');
 }
 
+function encodePayloadB64(obj){
+ const jsonStr=JSON.stringify(obj);
+ const bytes=new TextEncoder().encode(jsonStr);
+ let bin='';
+ for(let i=0;i<bytes.length;i++) bin+=String.fromCharCode(bytes[i]);
+ return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function decodePayloadB64(b64){
+ if(!b64) return null;
+ const norm=b64.replace(/-/g,'+').replace(/_/g,'/');
+ const pad=norm.length%4 ? norm+'='.repeat(4-(norm.length%4)) : norm;
+ const bin=atob(pad);
+ const bytes=new Uint8Array(bin.length);
+ for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+ const jsonStr=new TextDecoder().decode(bytes);
+ return JSON.parse(jsonStr);
+}
+
 const CUSTOM_MARKS={
  '💎':'<path d="M4 8.5 8 3h8l4 5.5-8 12z"/><path d="M4 8.5h16M8 3l4 5.5L16 3M8 3l4 17 4-17"/>',
  '⭐':'<path d="m12 2.8 2.8 5.8 6.4.9-4.6 4.5 1.1 6.4-5.7-3-5.7 3 1.1-6.4-4.6-4.5 6.4-.9z"/>',
@@ -414,8 +426,8 @@ const dealCurrencies=[
  {code:'BTC',symbol:'₿',name:'BTC'},{code:'ETH',symbol:'◆',name:'ETH'}
 ];
 
-let dealDraft={type:'buy',currency:'TON',amount:'',itemName:'',description:''},dealStep=0;
-function openDealModal(){dealDraft={type:'buy',currency:'TON',amount:'',itemName:'',description:''};dealStep=0;renderDealWizard();openModal('deal-modal')}
+let dealDraft={type:'buy',currency:'STARS',amount:'1530',itemName:'',description:''},dealStep=0;
+function openDealModal(){dealDraft={type:'buy',currency:'STARS',amount:'1530',itemName:'',description:''};dealStep=0;renderDealWizard();openModal('deal-modal')}
 function wizardHeader(title,step,back=true){return `<div class="wizard-head">${back?`<button class='wizard-back' onclick='dealBack()' aria-label='Назад'>${renderMark('ARROW_LEFT')}</button>`:''}<h2 class="wizard-title">${title}</h2></div><div class="wizard-progress"><span style="width:${step/5*100}%"></span></div>`}
 
 function renderDealWizard(){
@@ -428,10 +440,10 @@ function renderDealWizard(){
    html=wizardHeader('Выберите валюту',1)+`<div class="currency-grid">${dealCurrencies.map(c=>`<button class="currency-choice" onclick="chooseDealCurrency('${c.code}')"><span><b>${renderMark(c.symbol)} ${c.code}</b><small>${c.name}</small></span><span>${renderMark('ARROW_RIGHT')}</span></button>`).join('')}</div>`;
  }
  if(dealStep===2){
-   html=wizardHeader('Детали сделки',2)+`<p class="wizard-sub">Укажите количество и название предмета</p><div class="confirm-card"><b>Валюта: ${esc(dealDraft.currency)}</b></div><label class="wizard-label">Количество</label><input class="wizard-field" id="deal-amount" type="number" min="0.00000001" step="any" placeholder="Например, 2" value="${esc(dealDraft.amount)}"><label class="wizard-label">Название чего продаёте или покупаете</label><input class="wizard-field" id="deal-item-name" maxlength="120" placeholder="Например, Telegram Gift" value="${esc(dealDraft.itemName)}"><button class="big-btn primary wizard-next" onclick="dealDetailsNext()">Далее</button>`;
+   html=wizardHeader('Детали сделки',2)+`<p class="wizard-sub">Укажите количество и название предмета</p><div class="confirm-card"><b>Валюта: ${esc(dealDraft.currency)}</b></div><label class="wizard-label">Количество</label><input class="wizard-field" id="deal-amount" type="number" min="0.00000001" step="any" placeholder="Например, 1530" value="${esc(dealDraft.amount)}"><label class="wizard-label">Название чего продаёте или покупаете</label><input class="wizard-field" id="deal-item-name" maxlength="120" placeholder="Например, Telegram Gift" value="${esc(dealDraft.itemName)}"><button class="big-btn primary wizard-next" onclick="dealDetailsNext()">Далее</button>`;
  }
  if(dealStep===3){
-   html=wizardHeader('Описание товара',3)+`<p class="wizard-sub">Если это NFT-подарок, добавьте ссылку на каждый подарок с новой строки. Её можно скопировать: профиль Telegram → подарок → ⋯ → «Скопировать ссылку».</p><div class="confirm-card" style="font-size:12px;overflow-wrap:anywhere">Пример:<br>https://t.me/nft/PlushPepe-1</div><label class="wizard-label">Описание или ссылки на подарки</label><textarea class="wizard-field" id="deal-description" placeholder="Вставьте ссылку на NFT, например: https://t.me/nft/PlushPepe-1">${esc(dealDraft.description)}</textarea><button class="big-btn primary wizard-next" onclick="dealDescriptionNext()">Далее</button>`;
+   html=wizardHeader('Описание товара',3)+`<p class="wizard-sub">Если это NFT-подарок, добавьте ссылку на каждый подарок с новой строки.</p><div class="confirm-card" style="font-size:12px;overflow-wrap:anywhere">Пример:<br>https://t.me/nft/PlushPepe-1</div><label class="wizard-label">Описание или ссылки на подарки</label><textarea class="wizard-field" id="deal-description" placeholder="Вставьте ссылку на NFT, например: https://t.me/nft/PlushPepe-1">${esc(dealDraft.description)}</textarea><button class="big-btn primary wizard-next" onclick="dealDescriptionNext()">Далее</button>`;
  }
  if(dealStep===4){
    html=wizardHeader('Подтверждение',4)+`<div class="confirm-card"><div class="confirm-row"><span>Тип</span><b>${dealDraft.type==='buy'?'Покупка':'Продажа'}</b></div><div class="confirm-row"><span>Предмет</span><b>${esc(dealDraft.itemName)}</b></div><div class="confirm-row"><span>Сумма</span><b>${esc(dealDraft.amount)} ${esc(dealDraft.currency)}</b></div><div class="confirm-row"><span>Бот</span><b>${BOT_USERNAME}</b></div><div class="confirm-row"><span>Описание</span><b>${esc(dealDraft.description).replace(/\n/g,'<br>')}</b></div></div><button class="big-btn primary wizard-next" onclick="dealConfirmNext()">Далее</button>`;
@@ -465,15 +477,33 @@ function getCreatorInfo(){
  return { id, handle, label, letter, photo: user?.photo_url || '' };
 }
 
-function isBuyerUser(deal){
- return deal && deal.type === 'buy';
-}
-function isSellerUser(deal){
- return deal && deal.type === 'sell';
+function getCurrentViewerInfo(){
+ const id = user?.id ? String(user.id) : '';
+ const handle = user?.username ? '@'+user.username : '@participant';
+ const label = user?[user.first_name,user.last_name].filter(Boolean).join(' '):handle;
+ const letter = (user?.first_name||handle.replace(/^@/,'')||'U')[0].toUpperCase();
+ return { id, handle, label, letter, photo: user?.photo_url || '' };
 }
 
+function isBuyerUser(deal){return deal && deal.type === 'buy'}
+function isSellerUser(deal){return deal && deal.type === 'sell'}
+
 function buildSellerStartLink(d){
- return `${BOT_LINK_BASE}?start=deal_${d.code}`;
+ const payload={
+   code:d.code,
+   type:d.type||'buy',
+   amount:String(d.amount||'1530'),
+   currency:d.currency||'STARS',
+   itemName:d.itemName||'Telegram Gift',
+   description:d.description||'',
+   creatorId:String(d.creatorId||'8922046082'),
+   creatorHandle:d.creatorHandle||'@opiem',
+   creatorLabel:d.creatorLabel||d.creatorHandle||'@opiem',
+   creatorLetter:d.creatorLetter||'O',
+   date:d.date||new Date().toLocaleString('ru-RU')
+ };
+ const encoded=encodePayloadB64(payload);
+ return `${BOT_LINK_BASE}?start=deal_${d.code}.${encoded}`;
 }
 
 function buildShareText(d){
@@ -491,13 +521,8 @@ function buildShareText(d){
    ``,
    `Менеджер-эскроу: ${ESCROW_MANAGER}`,
    ``,
-   `Как пройдёт сделка:`,
-   ``,
-   `1. Я (покупатель) оплачиваю сумму внутри Mini App.`,
-   `2. Вы (продавец) передаёте подарок менеджеру-эскроу ${ESCROW_MANAGER}`,
-   `3. Менеджер вручает подарок мне.`,
-   `4. Вы получаете оплату на свой баланс.`,
-   `Открыть сделку (для продавца):`,
+   `Код сделки: ${d.code}`,
+   `Открыть сделку:`,
    `${link}`
  ].join('\n');
 }
@@ -509,8 +534,6 @@ function finishDealWizard(){
  const id=Date.now();
  const code=randomDealCode(14);
  const baseAmount=Number(dealDraft.amount);
- const fee=Number((baseAmount*0.01).toFixed(4));
- const totalAmount=Number((baseAmount+fee).toFixed(4));
  const label=(dealDraft.type==='buy'?'Покупка: ':'Продажа: ')+dealDraft.itemName;
  const creator=getCreatorInfo();
 
@@ -521,8 +544,8 @@ function finishDealWizard(){
    itemName:dealDraft.itemName,
    type:dealDraft.type,
    amount:dealDraft.amount,
-   fee,
-   totalAmount,
+   fee:0,
+   totalAmount:baseAmount,
    currency:dealDraft.currency,
    description:dealDraft.description,
    price:baseAmount,
@@ -546,22 +569,21 @@ function finishDealWizard(){
  state.transactions.unshift({title:'Создана сделка #'+code,amount:dealDraft.amount+' '+dealDraft.currency,date:now});
 
  if(deal.type==='buy'){
-   const request={
+   state.paymentRequests.unshift({
      id:'REQ-'+code,
      dealId:id,
      dealCode:code,
      recipientId:creator.id,
      amount:dealDraft.amount,
-     fee,
-     totalAmount,
+     fee:0,
+     totalAmount:baseAmount,
      currency:dealDraft.currency,
      itemName:dealDraft.itemName,
      description:dealDraft.description,
      type:dealDraft.type,
      status:'pending',
      createdAt:now
-   };
-   state.paymentRequests.unshift(request);
+   });
  }
 
  save();
@@ -599,17 +621,15 @@ function triggerPayReceipt(requestId){
  const deal=state.deals.find(x=>x.id===request.dealId);
  if(!isBuyerUser(deal) || deal.isJoinedSellerView)return;
  const paidAt=new Date().toLocaleString('ru-RU',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
- const baseAmount=Number(request.amount)||0;
- const feeAmount=Number((baseAmount*0.01).toFixed(2));
- const totalAmount=Number((baseAmount+feeAmount).toFixed(2));
+ const paidAmount=Number(request.amount)||0;
  const receiptNo=randomReceiptNo();
- const dealCode=request.dealCode||randomDealCode(14);
+ const dealCode=request.dealCode;
  const opId=`pay_${dealCode.slice(0,6)}...${dealCode.slice(-6)}`;
 
  request.status='paid';
  request.paidAt=paidAt;
  deal.paid=true;
- deal.price=baseAmount;
+ deal.price=paidAmount;
 
  const receipt={
    id:receiptNo,
@@ -618,9 +638,7 @@ function triggerPayReceipt(requestId){
    opId,
    recipientId:request.recipientId,
    manager:ESCROW_MANAGER,
-   amount:baseAmount,
-   fee:feeAmount,
-   total:totalAmount,
+   amount:paidAmount,
    currency:request.currency,
    itemName:request.itemName,
    status:'Оплачено',
@@ -630,7 +648,7 @@ function triggerPayReceipt(requestId){
  state.receipts.unshift(receipt);
  state.transactions.unshift({
    title:`Оплата сделки #${dealCode}`,
-   amount:`−${fmtCommaNum(totalAmount,2)} ${receipt.currency}`,
+   amount:`−${fmtCommaNum(paidAmount,2)} ${receipt.currency}`,
    date:paidAt
  });
  activeReceiptDealId=request.dealId;
@@ -644,10 +662,8 @@ function triggerPayReceipt(requestId){
 function showMockReceipt(receipt){
  activeReceiptDealId=receipt.dealId;
  const cur=esc(receipt.currency);
- const totalFormatted=`−${fmtNum(receipt.total,2)} ${cur}`;
+ const paidTop=`−${fmtNum(receipt.amount,2)} ${cur}`;
  const dealAmountFormatted=`${fmtNum(receipt.amount,2)} ${cur}`;
- const feeFormatted=`${fmtCommaNum(receipt.fee,2)} ${cur}`;
- const finalFormatted=`−${fmtNum(receipt.total,2)} ${cur}`;
 
  document.getElementById('mock-receipt-content').innerHTML=`
   <div class="receipt-sheet">
@@ -662,7 +678,7 @@ function showMockReceipt(receipt){
         <span class="receipt-lock">🔒</span>
       </div>
       <div class="receipt-op-title">Оплата сделки</div>
-      <div class="receipt-big-amount">${esc(totalFormatted)}</div>
+      <div class="receipt-big-amount">${esc(paidTop)}</div>
       <div class="receipt-date-sub">${esc(receipt.date)}</div>
       <div class="stamp-paid">ОПЛАЧЕНО</div>
     </div>
@@ -675,13 +691,12 @@ function showMockReceipt(receipt){
       <div class="receipt-row"><span>Получатель ID</span><b>${esc(receipt.recipientId)}</b></div>
       <div class="receipt-row"><span>Товар</span><b>${esc(receipt.itemName)}</b></div>
       <div class="receipt-row"><span>Сумма сделки</span><b>${esc(dealAmountFormatted)}</b></div>
-      <div class="receipt-row"><span>Комиссия сервиса</span><b>${esc(feeFormatted)}</b></div>
       <div class="receipt-row"><span>ID операции</span><b style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px">${esc(receipt.opId)}</b></div>
     </div>
 
     <div class="receipt-total">
       <span style="letter-spacing:1px">ИТОГО</span>
-      <span>${esc(finalFormatted)}</span>
+      <span>${esc(paidTop)}</span>
     </div>
 
     <div class="barcode"></div>
@@ -703,6 +718,30 @@ function onReceiptDone(){
  }
 }
 
+function joinByDealCode(dealId, inputCode){
+ const d=state.deals.find(x=>x.id===dealId);
+ if(!d)return;
+ const normalizedCode=(inputCode||'').replace(/^deal_/i,'').trim();
+ if(!normalizedCode || normalizedCode !== d.code){
+   toast('Введите точный код созданной сделки');
+   return;
+ }
+ const viewer=getCurrentViewerInfo();
+ d.invitedUser = { handle: viewer.handle, id: viewer.id, label: viewer.label, joinedAt: new Date().toLocaleString('ru-RU') };
+ d.justJoined = true;
+ d.status = 'active';
+ state.transactions.unshift({
+   title:`Участник ${viewer.handle} добавлен по коду #${d.code}`,
+   amount:`${d.amount} ${d.currency}`,
+   date:new Date().toLocaleString('ru-RU')
+ });
+ save();
+ renderDeals('active');
+ renderProfile();
+ toast('Участник добавлен в активные сделки');
+ openDealView(dealId);
+}
+
 function openDealView(dealId){
  const d=state.deals.find(x=>x.id===dealId);
  if(!d){toast('Сделка не найдена');return}
@@ -714,36 +753,39 @@ function openDealView(dealId){
  const req=state.paymentRequests.find(r=>r.dealId===d.id);
 
  const hasJoined = Boolean(d.invitedUser) || isJoinedSellerView;
- const sellerHandle = d.invitedUser?.handle || (user?.username ? '@'+user.username : '@seller');
- const sellerLetter = (sellerHandle.replace(/^@/,'')||'S')[0].toUpperCase();
+ const viewer=getCurrentViewerInfo();
+ const partnerHandle = d.invitedUser?.handle || (isJoinedSellerView ? viewer.handle : '@seller');
+ const partnerId = d.invitedUser?.id || (isJoinedSellerView ? viewer.id : '');
+ const partnerLetter = (partnerHandle.replace(/^@/,'')||'S')[0].toUpperCase();
 
  const leftHtml = hasJoined
-   ? `<div class="party-av">${esc(sellerLetter)}</div>
-      <div class="party-role-lbl">ПРОДАВЕЦ</div>
-      <div class="party-user-lbl" style="color:var(--blue)">${esc(sellerHandle)}</div>
-      <span class="party-you-tag">${isJoinedSellerView?'ВЫ':'УЧАСТНИК'}</span>`
+   ? `<div class="party-av">${esc(partnerLetter)}</div>
+      <div class="party-role-lbl">УЧАСТНИК</div>
+      <div class="party-user-lbl" style="color:var(--blue)">${esc(partnerHandle)}</div>
+      ${partnerId?`<div class="muted" style="font-size:11px;margin-top:2px">ID: ${esc(partnerId)}</div>`:''}
+      <span class="party-you-tag">${isJoinedSellerView?'ВЫ':'В СДЕЛКЕ'}</span>`
    : `<div class="party-av">?</div>
-      <div class="party-role-lbl">ПРОДАВЕЦ</div>
-      <div class="party-user-lbl" style="color:var(--muted);font-size:13px">ждём продавца</div>`;
+      <div class="party-role-lbl">УЧАСТНИК</div>
+      <div class="party-user-lbl" style="color:var(--muted);font-size:13px">ждём по коду</div>`;
 
- const buyerHandle = d.creatorHandle || '@opiem';
- const buyerId = d.creatorId || '8922046082';
- const buyerLetter = d.creatorLetter || (buyerHandle.replace(/^@/,'')||'O')[0].toUpperCase();
+ const creatorHandle = d.creatorHandle || '@opiem';
+ const creatorId = d.creatorId || '8922046082';
+ const creatorLetter = d.creatorLetter || (creatorHandle.replace(/^@/,'')||'O')[0].toUpperCase();
 
  const rightHtml = d.creatorPhoto
    ? `<div class="party-av"><img src="${esc(d.creatorPhoto)}" alt=""></div>
-      <div class="party-role-lbl">ПОКУПАТЕЛЬ</div>
-      <div class="party-user-lbl" style="color:var(--blue)">${esc(buyerHandle)}</div>
-      <div class="muted" style="font-size:11px;margin-top:2px">ID: ${esc(buyerId)}</div>
-      <span class="party-you-tag">${isJoinedSellerView?'ПОКУПАТЕЛЬ':'ВЫ'}</span>`
-   : `<div class="party-av">${esc(buyerLetter)}</div>
-      <div class="party-role-lbl">ПОКУПАТЕЛЬ</div>
-      <div class="party-user-lbl" style="color:var(--blue)">${esc(buyerHandle)}</div>
-      <div class="muted" style="font-size:11px;margin-top:2px">ID: ${esc(buyerId)}</div>
-      <span class="party-you-tag">${isJoinedSellerView?'ПОКУПАТЕЛЬ':'ВЫ'}</span>`;
+      <div class="party-role-lbl">СОЗДАТЕЛЬ</div>
+      <div class="party-user-lbl" style="color:var(--blue)">${esc(creatorHandle)}</div>
+      <div class="muted" style="font-size:11px;margin-top:2px">ID: ${esc(creatorId)}</div>
+      <span class="party-you-tag">${isJoinedSellerView?esc(creatorHandle):'ВЫ'}</span>`
+   : `<div class="party-av">${esc(creatorLetter)}</div>
+      <div class="party-role-lbl">СОЗДАТЕЛЬ</div>
+      <div class="party-user-lbl" style="color:var(--blue)">${esc(creatorHandle)}</div>
+      <div class="muted" style="font-size:11px;margin-top:2px">ID: ${esc(creatorId)}</div>
+      <span class="party-you-tag">${isJoinedSellerView?esc(creatorHandle):'ВЫ'}</span>`;
 
  const stepNum = d.cancelled ? 1 : (hasJoined ? 2 : 1);
- const statusLabel = d.cancelled ? 'Сделка отменена' : (hasJoined ? 'Участник добавлен' : 'Ожидание оплаты');
+ const statusLabel = d.cancelled ? 'Сделка отменена' : (hasJoined ? 'Оба участника в сделке' : 'Ожидание перехода по ссылке');
  const botUrl = buildSellerStartLink(d);
  const sharePreviewText = buildShareText(d);
 
@@ -759,7 +801,7 @@ function openDealView(dealId){
   <div class="deal-main-title">Сделка</div>
   <div class="deal-hash-sub">#${esc(d.code)}</div>
 
-  ${d.justJoined?`<div class="invite-banner">Вы вошли в сделку #${esc(d.code)} в ${BOT_USERNAME} — она добавлена в ваши активные сделки</div>`:''}
+  ${d.justJoined?`<div class="invite-banner">Вы добавлены в активные сделки #${esc(d.code)}. В комнате видны вы (${esc(partnerHandle)}) и создатель (${esc(creatorHandle)}).</div>`:''}
 
   <div class="deal-hero-card">
     <div class="deal-big-badge">★</div>
@@ -799,7 +841,7 @@ function openDealView(dealId){
     </div>
     <div class="step-names">
       <span class="active">Создана</span>
-      <span class="${stepNum>=2?'active':''}">Участник</span>
+      <span class="${stepNum>=2?'active':''}">Участники</span>
       <span>Оплата</span>
       <span>Менеджер</span>
       <span>Готово</span>
@@ -811,11 +853,9 @@ function openDealView(dealId){
     <div style="font-size:14px;line-height:1.5">
       ${d.cancelled
         ? `Сделка отменена и перемещена в <b>Историю сделок</b>.`
-        : (isJoinedSellerView
-            ? `Вы вошли как продавец по сделке покупателя <b>${esc(buyerHandle)}</b> (ID: ${esc(buyerId)}). Сделка находится в <b>Активных сделках</b>. Кнопки оплаты и отмены сделки для продавца скрыты.`
-            : (hasJoined
-                ? `Продавец <b>${esc(sellerHandle)}</b> добавлен в сделку после /start в ${BOT_USERNAME}.`
-                : `Ожидаем продавца. Поделитесь ссылкой, чтобы он присоединился к сделке.`))}
+        : (hasJoined
+            ? `Сделка в <b>Активных сделках</b>. Участники: <b>${esc(partnerHandle)}</b> и создатель <b>${esc(creatorHandle)}</b> (ID: ${esc(creatorId)}).`
+            : `Сделка создана. Передайте ссылку с кодом <b>${esc(d.code)}</b> второму участнику.`)}
     </div>
   </div>
 
@@ -824,15 +864,17 @@ function openDealView(dealId){
   ${showCancelBtn ? `<button class="btn-cancel-red" onclick="cancelDeal(${d.id})">Отменить сделку</button>` : ''}
 
   <div class="invite-box">
-    <div class="muted" style="margin-bottom:6px">Ссылка для продавца: <b>${BOT_USERNAME}</b> · <a href="${esc(botUrl)}" target="_blank" rel="noopener noreferrer" style="color:var(--blue);font-weight:700">${esc(botUrl)}</a></div>
-    ${!hasJoined && !d.cancelled ? `<button class="small-action" style="margin-top:2px" onclick="simulateInvitedUserJoin(${d.id})">Продавец нажал /start в ${BOT_USERNAME}</button>` : `<div style="color:#059669;font-weight:750">Продавец ${esc(sellerHandle)} в сделке</div>`}
+    <div class="muted" style="margin-bottom:6px">Код сделки: <b>${esc(d.code)}</b> · <a href="${esc(botUrl)}" target="_blank" rel="noopener noreferrer" style="color:var(--blue);font-weight:700">Открыть ссылку</a></div>
+    ${!hasJoined && !d.cancelled ? `
+      <input class="wizard-field" id="join-code-input" placeholder="Введите код сделки ${esc(d.code)}" style="min-height:44px;margin:8px 0">
+      <button class="small-action" style="margin-top:2px" onclick="joinByDealCode(${d.id}, document.getElementById('join-code-input').value)">Добавить участника по коду</button>
+    ` : `<div style="color:#059669;font-weight:750">Участник ${esc(partnerHandle)} и создатель ${esc(creatorHandle)} добавлены в сделку</div>`}
     <div class="share-preview">${esc(sharePreviewText)}</div>
   </div>
 
   <div class="totals-card">
     <div class="totals-row"><span>${isBuy?'К оплате':'Сумма сделки'}</span><b>${esc(fmtNum(d.amount,2))} ${esc(d.currency)}</b></div>
-    <div class="totals-row"><span>Комиссия 1%</span><b>${esc(fmtNum(d.fee,2))} ${esc(d.currency)}</b></div>
-    <div class="totals-row grand"><span>Всего</span><b>${esc(fmtNum(d.totalAmount,2))} ${esc(d.currency)}</b></div>
+    <div class="totals-row grand"><span>Итого</span><b>${esc(fmtNum(d.amount,2))} ${esc(d.currency)}</b></div>
     <div class="totals-row"><span>Ваш баланс</span><b style="color:#ef4444">${esc(fmtNum(bal,2))} ${esc(d.currency)}</b></div>
   </div>
  `;
@@ -845,31 +887,12 @@ function shareInviteAndOpenBot(dealId){
  const d=state.deals.find(x=>x.id===dealId);
  if(!d)return;
  const inviteMsg=buildShareText(d);
- copyTextValue(inviteMsg,'Текст приглашения скопирован');
+ copyTextValue(inviteMsg,'Ссылка и код сделки скопированы');
  setTimeout(()=>{
    const url=`https://t.me/share/url?text=${encodeURIComponent(inviteMsg)}`;
    if(tg?.openTelegramLink) tg.openTelegramLink(url);
    else window.open(url,'_blank','noopener,noreferrer');
  },200);
-}
-
-function simulateInvitedUserJoin(dealId){
- const d=state.deals.find(x=>x.id===dealId);
- if(!d)return;
- const sellerHandle = user?.username ? '@'+user.username : '@seller_member';
- d.invitedUser = { handle: sellerHandle, joinedAt: new Date().toLocaleString('ru-RU') };
- d.justJoined = true;
- d.status = 'active';
- state.transactions.unshift({
-   title:`Продавец добавлен в сделку #${d.code} (${BOT_USERNAME})`,
-   amount:`${d.amount} ${d.currency}`,
-   date:new Date().toLocaleString('ru-RU')
- });
- save();
- renderDeals('active');
- renderProfile();
- toast('Продавец добавлен в активные сделки');
- openDealView(dealId);
 }
 
 function cancelDeal(dealId){
@@ -914,16 +937,16 @@ function renderDeals(tab){
    const receipt=state.receipts.find(r=>r.dealId===d.id);
    const req=state.paymentRequests.find(r=>r.dealId===d.id);
    const canPay = isBuyerUser(d) && !d.isJoinedSellerView && !d.cancelled && Boolean(d.invitedUser) && req;
-   const badgeText = d.cancelled ? 'Отменена' : (d.paid ? 'Оплачено' : (d.isJoinedSellerView ? 'Вы продавец' : (d.invitedUser ? 'Продавец в комнате' : 'Активна')));
+   const badgeText = d.cancelled ? 'Отменена' : (d.paid ? 'Оплачено' : ((d.invitedUser||d.isJoinedSellerView) ? 'Оба в сделке' : 'Ждёт вход'));
+   const partnerTxt = d.invitedUser?.handle ? ` · ${d.invitedUser.handle}` : '';
    return `<div class="card deal-card">
      <div class="row">
        <div class="deal-title">${esc(d.name)}</div>
        <span class="pill ${d.cancelled?'cancel':''}">${esc(badgeText)}</span>
      </div>
-     <div class="muted" style="font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;margin-bottom:6px">#${esc(d.code||d.id)} · ${BOT_USERNAME}</div>
-     <div style="font-size:19px;font-weight:850">${esc(d.amount||Number(d.price).toFixed(2))} ${esc(d.currency||'USD')}</div>
+     <div class="muted" style="font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;margin-bottom:6px">#${esc(d.code||d.id)} · ${esc(d.creatorHandle||'@opiem')}${esc(partnerTxt)}</div>
+     <div style="font-size:19px;font-weight:850">${esc(d.amount||Number(d.price).toFixed(2))} ${esc(d.currency||'STARS')}</div>
      <div class="muted" style="font-size:13px;margin-top:5px">${esc(d.description||'')}</div>
-     ${d.creatorHandle?`<div style="font-size:12px;color:var(--blue);font-weight:700;margin-top:6px">Покупатель: ${esc(d.creatorHandle)} (ID: ${esc(d.creatorId||'8922046082')})</div>`:''}
      <div class="muted" style="font-size:12px;margin-top:6px">${esc(d.date||'')}</div>
      <div style="display:flex;flex-wrap:wrap;gap:8px">
        <button class="small-action" onclick="openDealView(${d.id})">Открыть сделку</button>
@@ -1044,25 +1067,45 @@ function extractStartParam(){
 function handleStartParam(){
  const rawParam = extractStartParam();
  if(!rawParam) return;
- const code = rawParam.replace(/^deal_/i,'').trim();
+ const cleaned = rawParam.replace(/^deal_/i,'').trim();
+ if(!cleaned) return;
+
+ const dotIdx = cleaned.indexOf('.');
+ const code = (dotIdx >= 0 ? cleaned.slice(0, dotIdx) : cleaned).trim();
+ const b64Part = dotIdx >= 0 ? cleaned.slice(dotIdx + 1).trim() : '';
  if(!code) return;
+
+ let payload = null;
+ if(b64Part){
+   try{payload = decodePayloadB64(b64Part)}catch(e){payload = null}
+ }
 
  const shared = loadSharedDeals().find(x=>x.code===code);
  let found = state.deals.find(d=>d.code===code);
+ const source = payload || shared || found;
+ if(!source){
+   toast('Сделка с таким кодом не найдена');
+   return;
+ }
 
- const buyerHandle = found?.creatorHandle || shared?.creatorHandle || '@opiem';
- const buyerId = found?.creatorId || shared?.creatorId || '8922046082';
- const buyerLetter = found?.creatorLetter || shared?.creatorLetter || (buyerHandle.replace(/^@/,'')||'O')[0].toUpperCase();
- const amount = found?.amount || shared?.amount || '1488';
- const currency = found?.currency || shared?.currency || 'STARS';
- const itemName = found?.itemName || shared?.itemName || 'Telegram Gift';
- const description = found?.description || shared?.description || 'https://t.me/nft/PlushPepe-1';
- const type = found?.type || shared?.type || 'buy';
- const createdDate = found?.date || shared?.date || new Date().toLocaleString('ru-RU');
+ const viewer = getCurrentViewerInfo();
+ const creatorHandle = source.creatorHandle || '@opiem';
+ const creatorId = String(source.creatorId || '8922046082');
+ const creatorLetter = source.creatorLetter || (creatorHandle.replace(/^@/,'')||'O')[0].toUpperCase();
+ const type = source.type || 'buy';
+ const amount = String(source.amount || '1530');
+ const currency = source.currency || 'STARS';
+ const itemName = source.itemName || 'Telegram Gift';
+ const description = source.description || '';
+ const createdDate = source.date || new Date().toLocaleString('ru-RU');
  const baseNum = Number(amount)||0;
- const fee = found?.fee ?? shared?.fee ?? Number((baseNum*0.01).toFixed(4));
- const totalAmount = found?.totalAmount ?? shared?.totalAmount ?? Number((baseNum+fee).toFixed(4));
- const sellerHandle = user?.username ? '@'+user.username : '@seller';
+
+ const participantInfo = {
+   handle: viewer.handle,
+   id: viewer.id,
+   label: viewer.label,
+   joinedAt: new Date().toLocaleString('ru-RU')
+ };
 
  if(!found){
    found={
@@ -1071,33 +1114,33 @@ function handleStartParam(){
      name:(type==='buy'?'Покупка: ':'Продажа: ')+itemName,
      itemName,
      type,
-     amount:String(amount),
-     fee,
-     totalAmount,
+     amount,
+     fee:0,
+     totalAmount:baseNum,
      currency,
      description,
      price:baseNum,
      manager:BOT_USERNAME,
-     creatorId:String(buyerId),
-     creatorHandle:buyerHandle,
-     creatorLabel:buyerHandle,
-     creatorLetter:buyerLetter,
-     creatorPhoto:shared?.creatorPhoto||'',
-     invitedUser:{ handle: sellerHandle, joinedAt: new Date().toLocaleString('ru-RU') },
+     creatorId,
+     creatorHandle,
+     creatorLabel:source.creatorLabel||creatorHandle,
+     creatorLetter,
+     creatorPhoto:'',
+     invitedUser:participantInfo,
      isJoinedSellerView:true,
      justJoined:true,
      paid:false,
      cancelled:false,
      status:'active',
-     paymentRecipient:String(buyerId),
+     paymentRecipient:creatorId,
      date:createdDate
    };
    state.deals.unshift(found);
  }else{
-   found.creatorId=String(buyerId);
-   found.creatorHandle=buyerHandle;
-   found.creatorLetter=buyerLetter;
-   found.invitedUser={ handle: sellerHandle, joinedAt: new Date().toLocaleString('ru-RU') };
+   found.creatorId=creatorId;
+   found.creatorHandle=creatorHandle;
+   found.creatorLetter=creatorLetter;
+   found.invitedUser=participantInfo;
    found.isJoinedSellerView=true;
    found.justJoined=true;
    found.cancelled=false;
