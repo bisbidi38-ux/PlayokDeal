@@ -36,6 +36,7 @@ h1{font-size:31px;letter-spacing:-1.1px;margin:0;font-weight:800}
 .deal-title{font-weight:750;font-size:17px;margin-bottom:8px}
 .muted{color:var(--muted)}
 .pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:6px 10px;background:rgba(8,124,255,.1);color:var(--blue);font-size:12px;font-weight:700}
+.pill.cancel{background:rgba(239,68,68,.12);color:#ef4444}
 .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .small-action{border-radius:13px;padding:11px 14px;background:rgba(8,124,255,.12);color:var(--blue);font-weight:750;margin-top:12px}
 .small-action.pay-accent{background:linear-gradient(115deg,var(--blue2),var(--blue));color:#fff;box-shadow:0 6px 16px rgba(8,124,255,.24)}
@@ -366,7 +367,8 @@ function decodePayloadB64Url(str){
    const bin=atob(b64);
    const bytes=new Uint8Array(bin.length);
    for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
-   return JSON.parse(new TextDecoder().decode(bytes));
+   const parsed=JSON.parse(new TextDecoder().decode(bytes));
+   return (parsed && typeof parsed==='object') ? parsed : null;
  }catch(e){
    return null;
  }
@@ -530,8 +532,10 @@ function finishDealWizard(){
    creatorLetter:creator.letter,
    creatorPhoto:creator.photo,
    invitedUser:null,
+   isJoinedSellerView:false,
    justJoined:false,
    paid:false,
+   cancelled:false,
    status:'active',
    paymentRecipient:creator.id,
    date:now
@@ -571,7 +575,7 @@ function showMockPayment(requestId){
  const request=state.paymentRequests.find(x=>x.id===requestId);
  if(!request)return;
  const deal=state.deals.find(x=>x.id===request.dealId);
- if(!isBuyerUser(deal)){toast('Оплата доступна только покупателю');return}
+ if(!isBuyerUser(deal) || deal.isJoinedSellerView){toast('Оплата доступна только покупателю');return}
  const root=document.getElementById('mock-payment-content');
  const amtStr=`${esc(request.amount)} ${esc(request.currency)}`;
  root.innerHTML=`
@@ -593,7 +597,7 @@ function triggerPayReceipt(requestId){
  const request=state.paymentRequests.find(x=>x.id===requestId);
  if(!request)return;
  const deal=state.deals.find(x=>x.id===request.dealId);
- if(!isBuyerUser(deal))return;
+ if(!isBuyerUser(deal) || deal.isJoinedSellerView)return;
  const paidAt=new Date().toLocaleString('ru-RU',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
  const baseAmount=Number(request.amount)||0;
  const feeAmount=Number((baseAmount*0.01).toFixed(2));
@@ -738,13 +742,13 @@ function openDealView(dealId){
       <div class="muted" style="font-size:11px;margin-top:2px">ID: ${esc(buyerId)}</div>
       <span class="party-you-tag">${isJoinedSellerView?'ПОКУПАТЕЛЬ':'ВЫ'}</span>`;
 
- const stepNum = hasJoined ? 2 : 1;
- const statusLabel = hasJoined ? 'Участник добавлен' : 'Ожидание оплаты';
+ const stepNum = d.cancelled ? 1 : (hasJoined ? 2 : 1);
+ const statusLabel = d.cancelled ? 'Сделка отменена' : (hasJoined ? 'Участник добавлен' : 'Ожидание оплаты');
  const botUrl = buildSellerStartLink(d);
  const sharePreviewText = buildShareText(d);
 
- const showPayBtn = isBuy && !isJoinedSellerView && hasJoined && req;
- const showCancelBtn = !isSeller && !isJoinedSellerView && d.status==='active';
+ const showPayBtn = isBuy && !isJoinedSellerView && !d.cancelled && hasJoined && req;
+ const showCancelBtn = !isSeller && !isJoinedSellerView && !d.cancelled && d.status==='active';
 
  root.innerHTML=`
   <div class="deal-topbar">
@@ -755,7 +759,7 @@ function openDealView(dealId){
   <div class="deal-main-title">Сделка</div>
   <div class="deal-hash-sub">#${esc(d.code)}</div>
 
-  ${d.justJoined?`<div class="invite-banner">Комната сделки #${esc(d.code)} открыта после /start в ${BOT_USERNAME}</div>`:''}
+  ${d.justJoined?`<div class="invite-banner">Вы вошли в сделку #${esc(d.code)} в ${BOT_USERNAME} — она добавлена в ваши активные сделки</div>`:''}
 
   <div class="deal-hero-card">
     <div class="deal-big-badge">★</div>
@@ -805,21 +809,23 @@ function openDealView(dealId){
   <div class="now-panel">
     <div class="now-lbl">● СЕЙЧАС</div>
     <div style="font-size:14px;line-height:1.5">
-      ${isJoinedSellerView
-        ? `Вы вошли как продавец по сделке покупателя <b>${esc(buyerHandle)}</b> (ID: ${esc(buyerId)}). Менеджер-эскроу: <b>${ESCROW_MANAGER}</b>. Кнопки оплаты и отмены сделки для продавца скрыты.`
-        : (hasJoined
-            ? `Продавец <b>${esc(sellerHandle)}</b> добавлен в сделку после /start в ${BOT_USERNAME}.`
-            : `Ожидаем продавца. Поделитесь ссылкой, чтобы он присоединился к сделке.`)}
+      ${d.cancelled
+        ? `Сделка отменена и перемещена в <b>Историю сделок</b>.`
+        : (isJoinedSellerView
+            ? `Вы вошли как продавец по сделке покупателя <b>${esc(buyerHandle)}</b> (ID: ${esc(buyerId)}). Сделка находится в <b>Активных сделках</b>. Кнопки оплаты и отмены сделки для продавца скрыты.`
+            : (hasJoined
+                ? `Продавец <b>${esc(sellerHandle)}</b> добавлен в сделку после /start в ${BOT_USERNAME}.`
+                : `Ожидаем продавца. Поделитесь ссылкой, чтобы он присоединился к сделке.`))}
     </div>
   </div>
 
-  <button class="btn-share-blue" onclick="shareInviteAndOpenBot(${d.id})">✦ Поделиться сделкой</button>
+  ${!d.cancelled ? `<button class="btn-share-blue" onclick="shareInviteAndOpenBot(${d.id})">✦ Поделиться сделкой</button>` : ''}
   ${showPayBtn ? `<button class="big-btn primary" style="min-height:54px;font-size:16px;margin-bottom:10px" onclick="showMockPayment(${JSON.stringify(req.id)})">Оплатить</button>` : ''}
   ${showCancelBtn ? `<button class="btn-cancel-red" onclick="cancelDeal(${d.id})">Отменить сделку</button>` : ''}
 
   <div class="invite-box">
     <div class="muted" style="margin-bottom:6px">Ссылка для продавца: <b>${BOT_USERNAME}</b> · <a href="${esc(botUrl)}" target="_blank" rel="noopener noreferrer" style="color:var(--blue);font-weight:700">${esc(botUrl)}</a></div>
-    ${!hasJoined ? `<button class="small-action" style="margin-top:2px" onclick="simulateInvitedUserJoin(${d.id})">Продавец нажал /start в ${BOT_USERNAME}</button>` : `<div style="color:#059669;font-weight:750">Продавец ${esc(sellerHandle)} в комнате сделки</div>`}
+    ${!hasJoined && !d.cancelled ? `<button class="small-action" style="margin-top:2px" onclick="simulateInvitedUserJoin(${d.id})">Продавец нажал /start в ${BOT_USERNAME}</button>` : `<div style="color:#059669;font-weight:750">Продавец ${esc(sellerHandle)} в сделке</div>`}
     <div class="share-preview">${esc(sharePreviewText)}</div>
   </div>
 
@@ -853,16 +859,16 @@ function simulateInvitedUserJoin(dealId){
  const sellerHandle = user?.username ? '@'+user.username : '@seller_member';
  d.invitedUser = { handle: sellerHandle, joinedAt: new Date().toLocaleString('ru-RU') };
  d.justJoined = true;
- d.status = 'history';
+ d.status = 'active';
  state.transactions.unshift({
    title:`Продавец добавлен в сделку #${d.code} (${BOT_USERNAME})`,
    amount:`${d.amount} ${d.currency}`,
    date:new Date().toLocaleString('ru-RU')
  });
  save();
- renderDeals(dealTab);
+ renderDeals('active');
  renderProfile();
- toast('Продавец добавлен в сделку');
+ toast('Продавец добавлен в активные сделки');
  openDealView(dealId);
 }
 
@@ -870,16 +876,14 @@ function cancelDeal(dealId){
  const d=state.deals.find(x=>x.id===dealId);
  if(!d)return;
  if(isSellerUser(d) || d.isJoinedSellerView){toast('Продавец не может отменить сделку');return}
- const idx=state.deals.findIndex(x=>x.id===dealId);
- if(idx===-1)return;
- const removed=state.deals[idx];
- state.deals.splice(idx,1);
- state.transactions.unshift({title:'Отменена сделка #'+(removed.code||dealId),amount:removed.amount+' '+removed.currency,date:new Date().toLocaleString('ru-RU')});
+ d.status='history';
+ d.cancelled=true;
+ state.transactions.unshift({title:'Отменена сделка #'+(d.code||dealId),amount:d.amount+' '+d.currency,date:new Date().toLocaleString('ru-RU')});
  save();
  closeModal('deal-view-modal');
- renderDeals(dealTab);
+ renderDeals('history');
  renderProfile();
- toast('Сделка отменена');
+ toast('Сделка перемещена в историю');
 }
 
 function copyTextValue(text,msg){
@@ -902,20 +906,19 @@ function renderDeals(tab){
  let list=document.getElementById('deal-list'),items=state.deals.filter(d=>d.status===tab);
  if(!items.length){
    list.className='empty';
-   list.textContent=tab==='active'?'Нет активных сделок':'Нет завершённых сделок';
-   applyTranslations(list);
+   list.textContent=tab==='active'?'Нет активных сделок':'Нет сделок в истории';
    return;
  }
  list.className='';
  list.innerHTML=items.map(d=>{
    const receipt=state.receipts.find(r=>r.dealId===d.id);
    const req=state.paymentRequests.find(r=>r.dealId===d.id);
-   const canPay = isBuyerUser(d) && !d.isJoinedSellerView && tab==='history' && Boolean(d.invitedUser) && req;
-   const badgeText = d.paid ? 'Оплачено' : (d.isJoinedSellerView ? 'Продавец' : (d.invitedUser ? 'Продавец в комнате' : (tab==='active'?'Ожидание оплаты':'В истории')));
+   const canPay = isBuyerUser(d) && !d.isJoinedSellerView && !d.cancelled && Boolean(d.invitedUser) && req;
+   const badgeText = d.cancelled ? 'Отменена' : (d.paid ? 'Оплачено' : (d.isJoinedSellerView ? 'Вы продавец' : (d.invitedUser ? 'Продавец в комнате' : 'Активна')));
    return `<div class="card deal-card">
      <div class="row">
        <div class="deal-title">${esc(d.name)}</div>
-       <span class="pill">${esc(badgeText)}</span>
+       <span class="pill ${d.cancelled?'cancel':''}">${esc(badgeText)}</span>
      </div>
      <div class="muted" style="font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;margin-bottom:6px">#${esc(d.code||d.id)} · ${BOT_USERNAME}</div>
      <div style="font-size:19px;font-weight:850">${esc(d.amount||Number(d.price).toFixed(2))} ${esc(d.currency||'USD')}</div>
@@ -929,7 +932,6 @@ function renderDeals(tab){
      </div>
    </div>`;
  }).join('');
- applyTranslations(list);
 }
 
 function showDeals(t){renderDeals(t)}
@@ -994,7 +996,7 @@ const I18N={
 'Активные сделки':['Активні угоди','Active deals','الصفقات النشطة','进行中的交易'],
 'История сделок':['Історія угод','Deal history','سجل الصفقات','交易记录'],
 'Нет активных сделок':['Немає активних угод','No active deals','لا توجد صفقات نشطة','暂无进行中的交易'],
-'Нет завершённых сделок':['Немає завершених угод','No completed deals','لا توجد صفقات مكتملة','暂无已完成交易'],
+'Нет сделок в истории':['Немає угод в історії','No deals in history','لا توجد صفقات في السجل','历史记录中暂无交易'],
 'Мои кошельки':['Мої гаманці','My wallets','محافظي','我的钱包'],
 'Все балансы на одной странице':['Усі баланси на одній сторінці','All balances in one place','كل الأرصدة في مكان واحد','所有余额一目了然'],
 'ДОСТУПНЫЙ БАЛАНС':['ДОСТУПНИЙ БАЛАНС','AVAILABLE BALANCE','الرصيد المتاح','可用余额'],
@@ -1028,8 +1030,19 @@ function toggleLanguage(){openLanguagePicker()}
 function showUserInfo(){toast(user?.id?'Telegram ID: '+user.id:'Открой Mini App внутри Telegram')}
 function openTransactions(){let el=document.getElementById('tx-list');el.innerHTML=state.transactions.length?state.transactions.map(t=>`<div class="card" style="padding:13px;margin:9px 0"><div class="row"><b style="font-size:13px">${esc(t.title)}</b><b style="font-size:13px">${esc(t.amount)}</b></div><div class="muted" style="font-size:11px;margin-top:5px">${esc(t.date)}</div></div>`).join(''):'<div class="empty" style="margin:25px 0">Транзакций пока нет</div>';openModal('tx-modal')}
 
+function extractStartParam(){
+ const tgStart = tg?.initDataUnsafe?.start_param;
+ if(tgStart && String(tgStart).trim()) return String(tgStart).trim();
+ const params = new URLSearchParams(window.location.search);
+ const qStart = params.get('start') || params.get('tgWebAppStartParam') || '';
+ if(qStart.trim()) return qStart.trim();
+ const hash = window.location.hash || '';
+ const m = hash.match(/(?:tgWebAppStartParam|start)=([^&]+)/);
+ return m ? decodeURIComponent(m[1]).trim() : '';
+}
+
 function handleStartParam(){
- const rawParam = tg?.initDataUnsafe?.start_param || new URLSearchParams(window.location.search).get('start') || '';
+ const rawParam = extractStartParam();
  if(!rawParam) return;
  const clean = rawParam.replace(/^deal_/,'').trim();
  const decoded = decodePayloadB64Url(clean);
@@ -1074,7 +1087,8 @@ function handleStartParam(){
      isJoinedSellerView:true,
      justJoined:true,
      paid:false,
-     status:'history',
+     cancelled:false,
+     status:'active',
      paymentRecipient:String(buyerId),
      date:createdDate
    };
@@ -1086,12 +1100,13 @@ function handleStartParam(){
    found.invitedUser={ handle: sellerHandle, joinedAt: new Date().toLocaleString('ru-RU') };
    found.isJoinedSellerView=true;
    found.justJoined=true;
-   found.status='history';
+   found.cancelled=false;
+   found.status='active';
  }
 
  state.languageChosen=true;
  save();
- renderDeals('history');
+ renderDeals('active');
  renderProfile();
  openDealView(found.id);
 }
@@ -1103,7 +1118,7 @@ renderWallet();
 renderLeaders();
 renderProfile();
 applyTranslations();
-if(!state.languageChosen && !(tg?.initDataUnsafe?.start_param || new URLSearchParams(window.location.search).get('start'))){
+if(!state.languageChosen && !extractStartParam()){
  openLanguagePicker();
 }else{
  document.getElementById('language-modal').classList.remove('show');
