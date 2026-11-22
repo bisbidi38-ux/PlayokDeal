@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -1587,13 +1588,11 @@ function parseStartDealPayload(rawParam) {
   let extraParams = searchParams;
   if (hashMatch && hashMatch[1]) {
     try {
-      const decodedHash = decodeURIComponent(hashMatch[1]);
       const qIdx = window.location.href.indexOf('?');
       if (qIdx !== -1) {
         const afterQ = window.location.href.slice(qIdx + 1).split('#')[0];
         extraParams = new URLSearchParams(afterQ);
       }
-      void decodedHash;
     } catch (e) {}
   }
   const chatId = extraParams.get('chat_id') || '';
@@ -1615,7 +1614,7 @@ function parseStartDealPayload(rawParam) {
           itemName: String(decoded.i || ''),
           description: String(decoded.desc || decoded.i || ''),
           creatorHandle: byParam || String(decoded.by || 'id 0'),
-          creatorLabel: byNameParam || byParam || String(decoded.by || 'id 0'),
+          creatorLabel: byNameParam || byParam || String(decoded.byName || decoded.by || 'id 0'),
           creatorPhoto: byPhotoParam || String(decoded.byPhoto || ''),
           creatorId: String(decoded.byId || '0'),
           paid: Boolean(decoded.paid) || String(decoded.status || '').toLowerCase() === 'paid',
@@ -1633,10 +1632,6 @@ function parseStartDealPayload(rawParam) {
     creatorLabel: byNameParam || undefined,
     creatorPhoto: byPhotoParam || undefined
   };
-}
-    } catch (e) {}
-  }
-  return { code: body, paid: isPaidFromUrlOrInit() };
 }
 
 function handleStartParam() {
@@ -1802,4 +1797,5 @@ if (!state.languageChosen && !extractStartParam()) {
 handleStartParam();
 </script>
 </body>
-  </html>
+</html>
+```
