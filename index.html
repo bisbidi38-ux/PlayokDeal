@@ -77,7 +77,7 @@ h1{font-size:31px;letter-spacing:-1.1px;margin:0;font-weight:800}
 .podium-person{min-width:0;display:flex;flex-direction:column;align-items:center;animation:rise .65s both}
 .podium-person:nth-child(1){animation-delay:.18s}.podium-person:nth-child(2){animation-delay:.02s}.podium-person:nth-child(3){animation-delay:.32s}
 .avatar-shell{position:relative;width:65px;height:65px;border-radius:50%;padding:3px;margin:4px auto 7px}
-.avatar-shell img,.leader-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.avatar-shell img,.leader-avatar img{width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:50%;display:block}
 .avatar-shell img{border:2px solid rgba(255,255,255,.75)}
 .podium-person.first .avatar-shell{width:83px;height:83px;padding:4px;background:conic-gradient(#fff0a6,#ffb700,#fff2b8,#e68a00,#fff0a6);animation:goldPulse 2s infinite}
 .podium-person.first .avatar-shell:before{content:"";position:absolute;inset:-8px;border-radius:50%;border:2px dashed rgba(255,213,91,.9);animation:orbit 8s linear infinite}
@@ -299,7 +299,7 @@ body.dark .invite-banner{color:#34d399}
 <div class="modal-bg" id="deal-modal"><div class="modal deal-wizard"><div id="deal-wizard-content"></div></div></div>
 <div class="modal-bg" id="deal-view-modal" style="z-index:55"><div class="modal deal-wizard"><div id="deal-view-content"></div></div></div>
 <div class="modal-bg" id="share-modal" style="z-index:62"><div class="modal deal-wizard"><div id="share-modal-content"></div></div></div>
-<div class="modal-bg" id="wallet-modal"><div class="modal"><h2 id="wallet-modal-title">Пополнить баланс</h2><label>Валюта</label><select id="wallet-currency"></select><label>Сумма</label><input id="wallet-amount" type="number" min="0.000001" step="any" placeholder="Введите сумму"><button class="big-btn primary" onclick="submitWallet()">Подтвердить</button><button class="close-btn" onclick="closeModal('wallet-modal')">Отмена</button></div></div>
+<div class="modal-bg" id="wallet-modal"><div class="modal"><h2 id="wallet-modal-title">Пополнить баланс</h2><label>Валюта</label><select id="wallet-currency"></select><label>Сумма</label><input id="wallet-amount" type="number" min="1" max="10000000" step="any" placeholder="Введите сумму"><button class="big-btn primary" onclick="submitWallet()">Подтвердить</button><button class="close-btn" onclick="closeModal('wallet-modal')">Отмена</button></div></div>
 <div class="modal-bg" id="tx-modal"><div class="modal"><h2>История транзакций</h2><div id="tx-list"></div><button class="close-btn" onclick="closeModal('tx-modal')">Закрыть</button></div></div>
 <div class="modal-bg" id="payment-modal" style="z-index:65;align-items:center;padding:20px"><div class="modal" style="max-width:440px;border-radius:27px"><div id="mock-payment-content"></div></div></div>
 <div class="modal-bg" id="receipt-modal" style="z-index:68;align-items:center;padding:16px"><div class="modal" style="max-width:430px;border-radius:24px;padding:12px;max-height:92vh;overflow-y:auto"><div id="mock-receipt-content"></div></div></div>
@@ -446,7 +446,7 @@ function renderDealWizard(){
    html=wizardHeader('Создать сделку',true)+`<p class="wizard-sub">Выберите валюту</p><div class="currency-grid">${dealCurrencies.map(c=>`<button class="currency-choice" onclick="chooseDealCurrency('${c.code}')"><span class="cur-circle" style="background:${c.bg}">${renderMark(c.symbol)}</span><b>${c.code}</b></button>`).join('')}</div>`;
  }
  if(dealStep===2){
-   html=wizardHeader('Создать сделку',true)+`<p class="wizard-sub">Введите сумму</p><div class="amount-input-box"><input id="deal-amount" type="number" min="0.000001" step="any" placeholder="0.00" value="${esc(dealDraft.amount)}"><span>${esc(dealDraft.currency)}</span></div><button class="big-btn primary" style="min-height:54px;font-size:17px" onclick="dealAmountNext()">Далее</button>`;
+   html=wizardHeader('Создать сделку',true)+`<p class="wizard-sub">Введите сумму (от 1 до 10 000 000)</p><div class="amount-input-box"><input id="deal-amount" type="number" min="1" max="10000000" step="any" placeholder="0.00" value="${esc(dealDraft.amount)}"><span>${esc(dealDraft.currency)}</span></div><button class="big-btn primary" style="min-height:54px;font-size:17px" onclick="dealAmountNext()">Далее</button>`;
  }
  if(dealStep===3){
    html=wizardHeader('Создать сделку',true)+`<p class="wizard-sub">Описание товара</p><div class="confirm-card" style="font-size:12.5px;line-height:1.5;overflow-wrap:anywhere"><b>Если это NFT-подарок:</b><br>Профиль Telegram → подарок → ⋯ → «Скопировать ссылку». Несколько подарков — каждый со своей строки.<br><span style="color:var(--blue)">https://t.me/nft/PlushPepe-1<br>https://t.me/nft/DurovsCap-1</span></div><textarea class="wizard-field" id="deal-description" placeholder="Вставьте ссылки или опишите товар...">${esc(dealDraft.description)}</textarea><button class="big-btn primary" style="min-height:54px;font-size:17px" onclick="dealDescriptionNext()">Далее</button>`;
@@ -489,9 +489,10 @@ function chooseDealType(type){dealDraft.type=type;dealStep=1;renderDealWizard()}
 function chooseDealCurrency(code){dealDraft.currency=code;dealStep=2;renderDealWizard()}
 function dealBack(){if(dealStep>0){dealStep--;renderDealWizard()}else closeModal('deal-modal')}
 function dealAmountNext(){
- let amount=document.getElementById('deal-amount').value.trim();
- if(!amount||!Number.isFinite(Number(amount))||Number(amount)<=0){toast('Введите корректную сумму');return}
- dealDraft.amount=amount;dealStep=3;renderDealWizard();
+ let raw=document.getElementById('deal-amount').value.trim().replace(',','.');
+ let num=Number(raw);
+ if(!raw||!Number.isFinite(num)||num<1||num>10000000){toast('Введите сумму от 1 до 10 000 000');return}
+ dealDraft.amount=raw;dealStep=3;renderDealWizard();
 }
 function dealDescriptionNext(){
  let d=document.getElementById('deal-description').value.trim();
@@ -1045,7 +1046,7 @@ function openWalletAction(t){
 }
 function submitWallet(){
  let k=document.getElementById('wallet-currency').value,n=Number(document.getElementById('wallet-amount').value);
- if(!Number.isFinite(n)||n<=0){toast('Введи корректную сумму');return}
+ if(!Number.isFinite(n)||n<=0||n>10000000){toast('Введи сумму от 1 до 10 000 000');return}
  let old=Number(state.balances[k]||0);
  if(walletAction==='withdraw'&&n>old){toast('Недостаточно средств');return}
  state.balances[k]=walletAction==='deposit'?old+n:old-n;
@@ -1059,21 +1060,21 @@ function submitWallet(){
 }
 
 const leaders=[
- {name:'kise',vol:'$125.1k',num:125100,count:'184 сделки',avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=KiseAnimeStar&backgroundColor=b6e3f4,c0aede'},
- {name:'Jose',vol:'$100.6k',num:100600,count:'156 сделок',avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=JoseSemiVibe&backgroundColor=ffd5dc,ffdfbf'},
- {name:'Veramereck',vol:'$100.0k',num:100000,count:'149 сделок',avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=VeramereckAnime&backgroundColor=c0aede,d1d4f9'},
- {name:'mígæímæstro',vol:'$85.0k',num:85000,count:'122 сделки',avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=MaestroSemi99&backgroundColor=b6e3f4,ffdfbf'},
- {name:'Виктор',vol:'$46.5k',num:46500,count:'94 сделки',avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=ViktorAnimePro&backgroundColor=d1d4f9,b6e3f4'},
- {name:'Alex',vol:'$42.8k',num:42800,count:'81 сделка',avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=AlexSemiReal&backgroundColor=ffdfbf,c0aede'},
- {name:'Nikita',vol:'$38.2k',num:38200,count:'69 сделок',avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=NikitaAnimeArt&backgroundColor=b6e3f4,ffd5dc'},
- {name:'Mila',vol:'$31.4k',num:31400,count:'58 сделок',avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=MilaAnimeGirl&backgroundColor=ffd5dc,c0aede'}
+ {name:'kise',vol:'$125.1k',num:125100,count:'184 сделки',avatar:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=240&q=80&auto=format&fit=crop'},
+ {name:'Jose',vol:'$100.6k',num:100600,count:'156 сделок',avatar:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=240&q=80&auto=format&fit=crop'},
+ {name:'Veramereck',vol:'$100.0k',num:100000,count:'149 сделок',avatar:'https://cdn.myanimelist.net/images/characters/6/122643.jpg'},
+ {name:'mígæímæstro',vol:'$85.0k',num:85000,count:'122 сделки',avatar:'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=240&q=80&auto=format&fit=crop'},
+ {name:'Виктор',vol:'$46.5k',num:46500,count:'94 сделки',avatar:'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=240&q=80&auto=format&fit=crop'},
+ {name:'Alex',vol:'$42.8k',num:42800,count:'81 сделка',avatar:'https://images.unsplash.com/photo-1508341591423-4347099e1f19?w=240&q=80&auto=format&fit=crop'},
+ {name:'Nikita',vol:'$38.2k',num:38200,count:'69 сделок',avatar:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&q=80&auto=format&fit=crop'},
+ {name:'Mila',vol:'$31.4k',num:31400,count:'58 сделок',avatar:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=240&q=80&auto=format&fit=crop'}
 ];
 
 function renderLeaders(){
  let podium=[leaders[1],leaders[0],leaders[2]],classes=['second','first','third'];
- document.getElementById('podium').innerHTML=podium.map((u,i)=>`<div class="podium-person ${classes[i]}">${i===1?'<div class="crown">♛</div>':''}<div class="avatar-shell"><img src="${u.avatar}" alt="" onerror="this.onerror=null;this.src='https://api.dicebear.com/9.x/adventurer/svg?seed=PlayerFallback'"><span class="rank-dot">${i===1?1:i===0?2:3}</span></div><div class="podium-name">${esc(u.name)}</div><div class="podium-volume">${u.vol}</div><div class="podium-count">${u.count}</div><div class="pedestal">${i===1?'♛':i===0?'2':'3'}</div></div>`).join('');
+ document.getElementById('podium').innerHTML=podium.map((u,i)=>`<div class="podium-person ${classes[i]}">${i===1?'<div class="crown">♛</div>':''}<div class="avatar-shell"><img src="${u.avatar}" alt="" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=240&q=80&auto=format&fit=crop'"><span class="rank-dot">${i===1?1:i===0?2:3}</span></div><div class="podium-name">${esc(u.name)}</div><div class="podium-volume">${u.vol}</div><div class="podium-count">${u.count}</div><div class="pedestal">${i===1?'♛':i===0?'2':'3'}</div></div>`).join('');
  let max=leaders[0].num;
- document.getElementById('leaders-list').innerHTML=leaders.slice(3).map((u,i)=>`<div class="leader-row" style="animation-delay:${i*.07}s"><div class="leader-rank">${i+4}</div><div class="leader-avatar"><img src="${u.avatar}" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://api.dicebear.com/9.x/adventurer/svg?seed=MemberFallback'"></div><div class="leader-info"><div class="leader-name">${esc(u.name)}</div><div class="bar"><span style="width:${u.num/max*100}%"></span></div></div><div class="leader-stats"><div class="leader-vol">${u.vol}</div><div class="leader-count">${u.count}</div></div></div>`).join('');
+ document.getElementById('leaders-list').innerHTML=leaders.slice(3).map((u,i)=>`<div class="leader-row" style="animation-delay:${i*.07}s"><div class="leader-rank">${i+4}</div><div class="leader-avatar"><img src="${u.avatar}" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://cdn.myanimelist.net/images/characters/6/122643.jpg'"></div><div class="leader-info"><div class="leader-name">${esc(u.name)}</div><div class="bar"><span style="width:${u.num/max*100}%"></span></div></div><div class="leader-stats"><div class="leader-vol">${u.vol}</div><div class="leader-count">${u.count}</div></div></div>`).join('');
 }
 
 function renderProfile(){
