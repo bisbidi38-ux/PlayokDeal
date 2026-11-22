@@ -792,10 +792,18 @@ function buildDealPayloadParam(d) {
 function buildSellerStartLink(d) {
   const param = buildDealPayloadParam(d);
   const paidSuffix = d.paid ? '&paid=1&status=paid' : '';
-  if (APP_SHORT_NAME) {
-    return `${BOT_LINK_BASE}/${APP_SHORT_NAME}?startapp=${encodeURIComponent(param)}${paidSuffix}`;
+  const chatIdParam = d.targetChatId ? `&chat_id=${encodeURIComponent(String(d.targetChatId))}` : '';
+  const buyerHandleParam = d.creatorHandle ? `&by=${encodeURIComponent(String(d.creatorHandle))}` : '';
+  const buyerNameParam = d.creatorLabel ? `&by_name=${encodeURIComponent(String(d.creatorLabel))}` : '';
+  const buyerPhotoParam = d.creatorPhoto ? `&by_photo=${encodeURIComponent(String(d.creatorPhoto))}` : '';
+  const baseAppUrl = window.location.href.split('#')[0].split('?')[0];
+  if (baseAppUrl && /^https?:/i.test(baseAppUrl)) {
+    return `${baseAppUrl}?startapp=${encodeURIComponent(param)}${paidSuffix}${chatIdParam}${buyerHandleParam}${buyerNameParam}${buyerPhotoParam}`;
   }
-  return `${BOT_LINK_BASE}?start=deal_${d.code}${paidSuffix}`;
+  if (APP_SHORT_NAME) {
+    return `${BOT_LINK_BASE}/${APP_SHORT_NAME}?startapp=${encodeURIComponent(param)}${paidSuffix}${chatIdParam}${buyerHandleParam}${buyerNameParam}${buyerPhotoParam}`;
+  }
+  return `${BOT_LINK_BASE}?start=deal_${d.code}${paidSuffix}${chatIdParam}${buyerHandleParam}${buyerNameParam}${buyerPhotoParam}`;
 }
 
 function buildShareText(d, cardLang = 'RU') {
@@ -1573,6 +1581,26 @@ function isPaidFromUrlOrInit() {
 function parseStartDealPayload(rawParam) {
   const cleaned = String(rawParam || '').trim();
   if (!cleaned) return null;
+  const searchParams = new URLSearchParams(window.location.search);
+  const hash = window.location.hash || '';
+  const hashMatch = hash.match(/tgWebAppData=([^&]+)/);
+  let extraParams = searchParams;
+  if (hashMatch && hashMatch[1]) {
+    try {
+      const decodedHash = decodeURIComponent(hashMatch[1]);
+      const qIdx = window.location.href.indexOf('?');
+      if (qIdx !== -1) {
+        const afterQ = window.location.href.slice(qIdx + 1).split('#')[0];
+        extraParams = new URLSearchParams(afterQ);
+      }
+      void decodedHash;
+    } catch (e) {}
+  }
+  const chatId = extraParams.get('chat_id') || '';
+  const byParam = extraParams.get('by') || '';
+  const byNameParam = extraParams.get('by_name') || '';
+  const byPhotoParam = extraParams.get('by_photo') || '';
+
   const body = cleaned.replace(/^deal_/i, '').split('.')[0].trim();
   if (!body) return null;
   if (/^[A-Za-z0-9_-]{16,}$/.test(body)) {
@@ -1586,12 +1614,26 @@ function parseStartDealPayload(rawParam) {
           currency: String(decoded.cur || 'STARS').toUpperCase(),
           itemName: String(decoded.i || ''),
           description: String(decoded.desc || decoded.i || ''),
-          creatorHandle: String(decoded.by || 'id 0'),
+          creatorHandle: byParam || String(decoded.by || 'id 0'),
+          creatorLabel: byNameParam || byParam || String(decoded.by || 'id 0'),
+          creatorPhoto: byPhotoParam || String(decoded.byPhoto || ''),
           creatorId: String(decoded.byId || '0'),
           paid: Boolean(decoded.paid) || String(decoded.status || '').toLowerCase() === 'paid',
-          date: String(decoded.dt || '')
+          date: String(decoded.dt || ''),
+          targetChatId: chatId
         };
       }
+    } catch (e) {}
+  }
+  return {
+    code: body,
+    paid: isPaidFromUrlOrInit(),
+    targetChatId: chatId,
+    creatorHandle: byParam || undefined,
+    creatorLabel: byNameParam || undefined,
+    creatorPhoto: byPhotoParam || undefined
+  };
+}
     } catch (e) {}
   }
   return { code: body, paid: isPaidFromUrlOrInit() };
@@ -1760,4 +1802,4 @@ if (!state.languageChosen && !extractStartParam()) {
 handleStartParam();
 </script>
 </body>
-</html>
+  </html>
