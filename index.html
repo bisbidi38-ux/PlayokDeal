@@ -289,10 +289,10 @@ body.dark .invite-banner{color:#34d399}
 </section>
 
 <nav class="bottom-nav" id="bottom-nav">
-<button class="nav-item active" type="button" data-page="deals" onclick="navigate('deals',this)"><svg><use href="#i-deals"/></svg><span>Сделки</span></button>
-<button class="nav-item" type="button" data-page="wallet" onclick="navigate('wallet',this)"><svg><use href="#i-wallet"/></svg><span>Кошельки</span></button>
-<button class="nav-item" type="button" data-page="leaders" onclick="navigate('leaders',this)"><svg><use href="#i-trophy"/></svg><span>Лидеры</span></button>
-<button class="nav-item" type="button" data-page="profile" onclick="navigate('profile',this)"><svg><use href="#i-user"/></svg><span>Профиль</span></button>
+<button class="nav-item active" type="button" data-page="deals" ><svg><use href="#i-deals"/></svg><span>Сделки</span></button>
+<button class="nav-item" type="button" data-page="wallet" ><svg><use href="#i-wallet"/></svg><span>Кошельки</span></button>
+<button class="nav-item" type="button" data-page="leaders" ><svg><use href="#i-trophy"/></svg><span>Лидеры</span></button>
+<button class="nav-item" type="button" data-page="profile" ><svg><use href="#i-user"/></svg><span>Профиль</span></button>
 </nav>
 
 <div class="modal-bg" id="deal-modal"><div class="modal deal-wizard"><div id="deal-wizard-content"></div></div></div>
@@ -312,6 +312,8 @@ const ESCROW_MANAGER = '@PIayerokDeaI';
 const SHARED_DEALS_KEY = 'playerok_shared_deals';
 
 const tg = window.Telegram?.WebApp;
+// Initialize Telegram Mini App viewport and interaction environment safely.
+try { tg?.ready?.(); tg?.expand?.(); } catch (_) {}
 if (tg) {
   tg.ready();
   tg.expand();
@@ -410,6 +412,13 @@ function save() {
   } catch (e) {}
 }
 
+window.addEventListener('error', event => {
+  console.error('Mini App runtime error:', event.error || event.message);
+});
+window.addEventListener('unhandledrejection', event => {
+  console.error('Mini App promise error:', event.reason);
+});
+
 function toast(s) {
   const el = document.getElementById('toast');
   if (!el) return;
@@ -486,18 +495,33 @@ function renderMark(mark, extra = '') {
 function navigate(id, btn) {
   const pages = [...document.querySelectorAll('.page')];
   const navButtons = [...document.querySelectorAll('.nav-item')];
-  if (!pages.some(p => p.id === id)) return;
+  const page = pages.find(p => p.id === id);
+  if (!page) return false;
 
-  pages.forEach(p => p.classList.toggle('active', p.id === id));
+  pages.forEach(p => p.classList.toggle('active', p === page));
   const targetBtn = btn || navButtons.find(b => b.dataset.page === id) || null;
   navButtons.forEach(b => b.classList.toggle('active', b === targetBtn));
 
-  if (id === 'wallet') renderWallet();
-  if (id === 'leaders') renderLeaders();
-  if (id === 'profile') renderProfile();
-  if (id === 'deals') renderDeals(dealTab);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  try {
+    if (id === 'wallet') renderWallet();
+    else if (id === 'leaders') renderLeaders();
+    else if (id === 'profile') renderProfile();
+    else if (id === 'deals') renderDeals(dealTab);
+  } catch (err) {
+    console.error('Mini App navigation render error:', err);
+    toast('Не удалось обновить вкладку. Попробуйте ещё раз.');
+  }
+  try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) {}
+  return true;
 }
+
+// Delegated handler makes the bottom tabs reliable even if their inner SVG/text is tapped.
+document.addEventListener('click', event => {
+  const navBtn = event.target?.closest?.('.nav-item[data-page]');
+  if (!navBtn) return;
+  event.preventDefault();
+  navigate(navBtn.dataset.page, navBtn);
+});
 
 function openModal(id) {
   const el = document.getElementById(id);
@@ -1451,4 +1475,4 @@ if (!state.languageChosen && !extractStartParam()) {
 handleStartParam();
 </script>
 </body>
- </html>
+</html>
