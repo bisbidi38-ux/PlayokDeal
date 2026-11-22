@@ -203,6 +203,8 @@ body.dark .step-panel{background:rgba(245,158,11,.1);border-color:rgba(245,158,1
 .totals-row.grand{font-size:18px;font-weight:900}
 .invite-banner{padding:12px 14px;border-radius:16px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.35);color:#059669;font-size:13px;font-weight:750;margin-bottom:12px}
 body.dark .invite-banner{color:#34d399}
+.locked-banner{padding:14px 16px;border-radius:18px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35);color:#dc2626;font-size:13.5px;font-weight:750;margin-bottom:14px;line-height:1.45}
+body.dark .locked-banner{color:#f87171}
 
 .lang-pills-row{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:10px 0 14px}
 .lang-chip-btn{padding:10px 4px;border-radius:14px;border:1.5px solid var(--line);background:var(--bg);color:var(--text);display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:800;transition:.18s}
@@ -251,6 +253,7 @@ body.dark .invite-banner{color:#34d399}
 
 <section class="page active" id="deals">
 <header><div><h1>Мои сделки</h1><p class="subhead">Безопасные сделки в одном месте</p></div></header>
+<div id="deal-access-banner"></div>
 <button class="big-btn primary" type="button" id="btn-create-deal"><svg width="22" height="22"><use href="#i-plus"/></svg>Создать сделку</button>
 <button class="big-btn primary" type="button" id="btn-deals-active">Активные</button>
 <button class="outline" type="button" id="btn-deals-history">История сделок</button>
@@ -366,6 +369,7 @@ let walletAction = 'deposit';
 let dealTab = 'active';
 let activeReceiptDealId = null;
 let secTimerId = null;
+let accessBannerMsg = '';
 
 function loadSharedDeals() {
   try {
@@ -397,6 +401,8 @@ function saveSharedDeal(deal) {
       creatorLetter: deal.creatorLetter,
       creatorPhoto: deal.creatorPhoto,
       invitedUser: deal.invitedUser || null,
+      lockedUserId: deal.lockedUserId || deal.invitedUser?.id || null,
+      lockedUserHandle: deal.lockedUserHandle || deal.invitedUser?.handle || null,
       date: deal.date
     });
     localStorage.setItem(SHARED_DEALS_KEY, JSON.stringify(arr.slice(0, 50)));
@@ -652,19 +658,26 @@ function inferItemNameFromDesc(desc) {
 }
 
 function getCreatorInfo() {
-  const id = user?.id ? String(user.id) : '8922046082';
-  const handle = user?.username ? '@' + user.username : '@opiem';
+  const id = user?.id ? String(user.id) : 'guest_buyer';
+  const handle = user?.username ? '@' + user.username : (user ? (user.first_name || 'Покупатель') : '@opiem');
   const label = user ? [user.first_name, user.last_name].filter(Boolean).join(' ') : handle;
-  const letter = (user?.first_name || handle.replace(/^@/, '') || 'O')[0].toUpperCase();
+  const letter = (user?.first_name || handle.replace(/^@/, '') || 'П')[0].toUpperCase();
   return { id, handle, label, letter, photo: user?.photo_url || '' };
 }
 
 function getCurrentViewerInfo() {
-  const id = user?.id ? String(user.id) : '';
-  const handle = user?.username ? '@' + user.username : '@AlinaMamochka';
+  const id = user?.id ? String(user.id) : 'guest_viewer';
+  const handle = user?.username ? '@' + user.username : (user ? (user.first_name || 'Продавец') : '@seller');
   const label = user ? [user.first_name, user.last_name].filter(Boolean).join(' ') : handle;
-  const letter = (user?.first_name || handle.replace(/^@/, '') || 'A')[0].toUpperCase();
+  const letter = (user?.first_name || handle.replace(/^@/, '') || 'С')[0].toUpperCase();
   return { id, handle, label, letter, photo: user?.photo_url || '' };
+}
+
+function isSameParticipant(a, b) {
+  if (!a || !b) return false;
+  if (a.id && b.id && String(a.id) === String(b.id)) return true;
+  if (a.handle && b.handle && String(a.handle).toLowerCase() === String(b.handle).toLowerCase()) return true;
+  return false;
 }
 
 function isBuyerUser(deal) { return deal && deal.type === 'buy'; }
@@ -752,6 +765,8 @@ function finishDealWizard() {
       creatorLetter: creator.letter,
       creatorPhoto: creator.photo,
       invitedUser: null,
+      lockedUserId: null,
+      lockedUserHandle: null,
       isJoinedSellerView: false,
       justJoined: false,
       paid: false,
@@ -967,12 +982,17 @@ function openDealView(dealId) {
 
   const hasJoined = Boolean(d.invitedUser) || isJoinedSellerView;
   const viewer = getCurrentViewerInfo();
-  const partnerHandle = d.invitedUser?.handle || (isJoinedSellerView ? viewer.handle : '@seller');
-  const partnerLetter = (partnerHandle.replace(/^@/, '') || 'A')[0].toUpperCase();
-  const partnerPhoto = d.invitedUser?.photo || (isJoinedSellerView ? viewer.photo : '') || './1000043069_2.jpg';
+  const sellerObj = d.invitedUser || (isJoinedSellerView ? viewer : null);
+  const partnerHandle = sellerObj?.handle || '@seller';
+  const partnerLetter = (partnerHandle.replace(/^@/, '') || 'С')[0].toUpperCase();
+  const partnerPhoto = sellerObj?.photo || '';
+
+  const sellerAvatarInner = partnerPhoto
+    ? `<img src="${esc(partnerPhoto)}" alt="" referrerpolicy="no-referrer" onerror="this.remove();this.parentElement.textContent='${esc(partnerLetter)}'">`
+    : esc(partnerLetter);
 
   const leftHtml = hasJoined
-    ? `<div class="party-av"><img src="${esc(partnerPhoto)}" alt="" onerror="this.remove();this.parentElement.textContent='${esc(partnerLetter)}'"></div>
+    ? `<div class="party-av">${sellerAvatarInner}</div>
        <div class="party-role-lbl">ПРОДАВЕЦ</div>
        <div class="party-user-lbl" style="color:var(--blue)">${esc(partnerHandle)}</div>
        ${isJoinedSellerView ? '<span class="party-you-tag">ВЫ</span>' : '<span class="party-you-tag">В СДЕЛКЕ</span>'}`
@@ -981,10 +1001,13 @@ function openDealView(dealId) {
        <div class="party-user-lbl" style="color:var(--muted);font-size:13px">ждём продавца</div>`;
 
   const creatorHandle = d.creatorHandle || '@opiem';
-  const creatorLetter = d.creatorLetter || (creatorHandle.replace(/^@/, '') || 'O')[0].toUpperCase();
-  const creatorPhoto = d.creatorPhoto || './1000043068_2.jpg';
+  const creatorLetter = d.creatorLetter || (creatorHandle.replace(/^@/, '') || 'П')[0].toUpperCase();
+  const creatorPhoto = d.creatorPhoto || '';
+  const buyerAvatarInner = creatorPhoto
+    ? `<img src="${esc(creatorPhoto)}" alt="" referrerpolicy="no-referrer" onerror="this.remove();this.parentElement.textContent='${esc(creatorLetter)}'">`
+    : esc(creatorLetter);
 
-  const rightHtml = `<div class="party-av"><img src="${esc(creatorPhoto)}" alt="" onerror="this.remove();this.parentElement.textContent='${esc(creatorLetter)}'"></div>
+  const rightHtml = `<div class="party-av">${buyerAvatarInner}</div>
        <div class="party-role-lbl">ПОКУПАТЕЛЬ</div>
        <div class="party-user-lbl" style="color:var(--blue)">${esc(creatorHandle)}</div>
        ${!isJoinedSellerView ? '<span class="party-you-tag">ВЫ</span>' : ''}`;
@@ -1006,7 +1029,7 @@ function openDealView(dealId) {
     <div class="deal-main-title">Сделка</div>
     <div class="deal-hash-sub">#${esc(d.code)}</div>
 
-    ${d.justJoined ? `<div class="invite-banner">Вы успешно вошли в сделку #${esc(d.code)}. Сделка добавлена в активные сделки.</div>` : ''}
+    ${d.justJoined ? `<div class="invite-banner">Вы успешно вошли в сделку #${esc(d.code)}. Сделка добавлена в ваши активные сделки.</div>` : ''}
 
     <div class="deal-hero-card">
       <div class="deal-big-badge">★</div>
@@ -1059,7 +1082,7 @@ function openDealView(dealId) {
         ${d.cancelled
           ? `Сделка отменена и перемещена в <b>Историю сделок</b>.`
           : (isJoinedSellerView
-              ? `Покупатель в сделке. Ждём, когда он оплатит. После оплаты вы передадите подарок менеджеру <b style="color:var(--blue)">${ESCROW_MANAGER}</b>.`
+              ? `Вы в сделке с покупателем <b>${esc(creatorHandle)}</b>. Ждём оплату — после неё передайте подарок менеджеру <b style="color:var(--blue)">${ESCROW_MANAGER}</b>.`
               : (hasJoined
                   ? `Продавец <b>${esc(partnerHandle)}</b> в сделке. Можно переходить к оплате.`
                   : `Ожидаем продавца. Поделитесь ссылкой, чтобы он присоединился к сделке.`))}
@@ -1115,8 +1138,19 @@ function fallbackCopy(text, msg) {
   document.body.removeChild(ta);
 }
 
+function renderAccessBanner() {
+  const box = document.getElementById('deal-access-banner');
+  if (!box) return;
+  if (!accessBannerMsg) {
+    box.innerHTML = '';
+    return;
+  }
+  box.innerHTML = `<div class="locked-banner">🔒 ${esc(accessBannerMsg)}</div>`;
+}
+
 function renderDeals(tab) {
   dealTab = tab;
+  renderAccessBanner();
   const list = document.getElementById('deal-list');
   const items = state.deals.filter(d => d.status === tab);
   if (!items.length) {
@@ -1130,7 +1164,7 @@ function renderDeals(tab) {
     const req = state.paymentRequests.find(r => r.dealId === d.id);
     const canPay = isBuyerUser(d) && !d.isJoinedSellerView && !d.cancelled && Boolean(d.invitedUser) && req;
     const badgeText = d.cancelled ? 'Отменена' : (d.paid ? 'Оплачено' : ((d.invitedUser || d.isJoinedSellerView) ? 'Оба в сделке' : 'Ждёт вход'));
-    const partnerTxt = d.invitedUser?.handle ? ` · ${d.invitedUser.handle}` : '';
+    const partnerTxt = d.invitedUser?.handle ? ` · Продавец: ${d.invitedUser.handle}` : (d.isJoinedSellerView ? ` · Покупатель: ${d.creatorHandle || '@opiem'}` : '');
     return `<div class="card deal-card">
       <div class="row">
         <div class="deal-title">${esc(d.name)}</div>
@@ -1383,14 +1417,16 @@ function handleStartParam() {
   const code = rawParam.replace(/^deal_/i, '').split('.')[0].trim();
   if (!code) return;
 
+  accessBannerMsg = '';
   const shared = loadSharedDeals().find(x => x.code === code);
   let found = state.deals.find(d => d.code === code);
-  const source = shared || found || { code };
+  const source = found || shared || { code };
 
   const viewer = getCurrentViewerInfo();
   const creatorHandle = source.creatorHandle || '@opiem';
-  const creatorId = String(source.creatorId || '8922046082');
-  const creatorLetter = source.creatorLetter || (creatorHandle.replace(/^@/, '') || 'O')[0].toUpperCase();
+  const creatorId = String(source.creatorId || 'creator');
+  const creatorLetter = source.creatorLetter || (creatorHandle.replace(/^@/, '') || 'П')[0].toUpperCase();
+  const creatorPhoto = source.creatorPhoto || '';
   const type = source.type || 'buy';
   const amount = String(source.amount || '1500');
   const currency = source.currency || 'STARS';
@@ -1401,13 +1437,35 @@ function handleStartParam() {
   const fee = source.fee != null ? source.fee : Number((baseNum * 0.01).toFixed(2));
   const totalAmount = source.totalAmount != null ? source.totalAmount : Number((baseNum + fee).toFixed(2));
 
-  const participantInfo = {
-    handle: viewer.handle,
-    id: viewer.id,
-    label: viewer.label,
-    photo: viewer.photo,
-    joinedAt: new Date().toLocaleString('ru-RU')
-  };
+  const existingSeller = source.invitedUser || (source.lockedUserId || source.lockedUserHandle ? {
+    id: source.lockedUserId || '',
+    handle: source.lockedUserHandle || '@seller',
+    label: source.lockedUserHandle || '@seller',
+    photo: ''
+  } : null);
+
+  const isCreator = isSameParticipant({ id: creatorId, handle: creatorHandle }, viewer);
+
+  if (existingSeller && !isCreator && !isSameParticipant(existingSeller, viewer)) {
+    accessBannerMsg = `Сделка #${code} уже занята другим участником (${existingSeller.handle || 'участник'}). Повторный вход по ссылке закрыт.`;
+    toast('В эту сделку уже вошёл другой участник');
+    navigate('deals');
+    renderDeals('active');
+    renderProfile();
+    return;
+  }
+
+  const participantInfo = existingSeller && isSameParticipant(existingSeller, viewer)
+    ? { ...existingSeller, id: viewer.id, handle: viewer.handle, label: viewer.label, photo: viewer.photo || existingSeller.photo || '' }
+    : (existingSeller || {
+        handle: viewer.handle,
+        id: viewer.id,
+        label: viewer.label,
+        photo: viewer.photo,
+        joinedAt: new Date().toLocaleString('ru-RU')
+      });
+
+  const isSellerSide = !isCreator && isSameParticipant(participantInfo, viewer);
 
   if (!found) {
     found = {
@@ -1427,13 +1485,15 @@ function handleStartParam() {
       creatorHandle,
       creatorLabel: source.creatorLabel || creatorHandle,
       creatorLetter,
-      creatorPhoto: '',
+      creatorPhoto,
       invitedUser: participantInfo,
-      isJoinedSellerView: true,
-      justJoined: true,
-      paid: false,
-      cancelled: false,
-      status: 'active',
+      lockedUserId: participantInfo.id,
+      lockedUserHandle: participantInfo.handle,
+      isJoinedSellerView: isSellerSide,
+      justJoined: isSellerSide,
+      paid: Boolean(source.paid),
+      cancelled: Boolean(source.cancelled),
+      status: source.cancelled ? 'history' : 'active',
       paymentRecipient: creatorId,
       date: createdDate
     };
@@ -1442,11 +1502,13 @@ function handleStartParam() {
     found.creatorId = creatorId;
     found.creatorHandle = creatorHandle;
     found.creatorLetter = creatorLetter;
+    found.creatorPhoto = creatorPhoto || found.creatorPhoto || '';
     found.invitedUser = participantInfo;
-    found.isJoinedSellerView = true;
-    found.justJoined = true;
-    found.cancelled = false;
-    found.status = 'active';
+    found.lockedUserId = participantInfo.id;
+    found.lockedUserHandle = participantInfo.handle;
+    found.isJoinedSellerView = isSellerSide;
+    found.justJoined = isSellerSide;
+    found.status = found.cancelled ? 'history' : 'active';
   }
 
   state.languageChosen = true;
@@ -1471,4 +1533,4 @@ if (!state.languageChosen && !extractStartParam()) {
 handleStartParam();
 </script>
 </body>
-</html>
+  </html>
