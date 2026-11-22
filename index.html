@@ -128,44 +128,47 @@ h1{font-size:31px;letter-spacing:-1.1px;margin:0;font-weight:800}
 .modal input,.modal select{width:100%;height:51px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--text);padding:0 14px;outline:none}
 .modal .big-btn{height:55px;min-height:55px;font-size:16px;margin:16px 0 0}
 .close-btn{height:49px;width:100%;border-radius:15px;background:var(--bg);color:var(--text);font-weight:750;margin-top:9px}
-.toast{position:fixed;z-index:90;left:50%;bottom:110px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#172033;color:white;padding:12px 17px;border-radius:14px;font-size:13px;font-weight:700;transition:.25s;white-space:nowrap}
+.toast{position:fixed;z-index:90;left:50%;top:calc(16px + env(safe-area-inset-top));transform:translate(-50%,-18px);opacity:0;pointer-events:none;background:var(--surface);color:var(--text);border:1px solid var(--line);box-shadow:0 12px 32px rgba(17,24,39,.18);padding:12px 18px;border-radius:99px;font-size:14px;font-weight:750;transition:.25s;white-space:nowrap;display:inline-flex;align-items:center;gap:8px}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 .deal-wizard{max-height:92vh;overflow-y:auto;border-radius:27px 27px 0 0;overscroll-behavior:contain}
-.wizard-head{display:flex;align-items:center;gap:10px;margin-bottom:17px}
-.wizard-back{width:40px;height:40px;flex:0 0 40px;border-radius:14px;background:var(--bg);color:var(--text);font-size:23px;display:grid;place-items:center}
+.wizard-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.wizard-head-left{display:flex;align-items:center;gap:10px;min-width:0}
+.wizard-back{width:40px;height:40px;flex:0 0 40px;border-radius:14px;background:var(--bg);color:var(--text);font-size:20px;display:grid;place-items:center}
+.wizard-close{width:38px;height:38px;flex:0 0 38px;border-radius:50%;background:var(--bg);color:var(--muted);font-size:18px;font-weight:700;display:grid;place-items:center}
 .wizard-title{font-size:23px;font-weight:850;letter-spacing:-.5px;margin:0}
-.wizard-sub{color:var(--muted);font-size:13px;margin:5px 0 18px;line-height:1.45}
-.wizard-progress{height:5px;background:var(--line);border-radius:9px;overflow:hidden;margin:0 0 20px}
-.wizard-progress span{display:block;height:100%;background:linear-gradient(90deg,#37a5ff,#087cff);border-radius:9px;transition:width .35s}
+.wizard-sub{color:var(--muted);font-size:14px;margin:6px 0 16px;line-height:1.45;text-align:center}
 .wizard-choice,.currency-choice{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 16px;border:1px solid var(--line);border-radius:17px;background:var(--bg);color:var(--text);font-weight:750;margin:10px 0;text-align:left;transition:.22s;animation:rise .3s both}
 .wizard-choice:active,.currency-choice:active{transform:scale(.98);background:rgba(8,124,255,.1)}
-.choice-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:rgba(8,124,255,.12);color:var(--blue);font-size:23px}
-.currency-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.currency-choice{margin:0;padding:12px 10px;font-size:14px;min-height:61px}
-.currency-choice b{font-size:17px;display:block}
-.currency-choice small{display:block;color:var(--muted);font-weight:600;margin-top:2px}
-.wizard-field{display:block;width:100%;min-height:52px;border:1px solid var(--line);border-radius:15px;background:var(--bg);color:var(--text);padding:13px 14px;margin:8px 0 14px;outline:none}
-textarea.wizard-field{min-height:115px;resize:vertical;line-height:1.5}
+.choice-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:rgba(8,124,255,.1);color:var(--blue);font-size:20px}
+.currency-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.currency-choice{margin:0;padding:16px 10px;font-size:14px;min-height:86px;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:7px}
+.cur-circle{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;font-size:16px}
+.amount-input-box{display:flex;align-items:center;justify-content:space-between;border:2px solid var(--blue);border-radius:18px;background:var(--surface);padding:12px 16px;margin:12px 0 18px}
+.amount-input-box input{border:0;background:transparent;padding:0;height:40px;font-size:26px;font-weight:800;color:var(--text);width:100%;outline:none}
+.amount-input-box span{font-weight:800;color:var(--muted);font-size:15px;padding-left:10px}
+.wizard-field{display:block;width:100%;min-height:52px;border:1.5px solid var(--line);border-radius:16px;background:var(--surface);color:var(--text);padding:13px 14px;margin:8px 0 14px;outline:none}
+textarea.wizard-field{min-height:110px;resize:vertical;line-height:1.5}
 .wizard-field:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(8,124,255,.1)}
-.wizard-label{display:block;font-size:13px;color:var(--muted);font-weight:750;margin:15px 0 6px}
-.wizard-next{margin-top:13px!important}
 .confirm-card{padding:16px;border:1px solid var(--line);background:var(--bg);border-radius:17px;margin:10px 0}
-.confirm-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.confirm-row{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:15px}
 .confirm-row:last-child{border:0}.confirm-row span{color:var(--muted)}.confirm-row b{text-align:right;overflow-wrap:anywhere;max-width:65%}
-.security-box{border:1px solid rgba(239,68,68,.25);background:rgba(239,68,68,.07);border-radius:17px;padding:15px;line-height:1.48;font-size:13px}
-.security-box h3{color:#ef4444;margin:0 0 10px;font-size:16px}
-.security-box ul{padding-left:19px;margin:8px 0}.security-box li{margin:6px 0}
+.security-box{border:1px solid rgba(239,68,68,.24);background:rgba(239,68,68,.06);border-radius:18px;padding:16px;line-height:1.48;font-size:13.5px}
+.security-warn-pill{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:rgba(239,68,68,.12);color:#dc2626;font-weight:800;font-size:13px;margin-bottom:12px}
+.sec-rule-card{display:flex;align-items:flex-start;gap:10px;padding:11px 12px;border-radius:13px;background:var(--surface);border:1px solid var(--line);margin:8px 0}
+.sec-rule-card.danger{border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.06)}
+.sec-rule-card.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.08)}
 .security-ack{background:#e53945!important;box-shadow:0 9px 22px rgba(229,57,69,.24)!important}
+.security-ack:disabled{background:#d98a90!important;box-shadow:none!important;cursor:not-allowed;opacity:.92}
 
-.deal-topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-.pill-back{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:99px;background:#e5e7eb;color:#111827;font-weight:700;font-size:14px}
+.deal-topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.pill-back{display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:99px;background:#e5e7eb;color:#111827;font-weight:750;font-size:14px}
 body.dark .pill-back{background:#232e42;color:#f4f7fc}
-.deal-main-title{font-size:30px;font-weight:900;letter-spacing:-.8px;margin:4px 0 2px}
+.deal-main-title{font-size:32px;font-weight:900;letter-spacing:-.8px;margin:2px 0 2px}
 .deal-hash-sub{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);font-size:15px;margin-bottom:14px}
-.deal-hero-card{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:22px 18px;box-shadow:var(--shadow);margin-bottom:12px}
+.deal-hero-card{background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:22px 18px;box-shadow:var(--shadow);margin-bottom:12px}
 .deal-big-badge{width:68px;height:68px;border-radius:50%;margin:0 auto 12px;background:#f59e0b;color:#fff;display:grid;place-items:center;font-size:30px;box-shadow:0 10px 22px rgba(245,158,11,.24)}
-.deal-hero-amount{text-align:center;font-size:32px;font-weight:900;letter-spacing:-.8px}
+.deal-hero-amount{text-align:center;font-size:34px;font-weight:900;letter-spacing:-.8px}
 .deal-hero-amount small{font-size:16px;font-weight:800;color:var(--muted)}
 .deal-type-chip{display:inline-flex;align-items:center;gap:5px;margin:8px auto 16px;padding:6px 14px;border-radius:99px;background:rgba(8,124,255,.1);color:var(--blue);font-weight:750;font-size:13px}
 .deal-desc-label{font-size:11px;font-weight:800;letter-spacing:.9px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
@@ -175,8 +178,8 @@ body.dark .pill-back{background:#232e42;color:#f4f7fc}
 .party-av{width:54px;height:54px;border-radius:50%;margin:0 auto 8px;display:grid;place-items:center;font-weight:850;font-size:19px;background:var(--surface);border:1.5px solid var(--line);overflow:hidden}
 .party-av img{width:100%;height:100%;object-fit:cover}
 .party-role-lbl{font-size:10px;font-weight:800;letter-spacing:.6px;color:var(--muted);text-transform:uppercase}
-.party-user-lbl{font-size:15px;font-weight:800;margin-top:2px;overflow-wrap:anywhere}
-.party-you-tag{display:inline-block;margin-top:5px;padding:2px 9px;border-radius:99px;background:rgba(8,124,255,.15);color:var(--blue);font-size:10px;font-weight:850}
+.party-user-lbl{font-size:14px;font-weight:800;margin-top:2px;overflow-wrap:anywhere;line-height:1.25}
+.party-you-tag{display:inline-block;margin-top:5px;padding:2px 10px;border-radius:99px;background:rgba(8,124,255,.15);color:var(--blue);font-size:10px;font-weight:850}
 .shield-center{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#259eff,#066be0);color:#fff;display:grid;place-items:center;margin:0 auto}
 .created-line{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);font-size:14px}
 .created-line span{color:var(--muted)}
@@ -199,10 +202,13 @@ body.dark .step-panel{background:rgba(245,158,11,.1);border-color:rgba(245,158,1
 .totals-row.grand{font-size:18px;font-weight:900}
 .invite-banner{padding:12px 14px;border-radius:16px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.35);color:#059669;font-size:13px;font-weight:750;margin-bottom:12px}
 body.dark .invite-banner{color:#34d399}
-.invite-box{padding:12px 14px;border-radius:16px;background:var(--bg);border:1px dashed var(--line);margin-bottom:12px;font-size:12px;line-height:1.45}
-.share-preview{white-space:pre-line;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:11px 12px;font-size:12px;margin-top:8px;overflow-wrap:anywhere}
 
-/* Чистый чек без красной лишней суммы */
+.lang-pills-row{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:10px 0 14px}
+.lang-chip-btn{padding:10px 4px;border-radius:14px;border:1.5px solid var(--line);background:var(--bg);color:var(--text);display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:800;transition:.18s}
+.lang-chip-btn.active{border-color:var(--blue);background:rgba(8,124,255,.12);color:var(--blue)}
+.share-card-box{background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:14px;font-size:13.5px;line-height:1.48;white-space:pre-line;overflow-wrap:anywhere;margin-bottom:14px}
+.share-sec-btn{width:100%;height:52px;border-radius:16px;background:var(--bg);border:1px solid var(--line);color:var(--text);font-weight:750;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:9px}
+
 .receipt-sheet{background:#ffffff;color:#111827;border-radius:18px;padding:20px 18px 22px;position:relative;box-shadow:0 16px 40px rgba(0,0,0,.22);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
 .receipt-top{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:800;margin-bottom:14px}
 .receipt-brand{font-size:18px;font-weight:900;letter-spacing:-.4px;color:#111827}
@@ -245,7 +251,7 @@ body.dark .invite-banner{color:#34d399}
 <section class="page active" id="deals">
 <header><div><h1>Мои сделки</h1><p class="subhead">Безопасные сделки в одном месте</p></div></header>
 <button class="big-btn primary" onclick="openDealModal()"><svg width="22" height="22"><use href="#i-plus"/></svg>Создать сделку</button>
-<button class="big-btn primary" onclick="showDeals('active')">Активные сделки</button>
+<button class="big-btn primary" onclick="showDeals('active')">Активные</button>
 <button class="outline" onclick="showDeals('history')">История сделок</button>
 <div id="deal-list" class="empty">Нет активных сделок</div>
 </section>
@@ -290,6 +296,7 @@ body.dark .invite-banner{color:#34d399}
 
 <div class="modal-bg" id="deal-modal"><div class="modal deal-wizard"><div id="deal-wizard-content"></div></div></div>
 <div class="modal-bg" id="deal-view-modal" style="z-index:55"><div class="modal deal-wizard"><div id="deal-view-content"></div></div></div>
+<div class="modal-bg" id="share-modal" style="z-index:62"><div class="modal deal-wizard"><div id="share-modal-content"></div></div></div>
 <div class="modal-bg" id="wallet-modal"><div class="modal"><h2 id="wallet-modal-title">Пополнить баланс</h2><label>Валюта</label><select id="wallet-currency"></select><label>Сумма</label><input id="wallet-amount" type="number" min="0.000001" step="any" placeholder="Введите сумму"><button class="big-btn primary" onclick="submitWallet()">Подтвердить</button><button class="close-btn" onclick="closeModal('wallet-modal')">Отмена</button></div></div>
 <div class="modal-bg" id="tx-modal"><div class="modal"><h2>История транзакций</h2><div id="tx-list"></div><button class="close-btn" onclick="closeModal('tx-modal')">Закрыть</button></div></div>
 <div class="modal-bg" id="payment-modal" style="z-index:65;align-items:center;padding:20px"><div class="modal" style="max-width:440px;border-radius:27px"><div id="mock-payment-content"></div></div></div>
@@ -317,6 +324,7 @@ const defaults=()=>({deals:[],balances:{TON:0,USDT:0,STARS:0,RUB:0,EUR:0},connec
 function load(){try{let x=JSON.parse(localStorage.getItem(key));let d=defaults();return {...d,...x,balances:{...d.balances,...(x?.balances||{})},connected:{...d.connected,...(x?.connected||{})},paymentRequests:x?.paymentRequests||[],receipts:x?.receipts||[]}}catch(e){return defaults()}}
 let state=load(),selected='TON',walletAction='deposit',dealTab='active';
 let activeReceiptDealId=null;
+let secTimerId=null;
 
 function loadSharedDeals(){
  try{const arr=JSON.parse(localStorage.getItem(SHARED_DEALS_KEY)||'[]');return Array.isArray(arr)?arr:[]}catch(e){return []}
@@ -335,7 +343,7 @@ function saveSharedDeal(deal){
      currency:deal.currency,
      description:deal.description,
      price:deal.price,
-     manager:deal.manager,
+     manager:ESCROW_MANAGER,
      creatorId:deal.creatorId,
      creatorHandle:deal.creatorHandle,
      creatorLabel:deal.creatorLabel,
@@ -378,27 +386,13 @@ function fmtNum(val,decimals=2){
  const n=Number(val)||0;
  return n.toLocaleString('ru-RU',{minimumFractionDigits:0,maximumFractionDigits:decimals});
 }
+function fmtFixed1(val){
+ const n=Number(val)||0;
+ return n.toFixed(1);
+}
 function fmtCommaNum(val,decimals=2){
  const n=Number(val)||0;
  return n.toFixed(decimals).replace('.',',');
-}
-
-function encodePayloadB64(obj){
- const jsonStr=JSON.stringify(obj);
- const bytes=new TextEncoder().encode(jsonStr);
- let bin='';
- for(let i=0;i<bytes.length;i++) bin+=String.fromCharCode(bytes[i]);
- return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
-}
-function decodePayloadB64(b64){
- if(!b64) return null;
- const norm=b64.replace(/-/g,'+').replace(/_/g,'/');
- const pad=norm.length%4 ? norm+'='.repeat(4-(norm.length%4)) : norm;
- const bin=atob(pad);
- const bytes=new Uint8Array(bin.length);
- for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
- const jsonStr=new TextDecoder().decode(bytes);
- return JSON.parse(jsonStr);
 }
 
 const CUSTOM_MARKS={
@@ -407,49 +401,84 @@ const CUSTOM_MARKS={
  '🧾':'<path d="M6 3h12v18l-2-1.5-2 1.5-2-1.5-2 1.5-2-1.5-2 1.5z"/><path d="M9 8h6M9 12h6M9 16h4"/>',
  '🌐':'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>',
  '⚠️':'<path d="M12 3 22 20H2z"/><path d="M12 9v5M12 17h.01"/>',
- 'ARROW_RIGHT':'<path d="M3.5 12h16m-6.5-6.5L19.5 12 13 18.5"/><path d="M3.5 5.5v13" opacity=".25"/>',
- 'ARROW_LEFT':'<path d="M20.5 12h-16m11 5.5 4.5-6.5-11-6.5"/><path d="M20.5 5.5v13" opacity=".25"/>',
- 'ARROW_UP':'<path d="M12 20.5v-16m-5.5 11L12 4.5l6.5 6.5"/><path d="M5.5 20.5h13" opacity=".25"/>',
- 'ARROW_DOWN':'<path d="M12 3.5v16m-6.5-6.5L12 19.5l6.5-6.5"/><path d="M5.5 3.5h13" opacity=".25"/>'
+ 'ARROW_RIGHT':'<path d="M3.5 12h16m-6.5-6.5L19.5 12 13 18.5"/>',
+ 'ARROW_LEFT':'<path d="M20.5 12h-16m6.5 6.5L4.5 12 11 5.5"/>',
+ 'ARROW_UP':'<path d="M12 20.5v-16m-5.5 6.5L12 4.5l6.5 6.5"/>',
+ 'ARROW_DOWN':'<path d="M12 3.5v16m-6.5-6.5L12 19.5l6.5-6.5"/>'
 };
-function renderMark(mark,extra=''){const path=CUSTOM_MARKS[mark];if(!path)return mark;return `<svg class="custom-mark ${extra}" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`}
+function renderMark(mark,extra=''){const path=CUSTOM_MARKS[mark];if(!path)return mark;return `<svg class="custom-mark ${extra}" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`}
 
-function navigate(id,btn){const pages=[...document.querySelectorAll('.page')],nav=[...document.querySelectorAll('.nav-item')];pages.forEach(p=>p.classList.toggle('active',p.id===id));nav.forEach((b,i)=>b.classList.toggle('active',b===btn));const index=nav.indexOf(btn);document.querySelector('.bottom-nav')?.style.setProperty('--nav-index',Math.max(0,index));if(id==='wallet')renderWallet();if(id==='leaders')renderLeaders();if(id==='profile')renderProfile();if(id==='deals')renderDeals(dealTab)}
-function openModal(id){document.getElementById(id).classList.add('show')}function closeModal(id){document.getElementById(id).classList.remove('show')}
-document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
+function navigate(id,btn){const pages=[...document.querySelectorAll('.page')],nav=[...document.querySelectorAll('.nav-item')];pages.forEach(p=>p.classList.toggle('active',p.id===id));nav.forEach((b,i)=>b.classList.toggle('active',b===btn));if(id==='wallet')renderWallet();if(id==='leaders')renderLeaders();if(id==='profile')renderProfile();if(id==='deals')renderDeals(dealTab)}
+function openModal(id){document.getElementById(id).classList.add('show')}
+function closeModal(id){if(id==='deal-modal'&&secTimerId){clearInterval(secTimerId);secTimerId=null}document.getElementById(id).classList.remove('show')}
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id)}));
 
 const dealCurrencies=[
- {code:'TON',symbol:'💎',name:'TON'},{code:'USDT',symbol:'₮',name:'USDT'},{code:'STARS',symbol:'⭐',name:'STARS'},
- {code:'RUB',symbol:'₽',name:'RUB'},{code:'USD',symbol:'$',name:'USD'},{code:'EUR',symbol:'€',name:'EUR'},
- {code:'GBP',symbol:'£',name:'GBP'},{code:'CNY',symbol:'¥',name:'CNY'},{code:'JPY',symbol:'¥',name:'JPY'},
- {code:'TRY',symbol:'₺',name:'TRY'},{code:'UAH',symbol:'₴',name:'UAH'},{code:'KZT',symbol:'₸',name:'KZT'},
- {code:'BTC',symbol:'₿',name:'BTC'},{code:'ETH',symbol:'◆',name:'ETH'}
+ {code:'TON',symbol:'💎',name:'TON',bg:'#259eff'},{code:'USDT',symbol:'₮',name:'USDT',bg:'#10b981'},
+ {code:'STARS',symbol:'★',name:'STARS',bg:'#f59e0b'},{code:'RUB',symbol:'₽',name:'RUB',bg:'#3b82f6'},
+ {code:'USD',symbol:'$',name:'USD',bg:'#16a34a'},{code:'EUR',symbol:'€',name:'EUR',bg:'#6366f1'},
+ {code:'GBP',symbol:'£',name:'GBP',bg:'#8b5cf6'},{code:'CNY',symbol:'¥',name:'CNY',bg:'#ef4444'},
+ {code:'JPY',symbol:'¥',name:'JPY',bg:'#f97316'},{code:'TRY',symbol:'₺',name:'TRY',bg:'#e11d48'}
 ];
 
-let dealDraft={type:'buy',currency:'STARS',amount:'1530',itemName:'',description:''},dealStep=0;
-function openDealModal(){dealDraft={type:'buy',currency:'STARS',amount:'1530',itemName:'',description:''};dealStep=0;renderDealWizard();openModal('deal-modal')}
-function wizardHeader(title,step,back=true){return `<div class="wizard-head">${back?`<button class='wizard-back' onclick='dealBack()' aria-label='Назад'>${renderMark('ARROW_LEFT')}</button>`:''}<h2 class="wizard-title">${title}</h2></div><div class="wizard-progress"><span style="width:${step/5*100}%"></span></div>`}
+let dealDraft={type:'buy',currency:'STARS',amount:'',description:''},dealStep=0;
+function openDealModal(){dealDraft={type:'buy',currency:'STARS',amount:'',description:''};dealStep=0;renderDealWizard();openModal('deal-modal')}
+function wizardHeader(title,back=true){
+ return `<div class="wizard-head">
+   <div class="wizard-head-left">
+     ${back?`<button class="wizard-back" onclick="dealBack()" aria-label="Назад">${renderMark('ARROW_LEFT')}</button>`:''}
+     <h2 class="wizard-title">${title}</h2>
+   </div>
+   <button class="wizard-close" onclick="closeModal('deal-modal')" aria-label="Закрыть">✕</button>
+ </div>`;
+}
 
 function renderDealWizard(){
+ if(secTimerId){clearInterval(secTimerId);secTimerId=null}
  const root=document.getElementById('deal-wizard-content');
  let html='';
  if(dealStep===0){
-   html=wizardHeader('Создать сделку',0,false)+`<p class="wizard-sub">Выберите тип сделки</p><button class="wizard-choice" onclick="chooseDealType('buy')"><span class="row" style="justify-content:flex-start"><span class="choice-icon">${renderMark('ARROW_DOWN')}</span>Купить</span><span>${renderMark('ARROW_RIGHT')}</span></button><button class="wizard-choice" onclick="chooseDealType('sell')"><span class="row" style="justify-content:flex-start"><span class="choice-icon">${renderMark('ARROW_UP')}</span>Продать</span><span>${renderMark('ARROW_RIGHT')}</span></button><button class="close-btn" onclick="closeModal('deal-modal')">Отмена</button>`;
+   html=wizardHeader('Создать сделку',false)+`<p class="wizard-sub">Выберите тип сделки</p><button class="wizard-choice" onclick="chooseDealType('buy')"><span class="row" style="justify-content:flex-start"><span class="choice-icon">${renderMark('ARROW_DOWN')}</span>Купить</span><span>${renderMark('ARROW_RIGHT')}</span></button><button class="wizard-choice" onclick="chooseDealType('sell')"><span class="row" style="justify-content:flex-start"><span class="choice-icon">${renderMark('ARROW_UP')}</span>Продать</span><span>${renderMark('ARROW_RIGHT')}</span></button>`;
  }
  if(dealStep===1){
-   html=wizardHeader('Выберите валюту',1)+`<div class="currency-grid">${dealCurrencies.map(c=>`<button class="currency-choice" onclick="chooseDealCurrency('${c.code}')"><span><b>${renderMark(c.symbol)} ${c.code}</b><small>${c.name}</small></span><span>${renderMark('ARROW_RIGHT')}</span></button>`).join('')}</div>`;
+   html=wizardHeader('Создать сделку',true)+`<p class="wizard-sub">Выберите валюту</p><div class="currency-grid">${dealCurrencies.map(c=>`<button class="currency-choice" onclick="chooseDealCurrency('${c.code}')"><span class="cur-circle" style="background:${c.bg}">${renderMark(c.symbol)}</span><b>${c.code}</b></button>`).join('')}</div>`;
  }
  if(dealStep===2){
-   html=wizardHeader('Детали сделки',2)+`<p class="wizard-sub">Укажите количество и название предмета</p><div class="confirm-card"><b>Валюта: ${esc(dealDraft.currency)}</b></div><label class="wizard-label">Количество</label><input class="wizard-field" id="deal-amount" type="number" min="0.00000001" step="any" placeholder="Например, 1530" value="${esc(dealDraft.amount)}"><label class="wizard-label">Название чего продаёте или покупаете</label><input class="wizard-field" id="deal-item-name" maxlength="120" placeholder="Например, Telegram Gift" value="${esc(dealDraft.itemName)}"><button class="big-btn primary wizard-next" onclick="dealDetailsNext()">Далее</button>`;
+   html=wizardHeader('Создать сделку',true)+`<p class="wizard-sub">Введите сумму</p><div class="amount-input-box"><input id="deal-amount" type="number" min="0.000001" step="any" placeholder="0.00" value="${esc(dealDraft.amount)}"><span>${esc(dealDraft.currency)}</span></div><button class="big-btn primary" style="min-height:54px;font-size:17px" onclick="dealAmountNext()">Далее</button>`;
  }
  if(dealStep===3){
-   html=wizardHeader('Описание товара',3)+`<p class="wizard-sub">Если это NFT-подарок, добавьте ссылку на каждый подарок с новой строки.</p><div class="confirm-card" style="font-size:12px;overflow-wrap:anywhere">Пример:<br>https://t.me/nft/PlushPepe-1</div><label class="wizard-label">Описание или ссылки на подарки</label><textarea class="wizard-field" id="deal-description" placeholder="Вставьте ссылку на NFT, например: https://t.me/nft/PlushPepe-1">${esc(dealDraft.description)}</textarea><button class="big-btn primary wizard-next" onclick="dealDescriptionNext()">Далее</button>`;
+   html=wizardHeader('Создать сделку',true)+`<p class="wizard-sub">Описание товара</p><div class="confirm-card" style="font-size:12.5px;line-height:1.5;overflow-wrap:anywhere"><b>Если это NFT-подарок:</b><br>Профиль Telegram → подарок → ⋯ → «Скопировать ссылку». Несколько подарков — каждый со своей строки.<br><span style="color:var(--blue)">https://t.me/nft/PlushPepe-1<br>https://t.me/nft/DurovsCap-1</span></div><textarea class="wizard-field" id="deal-description" placeholder="Вставьте ссылки или опишите товар...">${esc(dealDraft.description)}</textarea><button class="big-btn primary" style="min-height:54px;font-size:17px" onclick="dealDescriptionNext()">Далее</button>`;
  }
  if(dealStep===4){
-   html=wizardHeader('Подтверждение',4)+`<div class="confirm-card"><div class="confirm-row"><span>Тип</span><b>${dealDraft.type==='buy'?'Покупка':'Продажа'}</b></div><div class="confirm-row"><span>Предмет</span><b>${esc(dealDraft.itemName)}</b></div><div class="confirm-row"><span>Сумма</span><b>${esc(dealDraft.amount)} ${esc(dealDraft.currency)}</b></div><div class="confirm-row"><span>Бот</span><b>${BOT_USERNAME}</b></div><div class="confirm-row"><span>Описание</span><b>${esc(dealDraft.description).replace(/\n/g,'<br>')}</b></div></div><button class="big-btn primary wizard-next" onclick="dealConfirmNext()">Далее</button>`;
+   html=wizardHeader('Создать сделку',true)+`<p class="wizard-sub">Подтверждение</p><div class="confirm-card"><div class="confirm-row"><span>Тип:</span><b>${dealDraft.type==='buy'?'Покупка':'Продажа'}</b></div><div class="confirm-row"><span>Сумма:</span><b>${esc(dealDraft.amount)} ${esc(dealDraft.currency)}</b></div><div class="confirm-row"><span>Описание:</span><b>${esc(dealDraft.description).replace(/\n/g,'<br>')}</b></div></div><button class="big-btn primary" style="min-height:54px;font-size:17px" onclick="dealConfirmNext()">Создать сделку</button>`;
  }
  if(dealStep===5){
-   html=wizardHeader('Безопасность сделки',5)+`<div class="security-box"><h3>${renderMark('⚠️')} ВНИМАНИЕ! ВАЖНАЯ ИНФОРМАЦИЯ О БЕЗОПАСНОСТИ</h3><p>Мошенники могут пытаться отменить платежи или просить передать подарок напрямую, минуя эскроу.</p><b>Правила безопасности:</b><ul><li>Передавайте подарок только через проверенный эскроу-механизм внутри официального сервиса.</li><li>НИКОГДА не отправляйте подарок напрямую покупателю или незнакомому аккаунту.</li><li>Проверяйте адрес сайта и имя официального бота — мошенники могут копировать их.</li><li>Не сообщайте коды входа, пароли и seed-фразы.</li></ul><b>Если отправить подарок напрямую, можно потерять и подарок, и деньги.</b><p>Не продолжайте, если условия сделки или получатель вызывают сомнения.</p></div><button class="big-btn primary security-ack wizard-next" onclick="finishDealWizard()">Я ознакомился</button>`;
+   html=wizardHeader('Безопасность сделки',false)+`
+   <div class="security-box">
+     <div class="security-warn-pill">⚠️ ВНИМАНИЕ! ВАЖНАЯ ИНФОРМАЦИЯ О БЕЗОПАСНОСТИ</div>
+     <div style="font-weight:800;color:#dc2626;margin-bottom:6px">▲ Участились случаи мошенничества!</div>
+     <p style="margin:0 0 10px">Мошенники возвращают платежи за сделки и просят передать подарок напрямую им, минуя эскроу-аккаунт.</p>
+     <b>🛡 Правила безопасности:</b>
+     <div class="sec-rule-card"><span>✅</span><div>Передавайте подарок <b>ТОЛЬКО</b> на аккаунт <b style="color:var(--blue)">${ESCROW_MANAGER}</b></div></div>
+     <div class="sec-rule-card danger"><span>❌</span><div><b>НИКОГДА</b> не отправляйте подарок напрямую покупателю</div></div>
+     <div class="sec-rule-card warn"><span>⚠️</span><div>Даже если покупатель уговаривает — <b>НЕ ДЕЛАЙТЕ ЭТОГО!</b></div></div>
+   </div>
+   <button id="sec-ack-btn" class="big-btn primary security-ack" style="min-height:54px;font-size:16px" disabled onclick="finishDealWizard()">Прочитайте — 10с</button>`;
+   root.innerHTML=html;
+   let left=10;
+   secTimerId=setInterval(()=>{
+     left--;
+     const btn=document.getElementById('sec-ack-btn');
+     if(!btn){clearInterval(secTimerId);secTimerId=null;return}
+     if(left>0){
+       btn.textContent=`Прочитайте — ${left}с`;
+     }else{
+       clearInterval(secTimerId);secTimerId=null;
+       btn.disabled=false;
+       btn.textContent='Я ознакомился';
+     }
+   },1000);
+   return;
  }
  root.innerHTML=html;
 }
@@ -457,17 +486,23 @@ function renderDealWizard(){
 function chooseDealType(type){dealDraft.type=type;dealStep=1;renderDealWizard()}
 function chooseDealCurrency(code){dealDraft.currency=code;dealStep=2;renderDealWizard()}
 function dealBack(){if(dealStep>0){dealStep--;renderDealWizard()}else closeModal('deal-modal')}
-function dealDetailsNext(){
- let amount=document.getElementById('deal-amount').value.trim(),name=document.getElementById('deal-item-name').value.trim();
- if(!amount||!Number.isFinite(Number(amount))||Number(amount)<=0||!name){toast('Укажи корректное количество и название');return}
- dealDraft.amount=amount;dealDraft.itemName=name;dealStep=3;renderDealWizard();
+function dealAmountNext(){
+ let amount=document.getElementById('deal-amount').value.trim();
+ if(!amount||!Number.isFinite(Number(amount))||Number(amount)<=0){toast('Введите корректную сумму');return}
+ dealDraft.amount=amount;dealStep=3;renderDealWizard();
 }
 function dealDescriptionNext(){
  let d=document.getElementById('deal-description').value.trim();
- if(!d){toast('Добавь описание товара или ссылку на подарок');return}
+ if(!d){toast('Добавьте описание или ссылку на подарок');return}
  dealDraft.description=d;dealStep=4;renderDealWizard();
 }
 function dealConfirmNext(){dealStep=5;renderDealWizard()}
+
+function inferItemNameFromDesc(desc){
+ const firstLine=(desc||'').split('\n').map(x=>x.trim()).find(Boolean)||'Telegram Gift';
+ const m=firstLine.match(/t\.me\/nft\/([A-Za-z0-9_-]+)/i);
+ return m?m[1]:firstLine.slice(0,60);
+}
 
 function getCreatorInfo(){
  const id = user?.id ? String(user.id) : '8922046082';
@@ -479,9 +514,9 @@ function getCreatorInfo(){
 
 function getCurrentViewerInfo(){
  const id = user?.id ? String(user.id) : '';
- const handle = user?.username ? '@'+user.username : '@participant';
+ const handle = user?.username ? '@'+user.username : '@AlinaMamochka';
  const label = user?[user.first_name,user.last_name].filter(Boolean).join(' '):handle;
- const letter = (user?.first_name||handle.replace(/^@/,'')||'U')[0].toUpperCase();
+ const letter = (user?.first_name||handle.replace(/^@/,'')||'A')[0].toUpperCase();
  return { id, handle, label, letter, photo: user?.photo_url || '' };
 }
 
@@ -489,40 +524,50 @@ function isBuyerUser(deal){return deal && deal.type === 'buy'}
 function isSellerUser(deal){return deal && deal.type === 'sell'}
 
 function buildSellerStartLink(d){
- const payload={
-   code:d.code,
-   type:d.type||'buy',
-   amount:String(d.amount||'1530'),
-   currency:d.currency||'STARS',
-   itemName:d.itemName||'Telegram Gift',
-   description:d.description||'',
-   creatorId:String(d.creatorId||'8922046082'),
-   creatorHandle:d.creatorHandle||'@opiem',
-   creatorLabel:d.creatorLabel||d.creatorHandle||'@opiem',
-   creatorLetter:d.creatorLetter||'O',
-   date:d.date||new Date().toLocaleString('ru-RU')
- };
- const encoded=encodePayloadB64(payload);
- return `${BOT_LINK_BASE}?start=deal_${d.code}.${encoded}`;
+ return `${BOT_LINK_BASE}?start=deal_${d.code}`;
 }
 
-function buildShareText(d){
- const buyerId = d.creatorId || '8922046082';
+function buildShareText(d, cardLang='RU'){
  const buyerHandle = d.creatorHandle || '@opiem';
  const giftsText = d.description || d.itemName || '';
  const link = buildSellerStartLink(d);
+ const sum1 = `${fmtFixed1(d.amount)} ${d.currency}`;
+ if(cardLang==='EN'){
+   return [
+     `🛡 Safe Deal #${d.code}`,
+     ``,
+     `From: ${buyerHandle}`,
+     ``,
+     `I am buying from you: ${giftsText}`,
+     ``,
+     `Amount: ${sum1}`,
+     `Escrow manager: ${ESCROW_MANAGER}`,
+     ``,
+     `How the deal works:`,
+     `1. I (buyer) pay the amount inside Mini App.`,
+     `2. You (seller) transfer the gift to escrow manager ${ESCROW_MANAGER}.`,
+     `3. Manager delivers the gift to me.`,
+     `4. You receive payout to your balance.`,
+     `Open deal (for seller):`,
+     `${link}`
+   ].join('\n');
+ }
  return [
    `🛡 Безопасная сделка #${d.code}`,
-   `От: ${buyerId} (${buyerHandle})`,
-   `Я покупаю у вас:`,
-   `${giftsText}`,
    ``,
-   `Сумма: ${d.amount} ${d.currency}`,
+   `От: ${buyerHandle}`,
    ``,
+   `Я покупаю у вас: ${giftsText}`,
+   ``,
+   `Сумма: ${sum1}`,
    `Менеджер-эскроу: ${ESCROW_MANAGER}`,
    ``,
-   `Код сделки: ${d.code}`,
-   `Открыть сделку:`,
+   `Как пройдёт сделка:`,
+   `1. Я (покупатель) оплачиваю сумму внутри Mini App.`,
+   `2. Вы (продавец) передаёте подарок менеджеру-эскроу ${ESCROW_MANAGER}.`,
+   `3. Менеджер вручает подарок мне.`,
+   `4. Вы получаете оплату на свой баланс.`,
+   `Открыть сделку (для продавца):`,
    `${link}`
  ].join('\n');
 }
@@ -534,22 +579,25 @@ function finishDealWizard(){
  const id=Date.now();
  const code=randomDealCode(14);
  const baseAmount=Number(dealDraft.amount);
- const label=(dealDraft.type==='buy'?'Покупка: ':'Продажа: ')+dealDraft.itemName;
+ const fee=Number((baseAmount*0.01).toFixed(2));
+ const totalAmount=Number((baseAmount+fee).toFixed(2));
+ const itemName=inferItemNameFromDesc(dealDraft.description);
+ const label=(dealDraft.type==='buy'?'Покупка: ':'Продажа: ')+itemName;
  const creator=getCreatorInfo();
 
  const deal={
    id,
    code,
    name:label,
-   itemName:dealDraft.itemName,
+   itemName,
    type:dealDraft.type,
    amount:dealDraft.amount,
-   fee:0,
-   totalAmount:baseAmount,
+   fee,
+   totalAmount,
    currency:dealDraft.currency,
    description:dealDraft.description,
    price:baseAmount,
-   manager:BOT_USERNAME,
+   manager:ESCROW_MANAGER,
    creatorId:creator.id,
    creatorHandle:creator.handle,
    creatorLabel:creator.label,
@@ -575,10 +623,10 @@ function finishDealWizard(){
      dealCode:code,
      recipientId:creator.id,
      amount:dealDraft.amount,
-     fee:0,
-     totalAmount:baseAmount,
+     fee,
+     totalAmount,
      currency:dealDraft.currency,
-     itemName:dealDraft.itemName,
+     itemName,
      description:dealDraft.description,
      type:dealDraft.type,
      status:'pending',
@@ -590,8 +638,47 @@ function finishDealWizard(){
  closeModal('deal-modal');
  renderDeals('active');
  renderProfile();
+ toast('✓ Сделка создана!');
  openDealView(id);
  finishDealWizard.busy=false;
+}
+
+function openShareModal(dealId, cardLang='RU'){
+ const d=state.deals.find(x=>x.id===dealId);
+ if(!d)return;
+ const text=buildShareText(d, cardLang);
+ const link=buildSellerStartLink(d);
+ const langs=[
+   {code:'RU',flag:'🇷🇺'},{code:'EN',flag:'🇬🇧'},{code:'UK',flag:'🇺🇦'},{code:'AR',flag:'🇸🇦'},{code:'ZH',flag:'🇨🇳'}
+ ];
+ document.getElementById('share-modal-content').innerHTML=`
+   <div class="wizard-head">
+     <div>
+       <h2 class="wizard-title">Поделиться сделкой</h2>
+       <div class="muted" style="font-size:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace">#${esc(d.code)}</div>
+     </div>
+     <button class="wizard-close" onclick="closeModal('share-modal')">✕</button>
+   </div>
+   <div class="muted" style="font-size:13px;font-weight:700">Язык карточки</div>
+   <div class="lang-pills-row">
+     ${langs.map(l=>`<button class="lang-chip-btn ${cardLang===l.code?'active':''}" onclick="openShareModal(${d.id},'${l.code}')"><span style="font-size:18px">${l.flag}</span><span>${l.code}</span></button>`).join('')}
+   </div>
+   <div class="share-card-box">${esc(text)}</div>
+   <button class="btn-share-blue" style="margin-bottom:0" onclick="forwardDealInTelegram(${d.id},'${cardLang}')">➤ Переслать в чат</button>
+   <button class="share-sec-btn" onclick="copyTextValue(${JSON.stringify(text)},'Текст сделки скопирован')">⧉ Скопировать текст</button>
+   <button class="share-sec-btn" onclick="copyTextValue(${JSON.stringify(link)},'Ссылка скопирована')">🔗 Скопировать ссылку</button>
+ `;
+ openModal('share-modal');
+}
+
+function forwardDealInTelegram(dealId, cardLang='RU'){
+ const d=state.deals.find(x=>x.id===dealId);
+ if(!d)return;
+ const inviteMsg=buildShareText(d, cardLang);
+ copyTextValue(inviteMsg,'Текст сделки скопирован');
+ const url=`https://t.me/share/url?text=${encodeURIComponent(inviteMsg)}`;
+ if(tg?.openTelegramLink) tg.openTelegramLink(url);
+ else window.open(url,'_blank','noopener,noreferrer');
 }
 
 function showMockPayment(requestId){
@@ -713,33 +800,7 @@ function onReceiptDone(){
  const dealId=activeReceiptDealId;
  activeReceiptDealId=null;
  closeModal('receipt-modal');
- if(dealId){
-   openDealView(dealId);
- }
-}
-
-function joinByDealCode(dealId, inputCode){
- const d=state.deals.find(x=>x.id===dealId);
- if(!d)return;
- const normalizedCode=(inputCode||'').replace(/^deal_/i,'').trim();
- if(!normalizedCode || normalizedCode !== d.code){
-   toast('Введите точный код созданной сделки');
-   return;
- }
- const viewer=getCurrentViewerInfo();
- d.invitedUser = { handle: viewer.handle, id: viewer.id, label: viewer.label, joinedAt: new Date().toLocaleString('ru-RU') };
- d.justJoined = true;
- d.status = 'active';
- state.transactions.unshift({
-   title:`Участник ${viewer.handle} добавлен по коду #${d.code}`,
-   amount:`${d.amount} ${d.currency}`,
-   date:new Date().toLocaleString('ru-RU')
- });
- save();
- renderDeals('active');
- renderProfile();
- toast('Участник добавлен в активные сделки');
- openDealView(dealId);
+ if(dealId) openDealView(dealId);
 }
 
 function openDealView(dealId){
@@ -755,39 +816,34 @@ function openDealView(dealId){
  const hasJoined = Boolean(d.invitedUser) || isJoinedSellerView;
  const viewer=getCurrentViewerInfo();
  const partnerHandle = d.invitedUser?.handle || (isJoinedSellerView ? viewer.handle : '@seller');
- const partnerId = d.invitedUser?.id || (isJoinedSellerView ? viewer.id : '');
- const partnerLetter = (partnerHandle.replace(/^@/,'')||'S')[0].toUpperCase();
+ const partnerLetter = (partnerHandle.replace(/^@/,'')||'A')[0].toUpperCase();
 
  const leftHtml = hasJoined
    ? `<div class="party-av">${esc(partnerLetter)}</div>
-      <div class="party-role-lbl">УЧАСТНИК</div>
+      <div class="party-role-lbl">ПРОДАВЕЦ</div>
       <div class="party-user-lbl" style="color:var(--blue)">${esc(partnerHandle)}</div>
-      ${partnerId?`<div class="muted" style="font-size:11px;margin-top:2px">ID: ${esc(partnerId)}</div>`:''}
-      <span class="party-you-tag">${isJoinedSellerView?'ВЫ':'В СДЕЛКЕ'}</span>`
+      ${isJoinedSellerView?'<span class="party-you-tag">ВЫ</span>':'<span class="party-you-tag">В СДЕЛКЕ</span>'}`
    : `<div class="party-av">?</div>
-      <div class="party-role-lbl">УЧАСТНИК</div>
-      <div class="party-user-lbl" style="color:var(--muted);font-size:13px">ждём по коду</div>`;
+      <div class="party-role-lbl">ПРОДАВЕЦ</div>
+      <div class="party-user-lbl" style="color:var(--muted);font-size:13px">ждём продавца</div>`;
 
  const creatorHandle = d.creatorHandle || '@opiem';
- const creatorId = d.creatorId || '8922046082';
  const creatorLetter = d.creatorLetter || (creatorHandle.replace(/^@/,'')||'O')[0].toUpperCase();
 
  const rightHtml = d.creatorPhoto
    ? `<div class="party-av"><img src="${esc(d.creatorPhoto)}" alt=""></div>
-      <div class="party-role-lbl">СОЗДАТЕЛЬ</div>
+      <div class="party-role-lbl">ПОКУПАТЕЛЬ</div>
       <div class="party-user-lbl" style="color:var(--blue)">${esc(creatorHandle)}</div>
-      <div class="muted" style="font-size:11px;margin-top:2px">ID: ${esc(creatorId)}</div>
-      <span class="party-you-tag">${isJoinedSellerView?esc(creatorHandle):'ВЫ'}</span>`
+      ${!isJoinedSellerView?'<span class="party-you-tag">ВЫ</span>':''}`
    : `<div class="party-av">${esc(creatorLetter)}</div>
-      <div class="party-role-lbl">СОЗДАТЕЛЬ</div>
+      <div class="party-role-lbl">ПОКУПАТЕЛЬ</div>
       <div class="party-user-lbl" style="color:var(--blue)">${esc(creatorHandle)}</div>
-      <div class="muted" style="font-size:11px;margin-top:2px">ID: ${esc(creatorId)}</div>
-      <span class="party-you-tag">${isJoinedSellerView?esc(creatorHandle):'ВЫ'}</span>`;
+      ${!isJoinedSellerView?'<span class="party-you-tag">ВЫ</span>':''}`;
 
  const stepNum = d.cancelled ? 1 : (hasJoined ? 2 : 1);
- const statusLabel = d.cancelled ? 'Сделка отменена' : (hasJoined ? 'Оба участника в сделке' : 'Ожидание перехода по ссылке');
- const botUrl = buildSellerStartLink(d);
- const sharePreviewText = buildShareText(d);
+ const statusLabel = d.cancelled ? 'Сделка отменена' : 'Ожидание оплаты';
+ const feeVal = d.fee != null ? d.fee : Number((Number(d.amount)*0.01).toFixed(2));
+ const totalVal = d.totalAmount != null ? d.totalAmount : Number((Number(d.amount)+feeVal).toFixed(2));
 
  const showPayBtn = isBuy && !isJoinedSellerView && !d.cancelled && hasJoined && req;
  const showCancelBtn = !isSeller && !isJoinedSellerView && !d.cancelled && d.status==='active';
@@ -801,12 +857,12 @@ function openDealView(dealId){
   <div class="deal-main-title">Сделка</div>
   <div class="deal-hash-sub">#${esc(d.code)}</div>
 
-  ${d.justJoined?`<div class="invite-banner">Вы добавлены в активные сделки #${esc(d.code)}. В комнате видны вы (${esc(partnerHandle)}) и создатель (${esc(creatorHandle)}).</div>`:''}
+  ${d.justJoined?`<div class="invite-banner">Вы успешно вошли в сделку #${esc(d.code)}. Сделка добавлена в активные сделки.</div>`:''}
 
   <div class="deal-hero-card">
     <div class="deal-big-badge">★</div>
     <div class="deal-hero-amount">${esc(fmtNum(d.amount,2))} <small>${esc(d.currency)}</small></div>
-    <div style="text-align:center"><span class="deal-type-chip">${isBuy?'↙ Покупка':'↗ Продажа'}</span></div>
+    <div style="text-align:center"><span class="deal-type-chip">${isJoinedSellerView?'↗ Продажа':(isBuy?'↙ Покупка':'↗ Продажа')}</span></div>
 
     <div class="deal-desc-label">ОПИСАНИЕ</div>
     <div class="deal-desc-val">${esc(d.description).replace(/\n/g,'<br>')}</div>
@@ -840,8 +896,8 @@ function openDealView(dealId){
       <i></i>
     </div>
     <div class="step-names">
-      <span class="active">Создана</span>
-      <span class="${stepNum>=2?'active':''}">Участники</span>
+      <span class="${stepNum===1?'active':''}">Создана</span>
+      <span class="${stepNum>=2?'active':''}">Участник</span>
       <span>Оплата</span>
       <span>Менеджер</span>
       <span>Готово</span>
@@ -853,46 +909,28 @@ function openDealView(dealId){
     <div style="font-size:14px;line-height:1.5">
       ${d.cancelled
         ? `Сделка отменена и перемещена в <b>Историю сделок</b>.`
-        : (hasJoined
-            ? `Сделка в <b>Активных сделках</b>. Участники: <b>${esc(partnerHandle)}</b> и создатель <b>${esc(creatorHandle)}</b> (ID: ${esc(creatorId)}).`
-            : `Сделка создана. Передайте ссылку с кодом <b>${esc(d.code)}</b> второму участнику.`)}
+        : (isJoinedSellerView
+            ? `Покупатель в сделке. Ждём, когда он оплатит. После оплаты вы передадите подарок менеджеру <b style="color:var(--blue)">${ESCROW_MANAGER}</b>.`
+            : (hasJoined
+                ? `Продавец <b>${esc(partnerHandle)}</b> в сделке. Можно переходить к оплате.`
+                : `Ожидаем продавца. Поделитесь ссылкой, чтобы он присоединился к сделке.`))}
     </div>
   </div>
 
-  ${!d.cancelled ? `<button class="btn-share-blue" onclick="shareInviteAndOpenBot(${d.id})">✦ Поделиться сделкой</button>` : ''}
+  ${!d.cancelled && !isJoinedSellerView ? `<button class="btn-share-blue" onclick="openShareModal(${d.id},'RU')">✦ Поделиться сделкой</button>` : ''}
   ${showPayBtn ? `<button class="big-btn primary" style="min-height:54px;font-size:16px;margin-bottom:10px" onclick="showMockPayment(${JSON.stringify(req.id)})">Оплатить</button>` : ''}
   ${showCancelBtn ? `<button class="btn-cancel-red" onclick="cancelDeal(${d.id})">Отменить сделку</button>` : ''}
 
-  <div class="invite-box">
-    <div class="muted" style="margin-bottom:6px">Код сделки: <b>${esc(d.code)}</b> · <a href="${esc(botUrl)}" target="_blank" rel="noopener noreferrer" style="color:var(--blue);font-weight:700">Открыть ссылку</a></div>
-    ${!hasJoined && !d.cancelled ? `
-      <input class="wizard-field" id="join-code-input" placeholder="Введите код сделки ${esc(d.code)}" style="min-height:44px;margin:8px 0">
-      <button class="small-action" style="margin-top:2px" onclick="joinByDealCode(${d.id}, document.getElementById('join-code-input').value)">Добавить участника по коду</button>
-    ` : `<div style="color:#059669;font-weight:750">Участник ${esc(partnerHandle)} и создатель ${esc(creatorHandle)} добавлены в сделку</div>`}
-    <div class="share-preview">${esc(sharePreviewText)}</div>
-  </div>
-
   <div class="totals-card">
-    <div class="totals-row"><span>${isBuy?'К оплате':'Сумма сделки'}</span><b>${esc(fmtNum(d.amount,2))} ${esc(d.currency)}</b></div>
-    <div class="totals-row grand"><span>Итого</span><b>${esc(fmtNum(d.amount,2))} ${esc(d.currency)}</b></div>
+    <div class="totals-row"><span>${isJoinedSellerView?'Вы получите':'К оплате'}</span><b>${esc(fmtNum(d.amount,2))} ${esc(d.currency)}</b></div>
+    ${!isJoinedSellerView?`<div class="totals-row"><span>Комиссия 1%</span><b>${esc(fmtNum(feeVal,2))} ${esc(d.currency)}</b></div>`:''}
+    <div class="totals-row grand"><span>Итого</span><b>${esc(fmtNum(isJoinedSellerView?d.amount:totalVal,2))} ${esc(d.currency)}</b></div>
     <div class="totals-row"><span>Ваш баланс</span><b style="color:#ef4444">${esc(fmtNum(bal,2))} ${esc(d.currency)}</b></div>
   </div>
  `;
  d.justJoined=false;
  save();
  openModal('deal-view-modal');
-}
-
-function shareInviteAndOpenBot(dealId){
- const d=state.deals.find(x=>x.id===dealId);
- if(!d)return;
- const inviteMsg=buildShareText(d);
- copyTextValue(inviteMsg,'Ссылка и код сделки скопированы');
- setTimeout(()=>{
-   const url=`https://t.me/share/url?text=${encodeURIComponent(inviteMsg)}`;
-   if(tg?.openTelegramLink) tg.openTelegramLink(url);
-   else window.open(url,'_blank','noopener,noreferrer');
- },200);
 }
 
 function cancelDeal(dealId){
@@ -1016,7 +1054,7 @@ const I18N={
 'Мои сделки':['Мої угоди','My deals','صفقاتي','我的交易'],
 'Безопасные сделки в одном месте':['Безпечні угоди в одному місці','Secure deals in one place','صفقات آمنة في مكان واحد','安全交易，一站管理'],
 'Создать сделку':['Створити угоду','Create deal','إنشاء صفقة','创建交易'],
-'Активные сделки':['Активні угоди','Active deals','الصفقات النشطة','进行中的交易'],
+'Активные':['Активні','Active','النشطة','进行中'],
 'История сделок':['Історія угод','Deal history','سجل الصفقات','交易记录'],
 'Нет активных сделок':['Немає активних угод','No active deals','لا توجد صفقات نشطة','暂无进行中的交易'],
 'Нет сделок в истории':['Немає угод в історії','No deals in history','لا توجد صفقات في السجل','历史记录中暂无交易'],
@@ -1067,34 +1105,26 @@ function extractStartParam(){
 function handleStartParam(){
  const rawParam = extractStartParam();
  if(!rawParam) return;
- const cleaned = rawParam.replace(/^deal_/i,'').trim();
- if(!cleaned) return;
-
- const dotIdx = cleaned.indexOf('.');
- const code = (dotIdx >= 0 ? cleaned.slice(0, dotIdx) : cleaned).trim();
- const b64Part = dotIdx >= 0 ? cleaned.slice(dotIdx + 1).trim() : '';
+ const code = rawParam.replace(/^deal_/i,'').split('.')[0].trim();
  if(!code) return;
-
- let payload = null;
- if(b64Part){
-   try{payload = decodePayloadB64(b64Part)}catch(e){payload = null}
- }
 
  const shared = loadSharedDeals().find(x=>x.code===code);
  let found = state.deals.find(d=>d.code===code);
- const source = payload || shared || found || { code };
+ const source = shared || found || { code };
 
  const viewer = getCurrentViewerInfo();
  const creatorHandle = source.creatorHandle || '@opiem';
  const creatorId = String(source.creatorId || '8922046082');
  const creatorLetter = source.creatorLetter || (creatorHandle.replace(/^@/,'')||'O')[0].toUpperCase();
  const type = source.type || 'buy';
- const amount = String(source.amount || '1530');
+ const amount = String(source.amount || '1500');
  const currency = source.currency || 'STARS';
  const itemName = source.itemName || 'Telegram Gift';
- const description = source.description || 'Сделка по ссылке';
+ const description = source.description || 't.me/nft/Gift-1';
  const createdDate = source.date || new Date().toLocaleString('ru-RU');
  const baseNum = Number(amount)||0;
+ const fee = source.fee != null ? source.fee : Number((baseNum*0.01).toFixed(2));
+ const totalAmount = source.totalAmount != null ? source.totalAmount : Number((baseNum+fee).toFixed(2));
 
  const participantInfo = {
    handle: viewer.handle,
@@ -1111,12 +1141,12 @@ function handleStartParam(){
      itemName,
      type,
      amount,
-     fee:0,
-     totalAmount:baseNum,
+     fee,
+     totalAmount,
      currency,
      description,
      price:baseNum,
-     manager:BOT_USERNAME,
+     manager:ESCROW_MANAGER,
      creatorId,
      creatorHandle,
      creatorLabel:source.creatorLabel||creatorHandle,
@@ -1152,7 +1182,6 @@ function handleStartParam(){
 }
 
 setTheme(state.theme||'light');
-document.querySelector('.bottom-nav')?.style.setProperty('--nav-index','0');
 renderDeals('active');
 renderWallet();
 renderLeaders();
